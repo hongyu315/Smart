@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/bg_color"
+                android:padding="@dimen/dimen_10_dp">
+
+    <ImageView
+        android:id="@+id/top_title_bar_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/menu_icon"/>
+
+    <TextView
+        android:id="@+id/top_title_bar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="YSEMENU"
+        android:textSize="20.0sp"
+        android:textColor="#ffffffff"
+        android:ellipsize="end"
+        />
+
+    <ImageView
+        android:id="@+id/top_title_bar_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/search_icon"/>
+</RelativeLayout>
+
