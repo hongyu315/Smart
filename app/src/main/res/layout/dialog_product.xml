@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:gravity="bottom"
+              android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:overScrollMode="never">
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20.0dip"
+                android:background="@color/comm_white"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="100.0dip"
+                    android:layout_marginLeft="150.0dip">
+
+                    <ImageButton
+                        android:id="@+id/ib_close"
+                        android:layout_width="35.0dip"
+                        android:layout_height="35.0dip"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="5.0dip"
+                        android:layout_marginRight="5.0dip"
+                        android:padding="10.0dip"
+                        android:scaleType="centerInside"
+                        android:src="@mipmap/comm_close"/>
+
+                    <TextView
+                        android:id="@+id/tv_info"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginRight="15.0dip"
+                        android:layout_marginBottom="3.0dip"
+                        android:ellipsize="end"
+                        android:includeFontPadding="false"
+                        android:lines="1"
+                        android:text="数量1"
+                        android:textColor="@color/comm_text_gray"
+                        android:textSize="14.0dip"/>
+
+                    <LinearLayout
+                        android:id="@+id/ll_price"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/tv_info"
+                        android:layout_marginRight="15.0dip"
+                        android:layout_marginBottom="5.0dip"
+                        android:gravity="bottom"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_selling_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="-2.0dip"
+                            android:gravity="bottom"
+                            android:includeFontPadding="false"
+                            android:text="$99999"
+                            android:textColor="@color/comm_price"
+                            android:textSize="16.0dip"/>
+
+                        <TextView
+                            android:id="@+id/tv_selling_price_unit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5.0dip"
+                            android:text="库存：100"
+                            android:textColor="@color/comm_text_gray"
+                            android:textSize="14.0dip"/>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:layout_marginLeft="15.0dip"
+                    android:layout_marginTop="10.0dip"
+                    android:layout_marginRight="15.0dip"
+                    android:background="@color/comm_line"/>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15.0dip"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_quantity_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15.0dip"
+                        android:text="@string/product_detail_quantity"
+                        android:textColor="@color/comm_text_gray_dark"
+                        android:textSize="15.0dip"/>
+
+                    <TextView
+                        android:id="@+id/tv_quantity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5.0dip"
+                        android:textColor="@color/comm_text_gray"
+                        android:textSize="11.0dip"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/btn_quantity_minus"
+                            android:layout_width="28.0dip"
+                            android:layout_height="28.0dip"
+                            android:background="@drawable/com_quantity_minus_selector"
+                            android:enabled="true"
+                            android:gravity="center"
+                            android:padding="0.0dip"
+                            android:text="-"
+                            android:textColor="@color/black"
+                            android:textSize="18.0dip"/>
+
+                        <EditText
+                            android:id="@+id/et_quantity_input"
+                            android:layout_width="40.0dip"
+                            android:layout_height="28.0dip"
+                            android:layout_marginLeft="2.0dip"
+                            android:layout_marginRight="2.0dip"
+                            android:background="@drawable/com_quantity_input_selector"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:imeOptions="actionDone"
+                            android:inputType="number"
+                            android:maxWidth="100.0dip"
+                            android:maxLength="5"
+                            android:maxLines="1"
+                            android:minWidth="21.0dip"
+                            android:text="1"
+                            android:textColor="@color/comm_text_gray_dark"
+                            android:textSize="15.0dip"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/btn_quantity_plus"
+                            android:layout_width="28.0dip"
+                            android:layout_height="28.0dip"
+                            android:layout_marginRight="15.0dip"
+                            android:background="@drawable/com_quantity_plus_selector"
+                            android:gravity="center"
+                            android:padding="0.0dip"
+                            android:text="＋"
+                            android:textColor="@color/black"
+                            android:textSize="18.0dip"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/dimen_150_dp"/>
+
+                <Button
+                    android:id="@+id/btn_submit"
+                    android:layout_width="fill_parent"
+                    android:layout_height="46.0dip"
+                    android:layout_marginTop="30.0dip"
+                    android:background="@drawable/comm_btn_red_selector"
+                    android:text="@string/product_detail_confirm"
+                    android:textColor="@color/comm_white"
+                    android:textSize="17.0dip"/>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_logo"
+                android:layout_width="120.0dip"
+                android:layout_height="120.0dip"
+                android:layout_marginLeft="15.0dip"/>
+        </FrameLayout>
+    </ScrollView>
+</LinearLayout>

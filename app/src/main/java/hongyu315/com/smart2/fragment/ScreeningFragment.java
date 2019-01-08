@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.superrecycleview.superlibrary.adapter.SuperBaseAdapter;
 import com.superrecycleview.superlibrary.recycleview.ProgressStyle;
 import com.superrecycleview.superlibrary.recycleview.SuperRecyclerView;
 
@@ -14,21 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hongyu315.com.smart2.R;
+import hongyu315.com.smart2.activity.ShoppingDetailActivity;
 import hongyu315.com.smart2.adapter.ScreenAdapter;
-import hongyu315.com.smart2.api.API;
 import hongyu315.com.smart2.bean.Product;
-import hongyu315.com.smart2.bean.ProductList;
-import hongyu315.com.smart2.constant.Constant;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import hongyu315.com.smart2.util.SysUtils;
 
-public class ScreeningFragment extends BaseFragment {
+public class ScreeningFragment extends BaseFragment implements SuperBaseAdapter.OnItemClickListener {
 
     private SuperRecyclerView listView;
     private List<Product> productList = new ArrayList();
+    private ScreenAdapter adapter ;
+
 
     public ScreeningFragment() {
     }
@@ -64,7 +61,6 @@ public class ScreeningFragment extends BaseFragment {
         listView = ((SuperRecyclerView) paramView.findViewById(R.id.screen_fragment_super_recycler_view));
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(),2);
-//        layoutManager.setOrientation(LinearLayout.VERTICAL);
         listView.setLayoutManager(layoutManager);
         listView.setRefreshEnabled(true);
         listView.setLoadMoreEnabled(true);
@@ -72,50 +68,53 @@ public class ScreeningFragment extends BaseFragment {
         listView.setLoadingMoreProgressStyle(ProgressStyle.BallClipRotate);
         listView.setArrowImageView(R.mipmap.iconfont_downgrey);
 
+        adapter = new ScreenAdapter(getActivity(),productList);
+        listView.setAdapter(adapter);
+        adapter.setOnItemClickListener(this);
     }
 
     @Override
     protected void initData() {
         super.initData();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(Constant.BASE_URL)
-                .build();
-        API api = retrofit.create(API.class);
-        Call<ProductList> products = api.getProducts("1");
-        products.enqueue(new Callback<ProductList>() {
-            @Override
-            public void onResponse(Call<ProductList> call, Response<ProductList> response) {
-
-                try {
-                    String url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLpqf2EGjTYjuw207W6eKF1oL-pJjxtpSm8Ii0K3ndGHF6LQfk";
-                    String url1 = "https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg";
-                    for (int i = 0; i < 100; i++) {
-                        Product product = new Product();
-                        product.setType("测试艺术商品 " + i);
-                        product.setUrl(url1);
-                        productList.add(product);
-                    }
+        try {
+            String url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLpqf2EGjTYjuw207W6eKF1oL-pJjxtpSm8Ii0K3ndGHF6LQfk";
+            String url1 = "https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg";
+            for (int i = 0; i < 4; i++) {
+                Product product = new Product();
+                product.setType("测试艺术商品 " + i);
+                product.setUrl(url1);
+                productList.add(product);
+            }
 
 //                    productList = response.body();
-                    if (productList != null){
-                        ScreenAdapter adapter = new ScreenAdapter(getActivity(),productList);
-
-                        listView.setAdapter(adapter);
-                    }
-
-                }catch (Exception e){
-
-                }
-
+            if (productList != null){
+                adapter = new ScreenAdapter(getActivity(),productList);
+                adapter.notifyDataSetChanged();
             }
 
-            @Override
-            public void onFailure(Call<ProductList> call, Throwable t) {
-                Log.e(TAG, "onFailure: fail" );
-            }
-        });
+        }catch (Exception e){
+
+        }
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .baseUrl(Constant.BASE_URL)
+//                .build();
+//        API api = retrofit.create(API.class);
+//        Call<ProductList> products = api.getProducts("1");
+//        products.enqueue(new Callback<ProductList>() {
+//            @Override
+//            public void onResponse(Call<ProductList> call, Response<ProductList> response) {
+//
+//
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ProductList> call, Throwable t) {
+//                Log.e(TAG, "onFailure: fail" );
+//            }
+//        });
     }
 
     private void initListener(){
@@ -123,14 +122,35 @@ public class ScreeningFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 Log.e(TAG, "onRefresh: finish");
+                String url1 = "https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg";
+                for (int i = 0; i < 4; i++) {
+                    Product product = new Product();
+                    product.setType("测试艺术商品 " + i);
+                    product.setUrl(url1);
+                    productList.add(product);
+                }
                 listView.completeRefresh();
             }
 
             @Override
             public void onLoadMore() {
-
+                Log.e(TAG, "onRefresh: load more finish");
+                String url1 = "https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg";
+                for (int i = 0; i < 4; i++) {
+                    Product product = new Product();
+                    product.setType("测试艺术商品 " + i);
+                    product.setUrl(url1);
+                    productList.add(product);
+                }
+                listView.completeLoadMore();
             }
         });
     }
 
+    @Override
+    public void onItemClick(View view, Object item, int position) {
+        Bundle bundleParm = new Bundle();
+        bundleParm.putSerializable("key",productList.get(position).getUrl());
+        SysUtils.startActivity(getActivity(),ShoppingDetailActivity.class,bundleParm);
+    }
 }

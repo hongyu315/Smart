@@ -12,20 +12,19 @@ import java.util.ArrayList;
 
 import hongyu315.com.smart2.bean.TabEntity;
 import hongyu315.com.smart2.fragment.HomeFragment;
-import hongyu315.com.smart2.fragment.MallFragment;
 import hongyu315.com.smart2.fragment.ShoppingFragment;
 import hongyu315.com.smart2.fragment.UserCenterFragment;
 import hongyu315.com.smart2.util.ToastUtils;
 
 public class MainActivity extends FragmentActivity {
 
-    private String[] mTitles = { "Tab1", "Tab2", "Tab3", "Tab4" };
+    private String[] mTitles = { "首页", "购物车", "我的" };
     private long exitTime = 0L;
     private ArrayList<Fragment> mFragments = new ArrayList();
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList();
     private static CommonTabLayout mTabLayout;
-    private int[] mIconSelectIds = { R.mipmap.tab_home_select, R.mipmap.tab_menu_select, R.mipmap.shopping_cat_select, R.mipmap.tab_user_select };
-    private int[] mIconUnselectIds = { R.mipmap.tab_home_unselect, R.mipmap.tab_menu_unselect, R.mipmap.shopping_cat_unselect, R.mipmap.tab_user_unselect };
+    private int[] mIconSelectIds = { R.mipmap.tab_home_select,  R.mipmap.shopping_cat_select, R.mipmap.tab_user_select };
+    private int[] mIconUnselectIds = { R.mipmap.tab_home_unselect, R.mipmap.shopping_cat_unselect, R.mipmap.tab_user_unselect };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +46,13 @@ public class MainActivity extends FragmentActivity {
     protected void findViews()
     {
         this.mFragments.add(HomeFragment.getInstance());
-        this.mFragments.add(MallFragment.newInstance());
-        this.mFragments.add(ShoppingFragment.newInstance("1","2"));
-        this.mFragments.add(UserCenterFragment.newInstance("1","2"));
+        this.mFragments.add(ShoppingFragment.getInstance());
+        this.mFragments.add(UserCenterFragment.getInstance());
 
         int i = 0;
         while (i < this.mTitles.length)
         {
-            this.mTabEntities.add(new TabEntity(null, this.mIconSelectIds[i], this.mIconUnselectIds[i]));
+            this.mTabEntities.add(new TabEntity(mTitles[i], this.mIconSelectIds[i], this.mIconUnselectIds[i]));
             i += 1;
         }
         mTabLayout = (CommonTabLayout)findViewById(R.id.mainTabLayout);

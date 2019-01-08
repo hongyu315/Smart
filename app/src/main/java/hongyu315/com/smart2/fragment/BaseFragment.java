@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 public abstract class BaseFragment
         extends Fragment
 {
-    protected String TAG = "";
+    protected String TAG = "Smart";
     public final int TIMEOUT = 30000;
     protected Activity mActivity;
     protected FragmentManager mFragmentManager;

@@ -1,10 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.ShoppingDetailActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tl="http://schemas.android.com/apk/res-auto"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/bg_color"
+                android:focusable="true"
+                android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+    <RelativeLayout
+        android:id="@+id/topMenu"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dimen_48_dp"
+        android:layout_marginTop="@dimen/dimen_15_dp"
+        android:background="@color/bg_color">
+
+        <ImageView
+            android:id="@+id/iv_left_image_menu"
+            android:layout_width="@dimen/dimen_28_dp"
+            android:layout_height="@dimen/dimen_28_dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dimen_10_dp"
+            android:gravity="center_vertical"/>
+
+        <com.flyco.tablayout.SlidingTabLayout
+            android:id="@+id/tl_3"
+            android:layout_width="wrap_content"
+            android:layout_height="48.0dip"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@color/bg_color"
+            tl:tl_textAllCaps="true"
+            tl:tl_textBold="BOTH"
+            tl:tl_textsize="14.0sp"/>
+
+        <ImageView
+            android:id="@+id/iv_right_image_menu"
+            android:layout_width="@dimen/dimen_28_dp"
+            android:layout_height="@dimen/dimen_28_dp"
+            android:layout_alignTop="@id/iv_left_image_menu"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"/>
+    </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@id/vPager"
+        android:layout_width="fill_parent"
+        android:layout_height="180.0dip"
+        android:layout_above="@+id/bottomMenu"
+        android:layout_below="@+id/topMenu"
+        android:layout_gravity="center"
+        android:background="#ffffffff"/>
+
+    <LinearLayout
+        android:id="@+id/bottomMenu"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/beige"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/add_shopping_cart"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5.0dip"
+            android:layout_marginEnd="20.0dip"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="加入购物车"
+            android:textColor="@android:color/black"
+            android:textSize="18.0sp"/>
+
+        <TextView
+            android:id="@+id/go_pay"
+            android:layout_width="0.0dip"
+            android:layout_height="50.0dip"
+            android:layout_weight="0.5"
+            android:background="@color/ic_taobao"
+            android:gravity="center"
+            android:text="立即购买"
+            android:textColor="@android:color/white"
+            android:textSize="16.0sp"/>
+    </LinearLayout>
+</RelativeLayout>

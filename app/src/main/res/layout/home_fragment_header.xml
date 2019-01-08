@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/ll_group"
+        style="@style/MatchMatch"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/dimen_100_dp"
+            android:background="@color/bg_color">
+
+            <TextView
+                android:id="@+id/tv_login"
+                style="@style/WrapWrap"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dimen_10_dp"
+                android:layout_toEndOf="@+id/iv_portrait"
+                android:gravity="left"
+                android:text="@string/login_name"
+                android:textColor="@color/white"
+                android:textSize="18.0sp"/>
+
+            <TextView
+                android:id="@+id/tv_lv"
+                android:layout_width="@dimen/dimen_90_dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_login"
+                android:layout_alignStart="@+id/tv_login"
+                android:gravity="left"
+                android:paddingTop="@dimen/dimen_3_dp"
+                android:paddingRight="@dimen/dimen_10_dp"
+                android:paddingBottom="@dimen/dimen_3_dp"
+                android:text="用户等级"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_12_dp"/>
+
+            <ImageView
+                android:id="@+id/iv_notification_icon"
+                android:layout_width="8.0dip"
+                android:layout_height="8.0dip"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/dimen_10_dp"
+                android:layout_marginRight="@dimen/dimen_28_dp"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/tv_setting"
+                style="@style/WrapWrap"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/setting"/>
+
+            <ImageView
+                android:id="@+id/iv_portrait"
+                android:layout_width="@dimen/dimen_80_dp"
+                android:layout_height="@dimen/dimen_80_dp"
+                android:layout_below="@+id/iv_notification_icon"
+                android:layout_marginTop="18.0dip"
+                android:layout_toEndOf="@+id/iv_notification_icon"
+                android:src="@mipmap/default_head_portrait"/>
+        </RelativeLayout>
+
+        <include layout="@layout/line_view"/>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1.0px"
+            android:layout_marginTop="@dimen/dimen_10_dp"
+            android:background="#ffe5e5e5"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_my_shopping"
+            style="@style/MatchHeight_40"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/tv_my_all_shopping"
+                style="@style/WrapWrap"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dimen_15_dp"
+                android:text="@string/my_shopping"
+                android:textColor="@color/black_3"
+                android:textSize="14.0sp"/>
+
+            <TextView
+                android:id="@+id/my_fragment_tv_check_all_shopping"
+                style="@style/WrapWrap"
+                android:layout_alignTop="@+id/tv_my_all_shopping"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dimen_15_dp"
+                android:drawableRight="@mipmap/enter"
+                android:drawablePadding="@dimen/dimen_10_dp"
+                android:text="@string/my_all_shopping"
+                android:textColor="@color/black_8"
+                android:textSize="12.0sp"/>
+        </RelativeLayout>
+
+        <include layout="@layout/default_line_view"/>
+
+        <LinearLayout
+            android:id="@+id/ll_order"
+            android:layout_width="fill_parent"
+            android:layout_height="65.0dip"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:paddingTop="8.0dip">
+
+            <LinearLayout
+                android:id="@+id/my_payment"
+                style="@style/AutoMatch">
+
+                <RelativeLayout
+                    android:id="@+id/re_wallet"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_wallet"
+                        style="@style/WrapWrap"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/dimen_6_dp"
+                        android:src="@mipmap/wallet"/>
+
+                    <TextView
+                        android:id="@+id/unread_walletmsg_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-12.0dip"
+                        android:layout_marginTop="0.0dip"
+                        android:layout_marginRight="10.0dip"
+                        android:layout_toRightOf="@+id/iv_wallet"
+                        android:background="@drawable/linearlayoutframe_circle"
+                        android:gravity="center"
+                        android:text="7"
+                        android:textColor="@color/magenta"
+                        android:textSize="10.0sp"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        style="@style/WrapWrap"
+                        android:layout_below="@+id/iv_wallet"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/dimen_4_dp"
+                        android:text="@string/my_payment"
+                        android:textColor="@color/black_3"
+                        android:textSize="12.0sp"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/my_take_delivery"
+                style="@style/AutoMatch">
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_receiving"
+                        style="@style/WrapWrap"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/dimen_6_dp"
+                        android:src="@mipmap/receiving"/>
+
+                    <TextView
+                        android:id="@+id/unread_noReceiveOrde_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-12.0dip"
+                        android:layout_marginTop="0.0dip"
+                        android:layout_marginRight="10.0dip"
+                        android:layout_toRightOf="@+id/iv_receiving"
+                        android:background="@drawable/linearlayoutframe_circle"
+                        android:gravity="center"
+                        android:text="7"
+                        android:textColor="@color/magenta"
+                        android:textSize="10.0sp"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        style="@style/WrapWrap"
+                        android:layout_below="@+id/iv_receiving"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/dimen_4_dp"
+                        android:text="@string/my_take_delivery"
+                        android:textColor="@color/black_3"
+                        android:textSize="12.0sp"/>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/my_comment"
+                style="@style/AutoMatch">
+
+                <RelativeLayout
+                    android:id="@+id/re_evaluate"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_evaluate"
+                        style="@style/WrapWrap"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/dimen_6_dp"
+                        android:src="@mipmap/evaluate"/>
+
+                    <TextView
+                        android:id="@+id/unread_evaluatemsg_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-12.0dip"
+                        android:layout_marginTop="0.0dip"
+                        android:layout_marginRight="10.0dip"
+                        android:layout_toRightOf="@+id/iv_evaluate"
+                        android:background="@drawable/linearlayoutframe_normal"
+                        android:gravity="center"
+                        android:paddingLeft="@dimen/dimen_3_dp"
+                        android:paddingRight="@dimen/dimen_3_dp"
+                        android:text="27"
+                        android:textColor="@color/magenta"
+                        android:textSize="10.0sp"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        style="@style/WrapWrap"
+                        android:layout_below="@+id/iv_evaluate"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/dimen_4_dp"
+                        android:text="@string/my_comment"
+                        android:textColor="@color/black_3"
+                        android:textSize="12.0sp"/>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/my_refund"
+                style="@style/AutoMatch">
+
+                <ImageView
+                    android:id="@+id/iv_aftersale"
+                    style="@style/WrapWrap"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dimen_5_dp"
+                    android:src="@mipmap/aftersale"/>
+
+                <TextView
+                    style="@style/WrapWrap"
+                    android:layout_below="@+id/iv_aftersale"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dimen_4_dp"
+                    android:text="@string/my_refund"
+                    android:textColor="@color/black_3"
+                    android:textSize="12.0sp"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <include layout="@layout/line_view"/>
+
+        <View
+            style="@style/MatchOne"
+            android:layout_marginTop="@dimen/dimen_10_dp"
+            android:background="@color/line_color"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_my_appointment"
+            style="@style/MatchHeight_40"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/tv_my_appointment"
+                style="@style/WrapWrap"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dimen_15_dp"
+                android:text="@string/my_appointment"
+                android:textColor="@color/black_3"
+                android:textSize="14.0sp"/>
+        </RelativeLayout>
+
+        <include layout="@layout/default_line_view"/>
+
+        <LinearLayout
+            android:id="@+id/ll_subscribe"
+            android:layout_width="fill_parent"
+            android:layout_height="65.0dip"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:paddingTop="8.0dip">
+
+            <RelativeLayout
+                android:id="@+id/my_appointment_payment"
+                style="@style/AutoMatch">
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_collect"
+                        style="@style/WrapWrap"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/dimen_6_dp"
+                        android:src="@mipmap/wallet"/>
+
+                    <TextView
+                        android:id="@+id/unread_yywalletmsg_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-12.0dip"
+                        android:layout_marginTop="0.0dip"
+                        android:layout_marginRight="10.0dip"
+                        android:layout_toRightOf="@+id/iv_collect"
+                        android:background="@drawable/linearlayoutframe_circle"
+                        android:gravity="center"
+                        android:text="7"
+                        android:textColor="@color/magenta"
+                        android:textSize="10.0sp"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        style="@style/WrapWrap"
+                        android:layout_below="@+id/iv_collect"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/dimen_4_dp"
+                        android:text="@string/my_collect"
+                        android:textColor="@color/black_3"
+                        android:textSize="12.0sp"/>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/my_appointment_use"
+                style="@style/AutoMatch">
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_address"
+                        style="@style/WrapWrap"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/dimen_6_dp"
+                        android:src="@mipmap/use"/>
+
+                    <TextView
+                        android:id="@+id/unread_yyusemsg_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-12.0dip"
+                        android:layout_marginTop="0.0dip"
+                        android:layout_marginRight="10.0dip"
+                        android:layout_toRightOf="@+id/iv_address"
+                        android:background="@drawable/linearlayoutframe_circle"
+                        android:gravity="center"
+                        android:text="7"
+                        android:textColor="@color/magenta"
+                        android:textSize="10.0sp"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        style="@style/WrapWrap"
+                        android:layout_below="@+id/iv_address"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/dimen_4_dp"
+                        android:text="@string/my_address"
+                        android:textColor="@color/black_3"
+                        android:textSize="12.0sp"/>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/my_appointment_comment"
+                style="@style/AutoMatch">
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_msg_center"
+                        style="@style/WrapWrap"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/dimen_6_dp"
+                        android:src="@mipmap/evaluate"/>
+
+                    <TextView
+                        android:id="@+id/unread_yyevaluatemsg_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-12.0dip"
+                        android:layout_marginTop="0.0dip"
+                        android:layout_marginRight="10.0dip"
+                        android:layout_toRightOf="@+id/iv_msg_center"
+                        android:background="@drawable/linearlayoutframe_normal"
+                        android:gravity="center"
+                        android:paddingLeft="@dimen/dimen_3_dp"
+                        android:paddingRight="@dimen/dimen_3_dp"
+                        android:text="27"
+                        android:textColor="@color/magenta"
+                        android:textSize="10.0sp"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        style="@style/WrapWrap"
+                        android:layout_below="@+id/iv_msg_center"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/dimen_4_dp"
+                        android:text="@string/my_msg_center"
+                        android:textColor="@color/black_3"
+                        android:textSize="12.0sp"/>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/my_appointment_refund"
+                style="@style/AutoMatch">
+
+                <ImageView
+                    android:id="@+id/iv_use_hlep"
+                    style="@style/WrapWrap"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dimen_6_dp"
+                    android:src="@mipmap/aftersale"/>
+
+                <TextView
+                    style="@style/WrapWrap"
+                    android:layout_below="@+id/iv_use_hlep"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dimen_4_dp"
+                    android:text="@string/my_use_hlep"
+                    android:textColor="@color/black_3"
+                    android:textSize="12.0sp"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <include layout="@layout/line_view"/>
+
+        <View
+            style="@style/MatchOne"
+            android:layout_marginTop="@dimen/dimen_10_dp"
+            android:background="@color/line_color"/>
+
+        <RelativeLayout
+            style="@style/MatchHeight_40"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/tv_other_goods"
+                style="@style/WrapWrap"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dimen_15_dp"
+                android:text="@string/my_commission"
+                android:textColor="@color/black_3"
+                android:textSize="14.0sp"/>
+
+            <TextView
+                style="@style/MatchWrap"
+                android:layout_alignBottom="@+id/tv_other_goods"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="@dimen/dimen_15_dp"
+                android:drawableRight="@mipmap/enter"
+                android:drawablePadding="@dimen/dimen_10_dp"
+                android:gravity="center|right"
+                android:textColor="@color/black_8"
+                android:textSize="12.0sp"/>
+        </RelativeLayout>
+
+        <include layout="@layout/default_line_view"/>
+    </LinearLayout>
+</LinearLayout>

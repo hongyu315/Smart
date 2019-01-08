@@ -103,4 +103,5 @@
     <string name="share_cancel">分享已取消</string>
     <string name="shoppingcat">购物车</string>
     <string name="social_fail_weixin_un_install">分享失败，未安装微信。</string>
+    <string name="title_activity_search">SearchActivity</string>
 </resources>

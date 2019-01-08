@@ -1,108 +1,149 @@
 package hongyu315.com.smart2.fragment;
 
-import android.net.Uri;
+import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
+import com.aspsine.swipetoloadlayout.OnRefreshListener;
+import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import hongyu315.com.smart2.R;
+import hongyu315.com.smart2.adapter.UserCenterProductAdapter;
+import hongyu315.com.smart2.bean.Product;
+import hongyu315.com.smart2.view.HeaderGridView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link UserCenterFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link UserCenterFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class UserCenterFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class UserCenterFragment extends BaseFragment implements OnRefreshListener, OnLoadMoreListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private List<Product> productList = new ArrayList();
+    private UserCenterProductAdapter adapter;
 
-//    private OnFragmentInteractionListener mListener;
+    private SwipeToLoadLayout swipeToLoadLayout;
+
+
+    private HeaderGridView gridView;
+
+    private View headerLayout;
+    private View footer;
+
+    static int mLoadMoreNum = 0;
+    static int mRefreshNum = 0;
+    private Handler handler = new Handler()
+    {
+        public void handleMessage(Message paramAnonymousMessage)
+        {
+            switch (paramAnonymousMessage.what)
+            {
+                default:
+//                    addHeaderView();
+                    return;
+            }
+        }
+    };
 
     public UserCenterFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UserCenterFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static UserCenterFragment newInstance(String param1, String param2) {
-        UserCenterFragment fragment = new UserCenterFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static UserCenterFragment getInstance() {
+        return new UserCenterFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_user_center, container, false);
     }
 
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-//
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
+    @Override
+    public void onViewCreated(View paramView, Bundle paramBundle) {
+        super.onViewCreated(paramView, paramBundle);
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        findViews(paramView);
+        initData();
+    }
+
+    @Override
+    protected void findViews(View paramView) {
+        super.findViews(paramView);
+
+        swipeToLoadLayout = (SwipeToLoadLayout) paramView.findViewById(R.id.swipeToLoadLayout);
+        gridView = (HeaderGridView) paramView.findViewById(R.id.swipe_target);
+
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        headerLayout = inflater.inflate(R.layout.home_fragment_header,null);
+        gridView.addHeaderView(headerLayout);
+
+        swipeToLoadLayout.setOnRefreshListener(this);
+        swipeToLoadLayout.setOnLoadMoreListener(this);
+//        swipeToLoadLayout.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                swipeToLoadLayout.setRefreshing(true);
+//            }
+//        }, 100);
+
+        adapter = new UserCenterProductAdapter(getActivity(),productList);
+
+        gridView.setAdapter(adapter);
+
+        footer = getLayoutInflater().inflate(R.layout.listview_footer, swipeToLoadLayout, false);
+        swipeToLoadLayout.setLoadMoreFooterView(footer);
+//        this.handler.sendEmptyMessageDelayed(0, 3000L);
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+
+        String url1 = "https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg";
+        for (int i = 0; i < 4; i++) {
+            Product product = new Product();
+            product.setType("测试衍生商品 " + i);
+            product.setUrl(url1);
+            productList.add(product);
+        }
+
+        if (productList != null){
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        Log.e("HongYu", "onRefresh: 下拉刷新");
+        swipeToLoadLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                swipeToLoadLayout.setRefreshing(false);
+                mRefreshNum ++;
+//                mAdapter.add("下拉刷新" + mLoadMoreNum);
+            }
+        }, 3000);
+    }
+
+    @Override
+    public void onLoadMore() {
+        Log.e("HongYu", "onRefresh: 上拉加载");
+        swipeToLoadLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                swipeToLoadLayout.setLoadingMore(false);
+                mLoadMoreNum ++;
+//                mAdapter.add("上拉加载更多" + mLoadMoreNum);
+            }
+        }, 3000);
     }
 }

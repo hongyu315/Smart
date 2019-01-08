@@ -67,7 +67,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
     public MallFragment() {
     }
 
-    public static MallFragment newInstance() {
+    public static MallFragment getInstance() {
         return new MallFragment();
     }
 
