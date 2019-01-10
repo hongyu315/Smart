@@ -17,4 +17,5 @@
     </attr>
 
     <attr name="mainLayoutId" format="reference"/>
+
 </resources>

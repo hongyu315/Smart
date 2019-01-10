@@ -30,6 +30,20 @@
             android:name=".activity.SearchActivity"
             android:label="@string/title_activity_search">
         </activity>
+        <activity android:name=".activity.MessageActivity">
+        </activity>
+        <activity android:name=".activity.BaseActivity">
+        </activity>
+        <activity android:name=".activity.FavoriteActivity">
+        </activity>
+        <activity android:name=".activity.MyOrderActivity">
+        </activity>
+        <activity android:name=".activity.LogisticsActivity">
+        </activity>
+        <activity android:name=".activity.OrderDetailActivity">
+        </activity>
+        <activity android:name=".activity.AboutActivity">
+        </activity>
     </application>
 
 </manifest>

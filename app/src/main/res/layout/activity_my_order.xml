@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tl="http://schemas.android.com/apk/res-auto"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/ghostwhite"
+                android:clipToPadding="true"
+                android:fitsSystemWindows="true">
+
+    <hongyu315.com.smart2.view.TopTitleBarView
+        android:id="@+id/topTitleBarView"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dimen_48_dp"/>
+
+    <com.flyco.tablayout.SlidingTabLayout
+        android:id="@+id/slidingTabLayout"
+        android:layout_below="@+id/topTitleBarView"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#EEEEEE"
+        tl:tl_textSelectColor="@color/yellow"
+        tl:tl_indicator_color="@color/yellow"
+        tl:tl_textUnselectColor="#66000000"
+        tl:tl_tab_padding="0dp"
+        tl:tl_tab_width="90dp"
+        tl:tl_textsize="15sp"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/my_order_view_pager"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/slidingTabLayout"/>
+
+
+</RelativeLayout>

@@ -1,53 +1,33 @@
 package hongyu315.com.smart2.fragment;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
-import com.aspsine.swipetoloadlayout.OnRefreshListener;
-import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.LinearLayout;
 
 import hongyu315.com.smart2.R;
-import hongyu315.com.smart2.adapter.UserCenterProductAdapter;
-import hongyu315.com.smart2.bean.Product;
-import hongyu315.com.smart2.view.HeaderGridView;
+import hongyu315.com.smart2.activity.FavoriteActivity;
+import hongyu315.com.smart2.activity.MessageActivity;
+import hongyu315.com.smart2.activity.MyOrderActivity;
+import hongyu315.com.smart2.util.SysUtils;
+import hongyu315.com.smart2.view.TopTitleBarView;
 
-public class UserCenterFragment extends BaseFragment implements OnRefreshListener, OnLoadMoreListener {
+public class UserCenterFragment extends BaseFragment implements View.OnClickListener {
 
-    private List<Product> productList = new ArrayList();
-    private UserCenterProductAdapter adapter;
+    private TopTitleBarView titleBarView;
 
-    private SwipeToLoadLayout swipeToLoadLayout;
-
-
-    private HeaderGridView gridView;
-
-    private View headerLayout;
-    private View footer;
-
-    static int mLoadMoreNum = 0;
-    static int mRefreshNum = 0;
-    private Handler handler = new Handler()
-    {
-        public void handleMessage(Message paramAnonymousMessage)
-        {
-            switch (paramAnonymousMessage.what)
-            {
-                default:
-//                    addHeaderView();
-                    return;
-            }
-        }
-    };
+    //已完成
+    private LinearLayout haveDoneLayout;
+    //待付款
+    private LinearLayout waitForPayLayout;
+    //待发货
+    private LinearLayout waitForDeliverLayout;
+    //待收货
+    private LinearLayout waitForReceiveLayout;
+    //收藏夹
+    private LinearLayout favoriteLayout;
 
     public UserCenterFragment() {
     }
@@ -72,78 +52,64 @@ public class UserCenterFragment extends BaseFragment implements OnRefreshListene
         super.onViewCreated(paramView, paramBundle);
 
         findViews(paramView);
-        initData();
     }
 
     @Override
     protected void findViews(View paramView) {
         super.findViews(paramView);
 
-        swipeToLoadLayout = (SwipeToLoadLayout) paramView.findViewById(R.id.swipeToLoadLayout);
-        gridView = (HeaderGridView) paramView.findViewById(R.id.swipe_target);
+        titleBarView = ((TopTitleBarView) paramView.findViewById(R.id.topTitleBarView));
+        titleBarView.mTopTitleBarViewBg.setBackgroundResource(R.color.bg_color);
+        titleBarView.mTvTitle.setTextColor(getResources().getColor(R.color.white));
+        titleBarView.mTvTitle.setText(getResources().getString(R.string.user_center));
+        titleBarView.mTvRightSearch.setImageResource(R.mipmap.menu_icon);
+        titleBarView.mTvRightSearch.setOnClickListener(this);
 
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        headerLayout = inflater.inflate(R.layout.home_fragment_header,null);
-        gridView.addHeaderView(headerLayout);
+        haveDoneLayout = (LinearLayout)paramView.findViewById(R.id.have_done_layout);
+        waitForPayLayout = (LinearLayout)paramView.findViewById(R.id.wait_for_pay);
+        waitForDeliverLayout = (LinearLayout)paramView.findViewById(R.id.wait_for_deliver);
+        waitForReceiveLayout = (LinearLayout)paramView.findViewById(R.id.wait_for_receive);
+        favoriteLayout = (LinearLayout)paramView.findViewById(R.id.favorite_layout);
 
-        swipeToLoadLayout.setOnRefreshListener(this);
-        swipeToLoadLayout.setOnLoadMoreListener(this);
-//        swipeToLoadLayout.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                swipeToLoadLayout.setRefreshing(true);
-//            }
-//        }, 100);
-
-        adapter = new UserCenterProductAdapter(getActivity(),productList);
-
-        gridView.setAdapter(adapter);
-
-        footer = getLayoutInflater().inflate(R.layout.listview_footer, swipeToLoadLayout, false);
-        swipeToLoadLayout.setLoadMoreFooterView(footer);
-//        this.handler.sendEmptyMessageDelayed(0, 3000L);
+        haveDoneLayout.setOnClickListener(this);
+        waitForPayLayout.setOnClickListener(this);
+        waitForDeliverLayout.setOnClickListener(this);
+        waitForReceiveLayout.setOnClickListener(this);
+        favoriteLayout.setOnClickListener(this);
     }
 
-    @Override
-    protected void initData() {
-        super.initData();
 
-        String url1 = "https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg";
-        for (int i = 0; i < 4; i++) {
-            Product product = new Product();
-            product.setType("测试衍生商品 " + i);
-            product.setUrl(url1);
-            productList.add(product);
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.top_title_bar_search:
+                SysUtils.startActivity(getActivity(),MessageActivity.class);
+                break;
+            case R.id.have_done_layout:
+                Intent intent = new Intent(getActivity(),MyOrderActivity.class);
+                intent.putExtra("index",0);
+                getActivity().startActivity(intent);
+                break;
+            case R.id.wait_for_pay:
+                Intent intent1 = new Intent(getActivity(),MyOrderActivity.class);
+                intent1.putExtra("index",1);
+                getActivity().startActivity(intent1);
+                break;
+            case R.id.wait_for_deliver:
+                Intent intent2 = new Intent(getActivity(),MyOrderActivity.class);
+                intent2.putExtra("index",2);
+                getActivity().startActivity(intent2);
+                break;
+            case R.id.wait_for_receive:
+                Intent intent3 = new Intent(getActivity(),MyOrderActivity.class);
+                intent3.putExtra("index",3);
+                getActivity().startActivity(intent3);
+                break;
+            case R.id.favorite_layout:
+                SysUtils.startActivity(getActivity(),FavoriteActivity.class);
+                break;
+            default:
+                break;
         }
-
-        if (productList != null){
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public void onRefresh() {
-        Log.e("HongYu", "onRefresh: 下拉刷新");
-        swipeToLoadLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipeToLoadLayout.setRefreshing(false);
-                mRefreshNum ++;
-//                mAdapter.add("下拉刷新" + mLoadMoreNum);
-            }
-        }, 3000);
-    }
-
-    @Override
-    public void onLoadMore() {
-        Log.e("HongYu", "onRefresh: 上拉加载");
-        swipeToLoadLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipeToLoadLayout.setLoadingMore(false);
-                mLoadMoreNum ++;
-//                mAdapter.add("上拉加载更多" + mLoadMoreNum);
-            }
-        }, 3000);
     }
 }

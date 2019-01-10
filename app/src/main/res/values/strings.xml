@@ -1,4 +1,16 @@
 <resources>
+
+    <string name="favorite">我的收藏</string>
+    <string name="add_to_shopping_car">加入购物车</string>
+    <string name="delete">删除</string>
+    <string name="my_order">我的订单</string>
+    <string name="message">消息列表</string>
+    <string name="user_center">个人中心</string>
+    <string name="logistics">物流信息</string>
+    <string name="order_detail">订单详情</string>
+    <string name="wait_for_pay">等待付款</string>
+
+
     <!--<string name="app_name">Smart2</string>-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -52,7 +64,7 @@
     <string name="abc_font_family_title_material">sans-serif-medium</string>
     <string name="actionBar_edit">编辑</string>
     <string name="all">全选</string>
-    <string name="app_name">yesmuseum</string>
+    <string name="app_name">Android练手测试</string>
     <string name="appbar_scrolling_view_behavior">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="bottom_sheet_behavior">android.support.design.widget.BottomSheetBehavior</string>
     <string name="character_counter_pattern">%1$d / %2$d</string>

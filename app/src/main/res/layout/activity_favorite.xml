@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cutline_gray"
+    android:orientation="vertical"
+    >
+
+    <hongyu315.com.smart2.view.TopTitleBarView
+        android:id="@+id/topTitleBarView"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dimen_48_dp"
+        android:layout_alignParentStart="true"/>
+
+
+    <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+        android:id="@+id/swipeToLoadLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <include
+            android:id="@id/swipe_refresh_header"
+            layout="@layout/layout_weibo_header"/>
+
+        <ListView
+            android:id="@id/swipe_target"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/cutline_gray"
+            android:divider="#00000000"
+            android:dividerHeight="@dimen/dimen_10_dp"
+            android:padding="@dimen/dimen_10_dp"/>
+
+        <include
+            android:id="@id/swipe_load_more_footer"
+            layout="@layout/layout_weibo_header"/>
+    </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
+
+
+</LinearLayout>

@@ -61,7 +61,6 @@
         android:background="@color/light_white"
         android:orientation="vertical">
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -79,8 +78,6 @@
         </GridView>
 
         </LinearLayout>
-
-
 
 
 </LinearLayout>
