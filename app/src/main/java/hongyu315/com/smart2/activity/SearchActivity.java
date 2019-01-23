@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hongyu315.com.smart2.R;
-import hongyu315.com.smart2.adapter.SearchAdapter;
+import hongyu315.com.smart2.adapter.ProductAdapter;
+import hongyu315.com.smart2.bean.Product;
 import hongyu315.com.smart2.bean.SearchContent;
 
 public class SearchActivity extends BaseActivity implements View.OnClickListener {
@@ -18,8 +19,8 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private EditText searchEditText;
     private TextView cancalTextView;
     private GridView searchContentList;
-    private SearchAdapter adapter;
-    private List<SearchContent> dataList = new ArrayList<>();
+    private ProductAdapter adapter;
+    private List<Product> dataList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         cancalTextView = findViewById(R.id.search_cancal);
         searchContentList = findViewById(R.id.search_content_list);
 
-        adapter = new SearchAdapter(this,dataList);
+        adapter = new ProductAdapter(this,dataList);
 
         searchContentList.setAdapter(adapter);
         cancalTextView.setOnClickListener(this);
@@ -43,9 +44,9 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
     protected void initData(){
         for (int i = 0; i < 10; i++) {
-            SearchContent content = new SearchContent();
-            content.setsContent("袜子" + i);
-            dataList.add(content);
+            Product product = new Product();
+            product.setUrl("http://img3.imgtn.bdimg.com/it/u=2949159174,2649619291&fm=11&gp=0.jpg");            SearchContent content = new SearchContent();
+            dataList.add(product);
         }
 
         adapter.notifyDataSetChanged();

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.AddAddressActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.hjq.bar.TitleBar
+            android:id="@+id/add_address_title_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/address_manager"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/add_address_confirm"
+            android:layout_below="@+id/add_address_title_bar"
+            android:padding="@dimen/dimen_10_dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:padding="@dimen/dimen_10_dp">
+
+                    <TextView
+                        android:id="@+id/address_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="收货货主"/>
+
+                    <EditText
+                        android:id="@+id/address_name_edit_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/dimen_10_dp"
+                        android:layout_toRightOf="@+id/address_name"
+                        android:background="@null"
+                        android:hint="收货人"
+                        android:textCursorDrawable="@null"
+                        android:textSize="@dimen/dimen_14_dp"/>
+
+                </RelativeLayout>
+
+                <include layout="@layout/line_view"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:padding="@dimen/dimen_10_dp">
+
+                    <TextView
+                        android:id="@+id/add_address_user_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="手机号码"/>
+
+                    <EditText
+                        android:id="@+id/add_address_user_phone_edit_text"
+                        android:textCursorDrawable="@null"
+                        android:textSize="@dimen/dimen_14_dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/dimen_10_dp"
+                        android:layout_toRightOf="@+id/add_address_user_phone"
+                        android:background="@null"
+                        android:hint="手机号码"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_10_dp"
+                    android:background="@color/white"
+                    android:padding="@dimen/dimen_10_dp">
+
+                    <TextView
+                        android:id="@+id/add_address_user_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="所在地区"/>
+
+                    <EditText
+                        android:id="@+id/add_address_user_address_edit_text"
+                        android:layout_width="wrap_content"
+                        android:textCursorDrawable="@null"
+                        android:textSize="@dimen/dimen_14_dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/dimen_10_dp"
+                        android:layout_toRightOf="@+id/add_address_user_address"
+                        android:background="@null"
+                        android:hint="所在地区"/>
+
+                </RelativeLayout>
+
+                <include layout="@layout/line_view"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:padding="@dimen/dimen_10_dp">
+
+                    <TextView
+                        android:id="@+id/add_address_user_address_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="详细地址"
+                        android:textCursorDrawable="@null"/>
+
+                    <EditText
+                        android:id="@+id/add_address_user_address_detail_edit_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textCursorDrawable="@null"
+                        android:textSize="@dimen/dimen_14_dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/dimen_10_dp"
+                        android:layout_toRightOf="@+id/add_address_user_address_detail"
+                        android:background="@null"
+                        android:hint="详细地址"/>
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/add_address_user_default_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onSetUserDefaultAddressLayoutClick"
+                    android:layout_marginTop="@dimen/dimen_10_dp"
+                    android:background="@color/white"
+                    android:padding="@dimen/dimen_10_dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="设为默认地址"/>
+
+                    <CheckBox
+                        android:id="@+id/add_address_user_default_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"/>
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <Button
+            android:id="@+id/add_address_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onAddAddressConfirmButtonClick"
+            android:layout_margin="@dimen/dimen_10_dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/dimen_20_dp"
+            android:text="@string/add_address_confirm"/>
+    </RelativeLayout>
+
+</LinearLayout>

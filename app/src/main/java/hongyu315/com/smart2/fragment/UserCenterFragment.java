@@ -8,15 +8,21 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import hongyu315.com.smart2.R;
+import hongyu315.com.smart2.activity.AccountManagerActivity;
 import hongyu315.com.smart2.activity.FavoriteActivity;
+import hongyu315.com.smart2.activity.LoginActivity;
 import hongyu315.com.smart2.activity.MessageActivity;
 import hongyu315.com.smart2.activity.MyOrderActivity;
+import hongyu315.com.smart2.manager.UserManager;
 import hongyu315.com.smart2.util.SysUtils;
 import hongyu315.com.smart2.view.TopTitleBarView;
 
 public class UserCenterFragment extends BaseFragment implements View.OnClickListener {
 
     private TopTitleBarView titleBarView;
+
+    //个人中心登录模块
+    private LinearLayout loginLayout;
 
     //已完成
     private LinearLayout haveDoneLayout;
@@ -65,12 +71,14 @@ public class UserCenterFragment extends BaseFragment implements View.OnClickList
         titleBarView.mTvRightSearch.setImageResource(R.mipmap.menu_icon);
         titleBarView.mTvRightSearch.setOnClickListener(this);
 
+        loginLayout = (LinearLayout) paramView.findViewById(R.id.user_center_login_layout);
         haveDoneLayout = (LinearLayout)paramView.findViewById(R.id.have_done_layout);
         waitForPayLayout = (LinearLayout)paramView.findViewById(R.id.wait_for_pay);
         waitForDeliverLayout = (LinearLayout)paramView.findViewById(R.id.wait_for_deliver);
         waitForReceiveLayout = (LinearLayout)paramView.findViewById(R.id.wait_for_receive);
         favoriteLayout = (LinearLayout)paramView.findViewById(R.id.favorite_layout);
 
+        loginLayout.setOnClickListener(this);
         haveDoneLayout.setOnClickListener(this);
         waitForPayLayout.setOnClickListener(this);
         waitForDeliverLayout.setOnClickListener(this);
@@ -78,10 +86,20 @@ public class UserCenterFragment extends BaseFragment implements View.OnClickList
         favoriteLayout.setOnClickListener(this);
     }
 
+    private void onLoginClick(){
+        if (UserManager.getInstance().isLogin()){
+            SysUtils.startActivity(getActivity(),AccountManagerActivity.class);
+        }else {
+            SysUtils.startActivity(getActivity(),LoginActivity.class);
+        }
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.user_center_login_layout:
+                onLoginClick();
+                break;
             case R.id.top_title_bar_search:
                 SysUtils.startActivity(getActivity(),MessageActivity.class);
                 break;

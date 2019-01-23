@@ -1,243 +1,60 @@
 package hongyu315.com.smart2.fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.superrecycleview.superlibrary.adapter.SuperBaseAdapter;
-import com.superrecycleview.superlibrary.recycleview.SuperRecyclerView;
+import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
+import com.aspsine.swipetoloadlayout.OnRefreshListener;
+import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import hongyu315.com.smart2.MainActivity;
 import hongyu315.com.smart2.R;
-import hongyu315.com.smart2.activity.ShoppingDetailActivity;
+import hongyu315.com.smart2.adapter.DialogSizeItemAdapter;
 import hongyu315.com.smart2.adapter.ShoppingCartAdapter;
 import hongyu315.com.smart2.bean.GoodsInfo;
+import hongyu315.com.smart2.util.DensityUtil;
 import hongyu315.com.smart2.util.SysUtils;
+import hongyu315.com.smart2.view.AmountView;
 
-public class ShoppingFragment extends BaseFragment implements View.OnClickListener,
-        SuperRecyclerView.LoadingListener,
-        ShoppingCartAdapter.onCheckClickListener,
-        ShoppingCartAdapter.onDelClickListener,
-        SuperBaseAdapter.OnItemClickListener {
+public class ShoppingFragment extends BaseFragment implements View.OnClickListener, ShoppingCartAdapter.onCheckboxClickListener, ShoppingCartAdapter.onAmountValueChangeListener {
 
 
-    private static final int TYPE_PULLREFRESH = 0;
-    private static final int TYPE_UPLOADREFRESH = 1;
-    protected String TAG = "";
     public LinearLayout check_LL;
     private int count = 0;
     private List<GoodsInfo> datas = new ArrayList();
-    private RelativeLayout errorWeb;
-    private Handler handler = new Handler()
-    {
-        public void handleMessage(Message paramAnonymousMessage)
-        {
-            switch (paramAnonymousMessage.what)
-            {
-                default:
-                    ShoppingFragment.this.updateloadData(0);
-                    return;
-            }
-        }
-    };
     public View layout_empty_shopcart;
     protected Activity mActivity;
     public CheckBox mAllCheckBox;
     public TextView mClearShoppingCart;
-    public TextView mCollectGoods;
-    public TextView mDelGoods;
     public TextView mGoPay;
     public RelativeLayout mLlCart;
     public LinearLayout mOrderInfo;
-    public TextView mShareGoods;
-    public LinearLayout mShareInfo;
     private ShoppingCartAdapter mShoppingCartAdapter;
     public TextView mTotalPrice;
-    private int pageNo1 = 1;
     private double price = 0.0D;
-    private SuperRecyclerView recyclerView;
-    public View rootView;
 
-    private void AddcheckAllGoodsInfoPrice(boolean paramBoolean) {}
+    private SwipeToLoadLayout swipeToLoadLayout;
+    private ListView recyclerView;
 
-    private void checkAllGoodsInfo(boolean paramBoolean)
-    {
-        List localList = this.datas;
-        int i = 0;
-        while (i < localList.size())
-        {
-            ((GoodsInfo)localList.get(i)).setChoosed(paramBoolean);
-            i += 1;
-        }
-        this.datas = localList;
-        mShoppingCartAdapter.mData = this.datas;
-//        this.mShoppingCartAdapter.setDatas(this.datas);
-        this.recyclerView.completeRefresh();
-        this.mShoppingCartAdapter.notifyDataSetChanged();
-    }
-
-    private void clearCart()
-    {
-        this.mClearShoppingCart.setVisibility(View.GONE);
-        this.mLlCart.setVisibility(View.GONE);
-        this.layout_empty_shopcart.setVisibility(View.GONE);
-    }
-
-    private void delAllGoodsInfo()
-    {
-        ArrayList localArrayList = new ArrayList();
-        int i = 0;
-        while (i < this.datas.size())
-        {
-            localArrayList.add(this.datas.get(i));
-            i += 1;
-        }
-        this.datas.removeAll(localArrayList);
-        this.mShoppingCartAdapter.mData = this.datas;
-        this.mShoppingCartAdapter.notifyDataSetChanged();
-        clearCart();
-    }
-
-    private ArrayList<GoodsInfo> initDataTest()
-    {
-        ArrayList localArrayList = new ArrayList();
-        int i = 0;
-        while (i < 4)
-        {
-            GoodsInfo localGoodsInfo = new GoodsInfo();
-            localGoodsInfo.setId(i + "");
-            localGoodsInfo.setChoosed(false);
-            localGoodsInfo.setName("购物车艺术品" + i);
-            localGoodsInfo.setImageUrl("https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg");
-            localGoodsInfo.setDesc("具体描述");
-            localGoodsInfo.setPrice(45.0D);
-            localGoodsInfo.setPrime_price(456.0D);
-            localGoodsInfo.setPostion(i);
-            localGoodsInfo.setCount(100);
-            localGoodsInfo.setSize("60");
-            localGoodsInfo.setGoodsImg(1);
-            localArrayList.add(localGoodsInfo);
-            i += 1;
-        }
-        return localArrayList;
-    }
-
-    private void onRefreshCart()
-    {
-        this.mClearShoppingCart.setVisibility(View.VISIBLE);
-        this.mLlCart.setVisibility(View.VISIBLE);
-        this.layout_empty_shopcart.setVisibility(View.GONE);
-    }
-
-
-    protected void findViews(View paramView)
-    {
-        this.rootView = paramView;
-        this.mClearShoppingCart = ((TextView)this.rootView.findViewById(R.id.clear_shopping_cart));
-        this.mAllCheckBox = ((CheckBox)this.rootView.findViewById(R.id.all_checkBox));
-        this.mClearShoppingCart.setOnClickListener(this);
-        this.mAllCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-        {
-            public void onCheckedChanged(CompoundButton paramAnonymousCompoundButton, boolean paramAnonymousBoolean)
-            {
-                ShoppingFragment.this.checkAllGoodsInfo(paramAnonymousBoolean);
-                ShoppingFragment.this.AddcheckAllGoodsInfoPrice(paramAnonymousBoolean);
-            }
-        });
-        this.recyclerView = ((SuperRecyclerView)this.rootView.findViewById(R.id.recyclerView));
-        this.mTotalPrice = ((TextView)this.rootView.findViewById(R.id.total_price));
-        this.mGoPay = ((TextView)this.rootView.findViewById(R.id.go_pay));
-        this.mGoPay.setOnClickListener(this);
-        this.mOrderInfo = ((LinearLayout)this.rootView.findViewById(R.id.order_info));
-        this.mShareGoods = ((TextView)this.rootView.findViewById(R.id.share_goods));
-        this.mCollectGoods = ((TextView)this.rootView.findViewById(R.id.collect_goods));
-        this.mDelGoods = ((TextView)this.rootView.findViewById(R.id.del_goods));
-        this.mShareInfo = ((LinearLayout)this.rootView.findViewById(R.id.share_info));
-        this.mLlCart = ((RelativeLayout)this.rootView.findViewById(R.id.ll_cart));
-        this.check_LL = ((LinearLayout)this.rootView.findViewById(R.id.check_LL));
-        this.layout_empty_shopcart = this.rootView.findViewById(R.id.layout_empty_shopcart);
-        this.layout_empty_shopcart.findViewById(R.id.no_cart).setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View paramAnonymousView)
-            {
-                MainActivity.setCurrentTab(1);
-            }
-        });
-//        paramView = new GridLayoutManager(this.mActivity, 1);
-        this.recyclerView.setLayoutManager(new GridLayoutManager(this.mActivity, 1));
-        this.recyclerView.setRefreshEnabled(true);
-        this.recyclerView.setLoadMoreEnabled(false);
-        this.recyclerView.setLoadingListener(this);
-        this.recyclerView.setRefreshProgressStyle(22);
-        this.recyclerView.setArrowImageView(2130903052);
-        this.mShoppingCartAdapter = new ShoppingCartAdapter(this.mActivity);
-        this.mShoppingCartAdapter.setOnCheckClickListener(this);
-        this.mShoppingCartAdapter.setOnDelClickListener(this);
-        this.recyclerView.setAdapter(this.mShoppingCartAdapter);
-        this.mShoppingCartAdapter.setOnItemClickListener(this);
-        this.recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener()
-        {
-            public void onScrollStateChanged(RecyclerView paramAnonymousRecyclerView, int paramAnonymousInt)
-            {
-                super.onScrollStateChanged(paramAnonymousRecyclerView, paramAnonymousInt);
-                if (paramAnonymousInt == 0)
-                {
-//                    GlideImageloader.GlidedResumeRequests(ShoppingFragment.this.mActivity);
-                    return;
-                }
-//                GlideImageloader.GlidedPauseRequests(ShoppingFragment.this.mActivity);
-            }
-
-            public void onScrolled(RecyclerView paramAnonymousRecyclerView, int paramAnonymousInt1, int paramAnonymousInt2)
-            {
-                super.onScrolled(paramAnonymousRecyclerView, paramAnonymousInt1, paramAnonymousInt2);
-            }
-        });
-    }
-
-    protected void initData()
-    {
-        this.recyclerView.setRefreshing(true);
-        this.handler.sendEmptyMessageDelayed(0, 1000L);
-    }
-
-    public void updateloadData(int paramInt)
-    {
-        initDataTest();
-        if (this.datas.size() > 0)
-        {
-            onRefreshCart();
-//            if (paramInt != 0) {
-//                break label66;
-//            }
-            this.datas = initDataTest();
-            this.mShoppingCartAdapter.mData = this.datas;
-            this.recyclerView.completeRefresh();
-            this.mShoppingCartAdapter.notifyDataSetChanged();
-        }
-//        label66:
-        while (paramInt != 1)
-        {
-            return;
-        }
-        this.datas.addAll(initDataTest());
-        this.mShoppingCartAdapter.mData = this.datas;
-        this.recyclerView.completeLoadMore();
-    }
+    //合计 ： 960元
+    private LinearLayout moneyLayout;
 
     public ShoppingFragment() {
     }
@@ -269,106 +86,343 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
+    protected void findViews(View paramView) {
+        super.findViews(paramView);
+
+        this.mClearShoppingCart = ((TextView)paramView.findViewById(R.id.clear_shopping_cart));
+        this.mAllCheckBox = ((CheckBox)paramView.findViewById(R.id.all_checkBox));
+        this.mClearShoppingCart.setOnClickListener(this);
+
+        this.mAllCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(CompoundButton paramAnonymousCompoundButton, boolean paramAnonymousBoolean)
+            {
+                ShoppingFragment.this.checkAllGoodsInfo(paramAnonymousBoolean);
+            }
+        });
+
+        swipeToLoadLayout = paramView.findViewById(R.id.swipeToLoadLayout);
+        this.recyclerView = ((ListView)paramView.findViewById(R.id.swipe_target));
+        this.mTotalPrice = ((TextView)paramView.findViewById(R.id.total_price));
+        this.mGoPay = ((TextView)paramView.findViewById(R.id.go_pay));
+        this.mGoPay.setOnClickListener(this);
+        this.mOrderInfo = ((LinearLayout)paramView.findViewById(R.id.order_info));
+        this.mLlCart = ((RelativeLayout)paramView.findViewById(R.id.ll_cart));
+        this.check_LL = ((LinearLayout)paramView.findViewById(R.id.check_LL));
+        this.layout_empty_shopcart = paramView.findViewById(R.id.layout_empty_shopcart);
+        moneyLayout = paramView.findViewById(R.id.money_layout);
+
+        this.mShoppingCartAdapter = new ShoppingCartAdapter(this.mActivity, datas, this, this);
+        recyclerView.setAdapter(mShoppingCartAdapter);
+
+        swipeToLoadLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                swipeToLoadLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeToLoadLayout.setLoadingMore(false);
+                    }
+                }, 3000);
+            }
+        });
+
+        swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeToLoadLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeToLoadLayout.setRefreshing(false);
+                    }
+                }, 3000);
+            }
+        });
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+
+        initDataTest();
+    }
+
+    private void initDataTest()
+    {
+        int i = 0;
+        while (i < 4)
+        {
+            GoodsInfo localGoodsInfo = new GoodsInfo();
+            localGoodsInfo.setId(i + "");
+            localGoodsInfo.setChoosed(false);
+            localGoodsInfo.setName("购物车艺术品" + i);
+            localGoodsInfo.setImageUrl("https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg");
+            localGoodsInfo.setDesc("具体描述");
+            localGoodsInfo.setPrice(45.0D);
+            localGoodsInfo.setPrime_price(456.0D);
+            localGoodsInfo.setPostion(i);
+            localGoodsInfo.setCount(100);
+            localGoodsInfo.setSize("1");
+            localGoodsInfo.setGoodsImg(1);
+            datas.add(localGoodsInfo);
+            i += 1;
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId())
         {
             default:
                 return;
             case R.id.clear_shopping_cart:
-                delAllGoodsInfo();
+                onEditClick();
+                return;
+            case R.id.go_pay:
+//                onGoPlayClick();
+                showBottomDialog();
                 return;
         }
-//        if (this.count > 0)
-//        {
-//            v = new Bundle();
-//            SysUtils.startActivity(this.mActivity, SureOrderActivity.class, paramView);
-//            return;
-//        }
-//        clearCart();
     }
 
-    @Override
-    public void onRefresh() {
-        this.handler.sendEmptyMessageDelayed(0, 1000L);
-    }
+    int sizeListSelectedPosition = 0;
+    int colorListSelectedPosition = 0;
+    int amountInDialog = 1;
+    private void showBottomDialog(){
 
-    @Override
-    public void onLoadMore() {
-        this.handler.sendEmptyMessageDelayed(0, 1000L);
-    }
+        //1、使用Dialog、设置style
+        final Dialog dialog = new Dialog(getActivity(),R.style.DialogTheme);
+        //2、设置布局
+        View view = View.inflate(getActivity(),R.layout.dialog_custom_layout,null);
 
-    @Override
-    public void onCheckClickListener(int paramInt, boolean paramBoolean) {
-        List localList = this.datas;
-        if (paramBoolean)
-        {
-            int i = 0;
-            while (i < localList.size())
-            {
-                if (((GoodsInfo)this.datas.get(paramInt)).getId() == ((GoodsInfo)localList.get(i)).getId())
-                {
-                    double d = this.price;
-                    this.price = (((GoodsInfo)this.datas.get(paramInt)).getPrice() + d);
-                    this.count += 1;
-                }
-                i += 1;
+        ListView sizeListView = view.findViewById(R.id.dialog_size_list);
+        List<String> items = new ArrayList<>();
+        items.add("M 四大行订单的等多久的解决");
+        items.add("M 四大行订单的等多久的解决");
+        items.add("M 四大行订单的等多久的解决");
+        items.add("M 四大行订单的等多久的解决");
+        final DialogSizeItemAdapter adapter = new DialogSizeItemAdapter(getActivity(),items);
+        sizeListView.setAdapter(adapter);
+
+        sizeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                adapter.changeSelected(position);
+                sizeListSelectedPosition = position;
             }
+        });
+        sizeListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                adapter.changeSelected(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        LinearLayout colorGridLayout = view.findViewById(R.id.dialog_color_list);
+        List<String> colors = new ArrayList<>();
+        colors.add("红色");
+        colors.add("红色");
+        colors.add("红色");
+        colors.add("红色");
+        colors.add("红色");
+        colors.add("红色");
+
+        final List<TextView> colorTextViews = new ArrayList<>(colors.size());
+
+        for (int i = 0; i < colors.size(); i++){
+            final TextView colorView = new TextView(getActivity());
+            colorView.setBackground(getResources().getDrawable(R.drawable.bg_amount_layout));
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(0,0,30,0);
+            colorView.setPadding(30,4,30,4);
+            colorView.setLayoutParams(lp);
+            colorView.setText(colors.get(i));
+            colorView.setTag(i);
+            colorView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //change other text status
+                    for(TextView textView : colorTextViews){
+                        textView.setBackgroundColor(getActivity().getResources().getColor(R.color.white));
+                        textView.setTextColor(getActivity().getResources().getColor(R.color.black));
+                    }
+                    colorListSelectedPosition = (int) v.getTag();
+                    colorView.setBackgroundColor(getActivity().getResources().getColor(R.color.black));
+                    colorView.setTextColor(getActivity().getResources().getColor(R.color.white));
+                }
+            });
+
+            colorTextViews.add(colorView);
+            colorGridLayout.addView(colorView);
         }
+
+
+        AmountView amountView = view.findViewById(R.id.dialog_color_item_amount);
+        amountView.setGoods_storage(Integer.MAX_VALUE);
+        amountView.etAmount.setText("1");
+        amountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
+            @Override
+            public void onAmountChange(View view, int amount) {
+                Log.e("Smart", "onAmountChange: mount = "  + amount );
+                amountInDialog = amount;
+            }
+        });
+
+        Button confirmBtn = view.findViewById(R.id.shopping_dialog_comfirm_btn);
+        confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("xxxx","size = " + sizeListSelectedPosition + "color" + colorListSelectedPosition + "amount" + amountInDialog  + "");
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setContentView(view);
+
+        Window window = dialog.getWindow();
+        //设置弹出位置
+        window.setGravity(Gravity.BOTTOM);
+        //设置弹出动画
+        window.setWindowAnimations(R.style.main_menu_animStyle);
+        //设置对话框大小
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,DensityUtil.dp2px(getActivity(), (float) (SysUtils.getScreenHeight(getActivity()) * 0.25)));
+        dialog.show();
+
+    }
+
+    /**
+     * 全选按钮点击
+     * @param paramBoolean
+     */
+    private void checkAllGoodsInfo(boolean paramBoolean)
+    {
+
+//        price = 0.0;
         int i = 0;
-        while (i < localList.size())
+        while (i < datas.size())
         {
-            if (((GoodsInfo)this.datas.get(paramInt)).getId() == ((GoodsInfo)localList.get(i)).getId())
-            {
-                this.price -= ((GoodsInfo)this.datas.get(paramInt)).getPrice();
-                this.count -= 1;
+            GoodsInfo goodsInfo = (GoodsInfo) datas.get(i);
+//            price += goodsInfo.getPrice();
+            goodsInfo.setChoosed(paramBoolean);
+            i += 1;
+        }
+
+        if (paramBoolean){//全选
+
+        }else {//全部取消
+            price = 0;
+        }
+
+//        String status = mClearShoppingCart.getText().toString();
+//        if (status.equalsIgnoreCase("编辑")){
+//            mTotalPrice.setText("￥" + price);
+//        }
+        this.mShoppingCartAdapter.notifyDataSetChanged();
+    }
+
+    private void clearCart()
+    {
+        this.mClearShoppingCart.setVisibility(View.GONE);
+        this.mLlCart.setVisibility(View.GONE);
+    }
+
+    private void delAllGoodsInfo()
+    {
+        ArrayList localArrayList = new ArrayList();
+        int i = 0;
+        while (i < this.datas.size())
+        {
+            if (datas.get(i).isChoosed()){
+                localArrayList.add(this.datas.get(i));
             }
             i += 1;
         }
-        this.mTotalPrice.setText("¥ " + this.price + "元");
-        this.mGoPay.setText(" 结算 " + this.count + " ）");
+
+        this.datas.removeAll(localArrayList);
+        this.mShoppingCartAdapter.notifyDataSetChanged();
+
+        if (datas.size() == 0){
+            clearCart();
+        }
+
+    }
+
+    public void onEditClick(){
+        String status = mClearShoppingCart.getText().toString();
+        if (status.equalsIgnoreCase("编辑")){
+            mClearShoppingCart.setText("完成");
+            mGoPay.setText("删除");
+            moneyLayout.setVisibility(View.GONE);
+        }else {
+            mClearShoppingCart.setText("编辑");
+            mGoPay.setText("去结算");
+            moneyLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * 去结算、删除按钮点击
+     */
+    public void onGoPlayClick(){
+        String status = mClearShoppingCart.getText().toString();
+        if (status.equalsIgnoreCase("完成")){
+            delAllGoodsInfo();
+        }else {
+
+        }
     }
 
     @Override
-    public void onDelClickListener(int paramInt) {
-//        Activity localActivity = this.mActivity;
-//        AlertView.Style localStyle = AlertView.Style.Alert;
-//        OnItemClickListener local5 = new OnItemClickListener()
-//        {
-//            public void onItemClick(Object paramAnonymousObject, int paramAnonymousInt)
-//            {
-//                if (paramAnonymousInt != -1)
-//                {
-//                    paramAnonymousObject = ShoppingFragment.this.datas;
-//                    paramAnonymousInt = 0;
-//                    while (paramAnonymousInt < ((List)paramAnonymousObject).size())
-//                    {
-//                        if (((GoodsInfo)ShoppingFragment.this.datas.get(paramInt)).getId() == ((GoodsInfo)((List)paramAnonymousObject).get(paramAnonymousInt)).getId()) {
-//                            ((List)paramAnonymousObject).remove(paramAnonymousInt);
-//                        }
-//                        paramAnonymousInt += 1;
-//                    }
-//                    if (ShoppingFragment.this.datas.size() > 0)
-//                    {
-//                        ShoppingFragment.access$202(ShoppingFragment.this, (List)paramAnonymousObject);
-//                        ShoppingFragment.this.mShoppingCartAdapter.setDatas(ShoppingFragment.this.datas);
-//                        ShoppingFragment.this.recyclerView.completeRefresh();
-//                        ShoppingFragment.this.mShoppingCartAdapter.notifyDataSetChanged();
-//                    }
-//                }
-//                else
-//                {
-//                    return;
-//                }
-//                ShoppingFragment.this.clearCart();
-//            }
-//        };
-//        new AlertView("������", "������������������������", "������", new String[] { "������" }, null, localActivity, localStyle, local5).setCancelable(true).show();
+    public void onCheckboxClick(View view, boolean isChecked) {
+        int position = (int) view.getTag();
+        datas.get(position).setChoosed(isChecked);
+
+        GoodsInfo goodsInfo = datas.get(position);
+        if (isChecked){
+            price += goodsInfo.getPrice() * Integer.valueOf(goodsInfo.getSize());
+        }else {
+            if (price > 0){
+                price -= goodsInfo.getPrice() * Integer.valueOf(goodsInfo.getSize());
+            }
+        }
+
+        String status = mClearShoppingCart.getText().toString();
+        if (status.equalsIgnoreCase("编辑")){
+            mTotalPrice.setText("￥" + price);
+        }
     }
 
+    /**
+     * 加 1 减 1 按钮监听
+     * @param view
+     * @param amount
+     */
     @Override
-    public void onItemClick(View view, Object item, int position) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("", "");
-        SysUtils.startActivity(this.mActivity, ShoppingDetailActivity.class, bundle);
+    public void onAmountValueChangeListener(View view, int amount) {
+        String status = mClearShoppingCart.getText().toString();
+
+        if (status.equalsIgnoreCase("编辑")){
+            int position = (int) view.getTag();
+            datas.get(position).setSize(amount + "");
+
+            price = 0.0;
+
+            int i = 0;
+            while (i < datas.size())
+            {
+                GoodsInfo goods = (GoodsInfo) datas.get(i);
+                if (goods.isChoosed()){
+                    price += goods.getPrice()  * Integer.valueOf(goods.getSize());
+                }
+                i += 1;
+            }
+
+
+            mTotalPrice.setText("￥" + price);
+        }
     }
 }

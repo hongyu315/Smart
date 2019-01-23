@@ -28,8 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dimen_6_dp"
-            android:text="清空"
+            android:padding="@dimen/dimen_10_dp"
+            android:text="编辑"
             android:textColor="@color/white"
             android:textSize="@dimen/dimen_18_dp"/>
     </RelativeLayout>
@@ -66,12 +66,27 @@
                 android:background="@color/gray"/>
         </LinearLayout>
 
-        <com.superrecycleview.superlibrary.recycleview.SuperRecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_above="@+id/bottom_menu"
-            android:layout_below="@+id/check_LL"/>
+
+        <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+            android:layout_below="@+id/check_LL"
+            android:id="@+id/swipeToLoadLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                android:id="@id/swipe_refresh_header"
+                layout="@layout/layout_weibo_header"/>
+
+            <ListView
+                android:id="@id/swipe_target"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"/>
+
+            <include
+                android:id="@id/swipe_load_more_footer"
+                layout="@layout/layout_weibo_header"/>
+        </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
 
         <LinearLayout
             android:id="@+id/bottom_menu"
@@ -109,6 +124,7 @@
                         android:orientation="vertical">
 
                         <LinearLayout
+                            android:id="@+id/money_layout"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:gravity="left"
@@ -139,52 +155,7 @@
                         android:layout_weight="0.5"
                         android:background="@color/ic_taobao"
                         android:gravity="center"
-                        android:text="结算(0)"
-                        android:textColor="@android:color/white"
-                        android:textSize="16.0sp"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/share_info"
-                    android:layout_width="0.0dip"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="0.7"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:id="@+id/share_goods"
-                        android:layout_width="0.0dip"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="0.3"
-                        android:background="@color/ic_yellow"
-                        android:gravity="center"
-                        android:text="分享宝贝"
-                        android:textColor="@android:color/white"
-                        android:textSize="16.0sp"/>
-
-                    <TextView
-                        android:id="@+id/collect_goods"
-                        android:layout_width="0.0dip"
-                        android:layout_height="fill_parent"
-                        android:layout_marginStart="1.0dip"
-                        android:layout_weight="0.3"
-                        android:background="@color/ic_taobao"
-                        android:gravity="center"
-                        android:text="移到收藏夹"
-                        android:textColor="@android:color/white"
-                        android:textSize="16.0sp"/>
-
-                    <TextView
-                        android:id="@+id/del_goods"
-                        android:layout_width="0.0dip"
-                        android:layout_height="fill_parent"
-                        android:layout_marginStart="1.0dip"
-                        android:layout_weight="0.3"
-                        android:background="@color/ic_red"
-                        android:gravity="center"
-                        android:text="删除"
+                        android:text="去结算"
                         android:textColor="@android:color/white"
                         android:textSize="16.0sp"/>
                 </LinearLayout>
@@ -203,4 +174,5 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:visibility="visible"/>
+
 </LinearLayout>

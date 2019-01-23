@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.AccountManagerActivity">
+
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/account_manager_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/account_manager"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/account_manager_title_bar"
+        android:padding="@dimen/dimen_10_dp">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/user_info_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:onClick="onUserInfoLayoutClick"
+                        style="@style/mid_layout">
+
+                        <ImageView
+                            android:id="@+id/user_icon"
+                            android:layout_width="@dimen/dimen_40_dp"
+                            android:layout_height="40dp"
+                            android:layout_marginRight="@dimen/dimen_10_dp"
+                            android:src="@mipmap/crical_icon"/>
+
+                        <TextView
+                            android:id="@+id/user_name"
+                            style="@style/usertext"
+                            android:text="洪雨"/>
+
+                        <ImageView style="@style/img_arrow"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:onClick="onAddressManagerLayoutClick"
+                    style="@style/mid_layout"
+                    android:layout_marginTop="@dimen/dimen_10_dp">
+
+                    <TextView
+                        style="@style/usertext"
+                        android:text="@string/address_manager"/>
+
+                    <ImageView style="@style/img_arrow"/>
+                </LinearLayout>
+
+                <include layout="@layout/line_view"/>
+
+                <LinearLayout
+                    android:onClick="onAboutLayoutClick"
+                    style="@style/mid_layout">
+
+                    <TextView
+                        style="@style/usertext"
+                        android:text="@string/about"/>
+
+                    <TextView
+                        android:id="@+id/version"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dimen_3_dp"
+                        android:text="v3.0.0"/>
+
+                    <ImageView style="@style/img_arrow"/>
+                </LinearLayout>
+
+                <include layout="@layout/line_view"/>
+
+                <LinearLayout
+                    android:onClick="onClearCacheLayoutClick"
+                    style="@style/mid_layout">
+
+                    <TextView
+                        style="@style/usertext"
+                        android:text="@string/clear_cache"/>
+
+                    <TextView
+                        android:id="@+id/cache_size"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dimen_3_dp"
+                        android:text="46.80M"/>
+
+                    <ImageView style="@style/img_arrow"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <Button
+            android:onClick="onLogoutButtonClick"
+            android:id="@+id/account_manager_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/black"
+            android:text="@string/account_manager_logout"
+            android:textColor="@color/white"/>
+    </RelativeLayout>
+
+
+</RelativeLayout>

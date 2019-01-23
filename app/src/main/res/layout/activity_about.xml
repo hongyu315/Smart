@@ -10,12 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:background="@color/bg_color"
         android:layout_height="match_parent">
 
-        <hongyu315.com.smart2.view.TopTitleBarView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,46 +19,54 @@
             android:orientation="vertical"
             android:weightSum="2">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_weight="1"
+                android:gravity="center_horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="0dp">
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <com.hjq.bar.TitleBar
+                    android:id="@+id/about_title_bar"
+                    app:title="@string/about"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
                 <ImageView
-                    android:layout_centerHorizontal="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/dimen_120_dp"
+                    android:layout_height="@dimen/dimen_120_dp"
                     android:src="@mipmap/art_user"/>
 
                 <LinearLayout
                     android:layout_marginLeft="@dimen/dimen_10_dp"
                     android:layout_marginRight="@dimen/dimen_10_dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_width="match_parent"
-                    android:background="@color/white"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
+                    android:onClick="onAuthNoticeLayoutClick"
+                    style="@style/mid_layout"
+                    android:layout_marginTop="@dimen/dimen_10_dp">
 
-                    <RelativeLayout
-                        android:padding="@dimen/dimen_10_dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:layout_centerVertical="true"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/delete"/>
-                        <ImageView
-                            android:layout_centerVertical="true"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:src="@mipmap/back"/>
-                    </RelativeLayout>
+                    <TextView
+                        style="@style/usertext"
+                        android:text="@string/auth_notice"/>
 
+                    <ImageView style="@style/img_arrow"/>
                 </LinearLayout>
 
-            </RelativeLayout>
+                <include layout="@layout/line_view"/>
+
+                <LinearLayout
+                    android:layout_marginLeft="@dimen/dimen_10_dp"
+                    android:layout_marginRight="@dimen/dimen_10_dp"
+                    android:onClick="onPrivateLicenceLayoutClick"
+                    style="@style/mid_layout">
+
+                    <TextView
+                        style="@style/usertext"
+                        android:text="@string/private_licence"/>
+
+                    <ImageView style="@style/img_arrow"/>
+                </LinearLayout>
+
+            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -70,6 +74,7 @@
                 android:layout_weight="1">
 
                 <TextView
+                    android:id="@+id/about_version"
                     android:layout_centerHorizontal="true"
                     android:text="当前版本：v3.0.0"
                     android:layout_marginBottom="@dimen/dimen_20_dp"

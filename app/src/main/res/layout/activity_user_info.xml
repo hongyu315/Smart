@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.UserInfoActivity">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/user_info_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/user_info"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/dimen_10_dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/user_info_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:onClick="onUserIconLayoutClick"
+                    style="@style/mid_layout">
+
+                    <TextView
+                        style="@style/usertext"
+                        android:text="@string/user_icon"/>
+
+                    <ImageView
+                        android:id="@+id/user_icon"
+                        android:layout_width="@dimen/dimen_40_dp"
+                        android:layout_height="40dp"
+                        android:layout_marginRight="@dimen/dimen_10_dp"
+                        android:src="@mipmap/crical_icon"/>
+
+                    <ImageView style="@style/img_arrow"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:onClick="onUserNickLayoutClick"
+                style="@style/mid_layout">
+
+                <TextView
+                    style="@style/usertext"
+                    android:text="@string/user_nickname"/>
+
+                <TextView
+                    android:id="@+id/user_nick_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dimen_3_dp"
+                    android:text="@string/un_fill_in"/>
+
+                <ImageView style="@style/img_arrow"/>
+            </LinearLayout>
+
+            <include layout="@layout/line_view"/>
+
+            <LinearLayout
+                android:onClick="onUserSexLayoutClick"
+                style="@style/mid_layout">
+
+                <TextView
+                    style="@style/usertext"
+                    android:text="@string/user_sex"/>
+
+                <TextView
+                    android:id="@+id/user_sex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dimen_3_dp"
+                    android:text="@string/un_fill_in"/>
+
+                <ImageView style="@style/img_arrow"/>
+            </LinearLayout>
+
+            <include layout="@layout/line_view"/>
+
+            <LinearLayout
+                android:onClick="onUserBirthDayLayoutClick"
+                style="@style/mid_layout">
+
+                <TextView
+                    style="@style/usertext"
+                    android:text="@string/user_birthday"/>
+
+                <TextView
+                    android:id="@+id/user_birthday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dimen_3_dp"
+                    android:text="@string/un_fill_in"/>
+
+                <ImageView style="@style/img_arrow"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -140,6 +140,7 @@
             android:layout_above="@+id/center_inside_user_center_layout">
 
             <LinearLayout
+                android:id="@+id/user_center_login_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"

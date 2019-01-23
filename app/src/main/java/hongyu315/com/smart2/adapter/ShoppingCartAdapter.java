@@ -1,84 +1,125 @@
 package hongyu315.com.smart2.adapter;
 
 import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.superrecycleview.superlibrary.adapter.BaseViewHolder;
-import com.superrecycleview.superlibrary.adapter.SuperBaseAdapter;
 
 import java.util.List;
 
 import hongyu315.com.smart2.R;
 import hongyu315.com.smart2.bean.GoodsInfo;
+import hongyu315.com.smart2.view.AmountView;
 
 public class ShoppingCartAdapter
-        extends SuperBaseAdapter<GoodsInfo>
+        extends BaseAdapter
 {
     public Context mContext;
-    private onCheckClickListener onCheckClickListener;
-    private onDelClickListener onDelClickListener;
+    private List<GoodsInfo> goodsInfoList;
+    private LayoutInflater mInflater;
+    private GoodsInfo goodsInfo;
 
-    public ShoppingCartAdapter(Context paramContext)
+    private onCheckboxClickListener mListener;
+    private onAmountValueChangeListener onAmountValueChangeListener;
+
+    public ShoppingCartAdapter(Context paramContext, List<GoodsInfo> paramList,
+                               onCheckboxClickListener listener, onAmountValueChangeListener amountValueChangeListener)
     {
-        super(paramContext);
         this.mContext = paramContext;
+        goodsInfoList = paramList;
+        mInflater = LayoutInflater.from(paramContext);
+        mListener = listener;
+        onAmountValueChangeListener = amountValueChangeListener;
     }
 
-    public ShoppingCartAdapter(Context paramContext, List<GoodsInfo> paramList)
-    {
-        super(paramContext, paramList);
-        this.mContext = paramContext;
+    @Override
+    public int getCount() {
+        return goodsInfoList.size();
     }
 
-    protected void convert(BaseViewHolder paramBaseViewHolder, GoodsInfo paramGoodsInfo, final int paramInt)
-    {
-        paramBaseViewHolder.setText(R.id.goods_name, paramGoodsInfo.getName());
-        paramBaseViewHolder.setText(R.id.goods_size, paramGoodsInfo.getSize());
-        paramBaseViewHolder.setText(R.id.goods_price, paramGoodsInfo.getPrice() + "");
-        paramBaseViewHolder.setText(R.id.goods_prime_price, paramGoodsInfo.getCount() + "");
-        paramBaseViewHolder.setOnClickListener(R.id.goods_del, new View.OnClickListener()
-        {
-            public void onClick(View paramAnonymousView)
-            {
-                ShoppingCartAdapter.this.onDelClickListener.onDelClickListener(paramInt);
+    @Override
+    public Object getItem(int position) {
+        return goodsInfoList.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder;
+        if (convertView == null){
+            viewHolder = new ViewHolder();
+
+            convertView = mInflater.inflate(R.layout.shoppingcart_product_item,null);
+
+            viewHolder.checkBox = convertView.findViewById(R.id.single_checkBox);
+            viewHolder.icon = convertView.findViewById(R.id.goods_image);
+            viewHolder.name = convertView.findViewById(R.id.goods_name);
+            viewHolder.goodContent = convertView.findViewById(R.id.goods_content);
+            viewHolder.goodSize = convertView.findViewById(R.id.goods_size);
+            viewHolder.goodPrice = convertView.findViewById(R.id.goods_price);
+            viewHolder.amountView = convertView.findViewById(R.id.amount_view);
+
+            convertView.setTag(viewHolder);
+        }else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        goodsInfo = goodsInfoList.get(position);
+
+        viewHolder.checkBox.setTag(position);
+        Glide.with(mContext).load(goodsInfo.getImageUrl()).into(viewHolder.icon);
+        viewHolder.name.setText(goodsInfo.getName());
+        viewHolder.goodPrice.setText("￥"  + goodsInfo.getPrice());
+        viewHolder.goodContent.setText(goodsInfo.getDesc());
+        viewHolder.checkBox.setChecked(goodsInfo.isChoosed());
+
+        viewHolder.amountView.setGoods_storage(Integer.MAX_VALUE);
+        viewHolder.amountView.etAmount.setText(goodsInfo.getSize());
+        viewHolder.amountView.setTag(position);
+        viewHolder.amountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
+            @Override
+            public void onAmountChange(View view, int amount) {
+                Log.e("Smart", "onAmountChange: mount = "  + amount );
+                onAmountValueChangeListener.onAmountValueChangeListener(view,amount);
             }
         });
-        Glide.with(this.mContext).load(paramGoodsInfo.getImageUrl()).into(((ImageView) paramBaseViewHolder.getView(R.id.goods_image)));
-//        GlideImageloader.GlidePictureTailor(this.mContext, paramGoodsInfo.getImageUrl(), (ImageView)paramBaseViewHolder.getView(2131558702), 2, 0);
-//        paramBaseViewHolder.setIsChecked(2131558701, paramGoodsInfo.isChoosed());
-//        paramBaseViewHolder.setOnCheckedChangeListener(2131558701, new CompoundButton.OnCheckedChangeListener()
-//        {
-//            public void onCheckedChanged(CompoundButton paramAnonymousCompoundButton, boolean paramAnonymousBoolean)
-//            {
-//                ShoppingCartAdapter.this.onCheckClickListener.onCheckClickListener(paramInt, paramAnonymousBoolean);
-//            }
-//        });
+        viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mListener.onCheckboxClick(buttonView,isChecked);
+            }
+        });
+
+        return convertView;
     }
 
-    protected int getItemViewLayoutId(int paramInt, GoodsInfo paramGoodsInfo)
-    {
-        return R.layout.shoppingcart_product_item;
+    public class ViewHolder{
+        CheckBox checkBox;
+        ImageView icon;
+        TextView name;
+        TextView goodContent;
+        TextView goodSize;
+        TextView goodPrice;
+        AmountView amountView;
     }
 
-    public void setOnCheckClickListener(onCheckClickListener paramonCheckClickListener)
-    {
-        this.onCheckClickListener = paramonCheckClickListener;
+    public interface onCheckboxClickListener{
+        void onCheckboxClick(View view, boolean isChecked);
     }
 
-    public void setOnDelClickListener(onDelClickListener paramonDelClickListener)
-    {
-        this.onDelClickListener = paramonDelClickListener;
-    }
-
-    public static abstract interface onCheckClickListener
-    {
-        public abstract void onCheckClickListener(int paramInt, boolean paramBoolean);
-    }
-
-    public static abstract interface onDelClickListener
-    {
-        public abstract void onDelClickListener(int paramInt);
+    public interface onAmountValueChangeListener{
+        void onAmountValueChangeListener(View view , int amount);
     }
 }

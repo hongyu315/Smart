@@ -26,4 +26,9 @@ public abstract class BaseActivity extends FragmentActivity {
         SysUtils.finish(this);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mFinish();
+    }
 }
