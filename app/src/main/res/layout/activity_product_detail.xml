@@ -91,6 +91,47 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <hongyu315.com.smart2.view.Banner
+                    android:id="@+id/product_detail_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_300_dp"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:text="商品详情列表"
+                    android:textColor="@color/black"
+                    android:layout_height="@dimen/dimen_100_dp"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:text="商品详情列表"
+                    android:textColor="@color/black"
+                    android:layout_height="@dimen/dimen_100_dp"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:text="商品详情列表"
+                    android:textColor="@color/black"
+                    android:layout_height="@dimen/dimen_100_dp"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:text="商品详情列表"
+                    android:textColor="@color/black"
+                    android:layout_height="@dimen/dimen_100_dp"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:text="商品详情列表"
+                    android:textColor="@color/black"
+                    android:layout_height="@dimen/dimen_100_dp"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:text="商品详情列表"
+                    android:textColor="@color/black"
+                    android:layout_height="@dimen/dimen_100_dp"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:text="商品详情列表"
+                    android:textColor="@color/black"
+                    android:layout_height="@dimen/dimen_100_dp"/>
+
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>

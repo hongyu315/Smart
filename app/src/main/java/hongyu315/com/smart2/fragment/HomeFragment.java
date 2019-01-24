@@ -2,7 +2,6 @@ package hongyu315.com.smart2.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -137,7 +136,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(getActivity(),ProductDetailActivity.class);
-        getActivity().startActivity(intent);
+        SysUtils.startActivity(getActivity(),ProductDetailActivity.class);
     }
 }
