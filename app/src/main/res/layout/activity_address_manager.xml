@@ -9,12 +9,14 @@
     tools:context=".activity.AddressManagerActivity">
 
     <RelativeLayout
+        android:background="@color/grey_200"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.hjq.bar.TitleBar
             android:id="@+id/address_activity_title_bar"
             app:title="@string/address_manager"
+            app:icon_left="@mipmap/back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -22,10 +24,11 @@
             android:id="@+id/add_address"
             android:onClick="onAddNewAddressLayoutClick"
             android:text="@string/add_address"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
+            android:background="@color/home_glod_text_unselect"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="@dimen/dimen_49_dp"/>
 
         <ListView
             android:id="@+id/address_list"

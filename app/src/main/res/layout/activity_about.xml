@@ -8,6 +8,7 @@
     tools:context=".activity.AboutActivity">
 
     <LinearLayout
+        android:background="@color/grey_200"
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_height="match_parent">
@@ -27,15 +28,17 @@
                 android:layout_height="wrap_content">
 
                 <com.hjq.bar.TitleBar
+                    app:icon_left="@mipmap/back"
                     android:id="@+id/about_title_bar"
                     app:title="@string/about"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
                 <ImageView
-                    android:layout_width="@dimen/dimen_120_dp"
-                    android:layout_height="@dimen/dimen_120_dp"
-                    android:src="@mipmap/art_user"/>
+                    android:layout_marginTop="@dimen/dimen_40_dp"
+                    android:layout_marginBottom="@dimen/dimen_20_dp"
+                    style="@style/WrapWrap"
+                    android:src="@mipmap/for_one_icon"/>
 
                 <LinearLayout
                     android:layout_marginLeft="@dimen/dimen_10_dp"
@@ -77,6 +80,7 @@
                     android:id="@+id/about_version"
                     android:layout_centerHorizontal="true"
                     android:text="当前版本：v3.0.0"
+                    android:textColor="#7a7a7b"
                     android:layout_marginBottom="@dimen/dimen_20_dp"
                     android:layout_alignParentBottom="true"
                     android:layout_width="wrap_content"

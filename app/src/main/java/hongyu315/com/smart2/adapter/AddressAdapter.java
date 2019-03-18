@@ -26,11 +26,11 @@ public class AddressAdapter extends BaseAdapter implements View.OnClickListener 
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
-    private List<Address> addressList;
-    private Address address;
+    private List<Address.DataBean.AddressBean> addressList;
+    private Address.DataBean.AddressBean address;
     private OnAddressItemClickListener mListener;
 
-    public AddressAdapter(Context context, List<Address> addresses, OnAddressItemClickListener listener){
+    public AddressAdapter(Context context, List<Address.DataBean.AddressBean> addresses, OnAddressItemClickListener listener){
         mContext = context;
         addressList = addresses;
         mLayoutInflater = LayoutInflater.from(context);
@@ -75,10 +75,10 @@ public class AddressAdapter extends BaseAdapter implements View.OnClickListener 
 
         address = addressList.get(position);
 
-        viewHolder.userName.setText(address.getUserName());
-        viewHolder.userPhone.setText(address.getUserPhone());
-        viewHolder.userAddress.setText(address.getUserLocate() + address.getUserDetailAddress());
-        viewHolder.isDefaultAddress.setChecked(address.isDefault());
+        viewHolder.userName.setText(address.getName());
+        viewHolder.userPhone.setText(address.getMobile());
+        viewHolder.userAddress.setText(address.getArea() + address.getAddress());
+        viewHolder.isDefaultAddress.setChecked(address.getDefaultX() == 1 ? true : false);
 
         viewHolder.editAddress.setTag(position);
         viewHolder.deleteAddress.setTag(position);

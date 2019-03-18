@@ -34,8 +34,8 @@ public class ScreenAdapter extends SuperBaseAdapter<Product> {
     @Override
     protected void convert(BaseViewHolder holder, Product item, int position) {
         product = productList.get(position);
-        holder.setText(R.id.product_txt,product.getType());
-        Glide.with(context).load(product.getUrl()).into((ImageView)holder.getView(R.id.product_img));
+//        holder.setText(R.id.product_txt,product.getType());
+        Glide.with(context).load(product.getThumb_url()).into((ImageView)holder.getView(R.id.product_img));
     }
 
     @Override

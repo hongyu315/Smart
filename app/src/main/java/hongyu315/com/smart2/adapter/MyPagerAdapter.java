@@ -26,7 +26,7 @@ public class MyPagerAdapter
 
     public Fragment getItem(int paramInt)
     {
-        return (Fragment)this.mlist.get(paramInt);
+        return this.mlist.get(paramInt);
     }
 
     @Nullable

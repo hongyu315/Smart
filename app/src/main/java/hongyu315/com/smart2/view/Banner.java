@@ -142,6 +142,8 @@ public class Banner extends RelativeLayout {
             views.clear();
         }
 
+        mAdapter = new BannerViewAdapter(views);
+
         for (int i = 0 ; i < dataList.size(); i++) {
             pointContainer.addView(BannerViewManager.getInstance().createPoint(getContext()));
         }
@@ -180,10 +182,13 @@ public class Banner extends RelativeLayout {
     }
 
     private void createBannerItem(String url, LinearLayout.LayoutParams lp, int position){
-        if (MimeTypeMap.getFileExtensionFromUrl(url).equals("mp4")) {
-            views.add(createVideoContainerLayout(getContext(),lp,url,position));
-        } else {
-            views.add(BannerViewManager.getInstance().createImageViewBanner(mActivity,lp,url));
+        try {
+            if (MimeTypeMap.getFileExtensionFromUrl(url).equals("mp4")) {
+                views.add(createVideoContainerLayout(getContext(),lp,url,position));
+            } else {
+                views.add(BannerViewManager.getInstance().createImageViewBanner(mActivity,lp,url));
+            }
+        }catch (Exception e){
         }
     }
 
@@ -205,11 +210,13 @@ public class Banner extends RelativeLayout {
 
     public void startBanner() {
         try {
-            mAdapter = new BannerViewAdapter(views);
-            viewPager.setAdapter(mAdapter);
-            viewPager.setOffscreenPageLimit(views.size());
-            viewPager.setCurrentItem(autoCurrIndex);
-            onSelect(autoCurrIndex);
+            if (views != null && views.size() > 0){
+//                mAdapter = new BannerViewAdapter(views);
+                viewPager.setAdapter(mAdapter);
+                viewPager.setOffscreenPageLimit(views.size());
+                viewPager.setCurrentItem(autoCurrIndex);
+                onSelect(autoCurrIndex);
+            }
         }catch (Exception e){
         }
     }
@@ -237,14 +244,26 @@ public class Banner extends RelativeLayout {
     }
 
     public void dataChanged() {
-        mAdapter.setDataList(views);
-        mAdapter.notifyDataSetChanged();
+        try{
+            if (mActivity != null && mAdapter != null && views != null){
+//                mAdapter.setDataList(views);
+//                mAdapter.notifyDataSetChanged();
+                startBanner();
+            }
+        }catch (Exception e){
+        }
     }
 
     public void destroy() {
-        views.clear();
-        views = null;
-        viewPager = null;
-        mAdapter = null;
+        try{
+            if (views != null && views.size() > 0){
+                views.clear();
+            }
+            views = null;
+            viewPager = null;
+            mAdapter = null;
+        }catch (Exception e){
+        }
+
     }
 }

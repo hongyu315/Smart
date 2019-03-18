@@ -8,7 +8,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-
     <style name="DialogTheme" parent="@android:style/Theme.Dialog">
         <!-- 边框 -->
         <item name="android:windowFrame">@null</item>
@@ -25,6 +24,29 @@
         <item name="android:backgroundDimEnabled">true</item>
         <!-- 遮罩层 -->
         <item name="android:backgroundDimAmount">0.5</item>
+    </style>
+
+    <style name="user_center_item_text" parent="WrapWrap">
+        <item name="android:textColor">#7b7b7a</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:layout_marginTop">@dimen/dimen_5_dp</item>
+    </style>
+
+    <style name="address_item_text" parent="WrapWrap">
+        <item name="android:textColor">@color/home_glod_text_unselect</item>
+        <item name="android:layout_centerInParent">true</item>
+    </style>
+
+    <style name="arrow_left_text" parent="WrapWrap">
+        <item name="android:textColor">@color/on_store_text_time</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_marginRight">@dimen/dimen_7_dp</item>
+    </style>
+
+    <!--自定义MyDialog样式-->
+    <style name="MyDialog">
+        <!-- 背景透明 -->
+        <item name="android:windowBackground">@drawable/single_unselect</item>
     </style>
 
     <!-- dialog的动画 -->
@@ -62,7 +84,7 @@
     <style name="img_arrow">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:src">@drawable/setting_arrow</item>
+        <item name="android:src">@mipmap/setting_arrow</item>
     </style>
 
     <!-- 上圆角样式 -->
@@ -94,6 +116,19 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <color name="tram">#00000000</color>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/abc_slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/abc_slide_out_bottom</item>
+    </style>
+
+    <style name="dialog_style" parent="android:Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/tram</item>
+        <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
+    </style>
 
     <!-- Here -->
     <style name="item_style">

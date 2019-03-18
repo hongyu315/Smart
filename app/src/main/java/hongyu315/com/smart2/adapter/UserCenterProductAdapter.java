@@ -56,8 +56,8 @@ public class UserCenterProductAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.screen_adapter_layout,null);
 
-            viewHolder.productIcon = (ImageView)convertView.findViewById(R.id.product_img);
-            viewHolder.productName = (TextView) convertView.findViewById(R.id.product_txt);
+            viewHolder.productIcon = convertView.findViewById(R.id.product_img);
+            viewHolder.productName = convertView.findViewById(R.id.product_txt);
 
             convertView.setTag(viewHolder);
         }else {
@@ -65,8 +65,8 @@ public class UserCenterProductAdapter extends BaseAdapter {
         }
 
         product = productList.get(position);
-        viewHolder.productName.setText(product.getType());
-        Glide.with(context).load(product.getUrl()).into((ImageView)viewHolder.productIcon);
+//        viewHolder.productName.setText(product.getType());
+        Glide.with(context).load(product.getThumb_url()).into(viewHolder.productIcon);
 
         return convertView;
     }

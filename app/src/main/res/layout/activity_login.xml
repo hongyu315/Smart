@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/login_bg"
     tools:context=".activity.LoginActivity">
 
     <LinearLayout
@@ -25,11 +26,11 @@
 
                 <ImageView
                     android:id="@+id/login_close_icon"
-                    android:onClick="onLoginCloseClick"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:src="@mipmap/search_icon"/>
+                    android:onClick="onLoginCloseClick"
+                    android:src="@mipmap/close"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -54,11 +55,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="10sp"
                             android:text="我已阅读并同意"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="10sp"
                             android:text="条款（可跳转）"/>
                     </LinearLayout>
 
@@ -71,65 +74,78 @@
 
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/dimen_50_dp">
+                            android:layout_height="@dimen/dimen_45_dp">
 
                             <EditText
                                 android:id="@+id/phone_edit_text"
                                 android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_centerVertical="true"
-                                android:layout_height="wrap_content"
                                 android:background="@null"
+                                android:inputType="phone"
+                                android:hint="手机号"
                                 android:textCursorDrawable="@null"
-                                android:hint="手机号"/>
+                                android:textColor="@color/edit_text_hint_color"
+                                android:textSize="14sp"
+                                />
                         </RelativeLayout>
 
                         <include layout="@layout/gray_line_view"/>
 
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/dimen_50_dp">
+                            android:layout_height="@dimen/dimen_45_dp">
 
                             <ImageView
+                                android:src="@mipmap/for_one_icon"
                                 android:id="@+id/image_verifier"
+                                android:layout_width="@dimen/dimen_80_dp"
+                                android:layout_height="@dimen/dimen_22_dp"
                                 android:layout_alignParentRight="true"
-                                android:src="@mipmap/search_icon"
-                                android:layout_centerVertical="true"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
+                                android:layout_centerVertical="true"/>
 
                             <EditText
                                 android:id="@+id/image_verifier_edit_text"
-                                android:layout_toLeftOf="@+id/image_verifier"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_centerVertical="true"
+                                android:layout_toLeftOf="@+id/image_verifier"
                                 android:background="@null"
-                                android:textCursorDrawable="@null"
-                                android:hint="图形验证码"/>
+                                android:textColor="@color/edit_text_hint_color"
+                                android:textSize="14sp"
+                                android:hint="图形验证码"
+                                android:textCursorDrawable="@null"/>
                         </RelativeLayout>
 
                         <include layout="@layout/gray_line_view"/>
 
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/dimen_50_dp">
+                            android:layout_height="@dimen/dimen_45_dp">
 
                             <Button
                                 android:id="@+id/get_verifier_code_btn"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="@dimen/dimen_80_dp"
+                                android:textSize="12sp"
+                                android:textColor="@color/gray"
+                                android:layout_height="@dimen/dimen_22_dp"
+                                android:background="@drawable/get_verify_bt_bg"
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
+                                android:onClick="onSendPhoneCheckCodeClick"
                                 android:text="获取验证码"/>
+
                             <EditText
                                 android:id="@+id/msg_verifier_edit_text"
-                                android:layout_toLeftOf="@+id/get_verifier_code_btn"
                                 android:layout_width="match_parent"
-                                android:background="@null"
-                                android:textCursorDrawable="@null"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_centerVertical="true"
-                                android:hint="短信验证码"/>
+                                android:layout_toLeftOf="@+id/get_verifier_code_btn"
+                                android:background="@null"
+                                android:textColor="@color/edit_text_hint_color"
+                                android:textSize="14sp"
+                                android:hint="短信验证码"
+                                android:textCursorDrawable="@null"/>
 
                         </RelativeLayout>
 
@@ -138,11 +154,11 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/dimen_150_dp"
-                        android:layout_height="@dimen/dimen_150_dp"
+                        android:layout_width="@dimen/dimen_128_dp"
+                        android:layout_height="@dimen/dimen_90_dp"
                         android:layout_above="@+id/login_input_layout"
                         android:layout_centerHorizontal="true"
-                        android:src="@mipmap/art_user"/>
+                        android:src="@mipmap/for_one_icon"/>
                 </RelativeLayout>
             </RelativeLayout>
 
@@ -156,12 +172,12 @@
 
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dimen_35_dp"
                 android:layout_gravity="bottom"
                 android:layout_marginLeft="@dimen/dimen_40_dp"
                 android:layout_marginRight="@dimen/dimen_40_dp"
                 android:layout_marginBottom="@dimen/dimen_10_dp"
-                android:background="@color/black"
+                android:background="@color/home_glod_text_unselect"
                 android:onClick="onLoginBtnClick"
                 android:text="登录"
                 android:textColor="@color/white"/>

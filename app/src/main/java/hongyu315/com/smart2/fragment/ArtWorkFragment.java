@@ -16,9 +16,9 @@ import java.util.List;
 import hongyu315.com.smart2.R;
 import hongyu315.com.smart2.adapter.ScreenAdapter;
 import hongyu315.com.smart2.api.API;
+import hongyu315.com.smart2.api.URL;
 import hongyu315.com.smart2.bean.Product;
 import hongyu315.com.smart2.bean.ProductList;
-import hongyu315.com.smart2.constant.Constant;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,7 +60,7 @@ public class ArtWorkFragment extends BaseFragment {
     protected void findViews(View paramView) {
         super.findViews(paramView);
 
-        listView = ((SuperRecyclerView) paramView.findViewById(R.id.artwork_fragment_super_recycler_view));
+        listView = paramView.findViewById(R.id.artwork_fragment_super_recycler_view);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(),2);
 //        layoutManager.setOrientation(LinearLayout.VERTICAL);
@@ -79,7 +79,7 @@ public class ArtWorkFragment extends BaseFragment {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(Constant.BASE_URL)
+                .baseUrl(URL.BASE_URL)
                 .build();
         API api = retrofit.create(API.class);
         Call<ProductList> products = api.getProducts("1");
@@ -88,16 +88,14 @@ public class ArtWorkFragment extends BaseFragment {
             public void onResponse(Call<ProductList> call, Response<ProductList> response) {
 
                 try {
-                    String url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLpqf2EGjTYjuw207W6eKF1oL-pJjxtpSm8Ii0K3ndGHF6LQfk";
                     String url1 = "https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg";
                     for (int i = 0; i < 4; i++) {
                         Product product = new Product();
-                        product.setType("测试衍生商品 " + i);
-                        product.setUrl(url1);
+//                        product.setType("测试衍生商品 " + i);
+//                        product.setUrl(url1);
                         productList.add(product);
                     }
 
-//                    productList = response.body();
                     if (productList != null){
                         ScreenAdapter adapter = new ScreenAdapter(getActivity(),productList);
 
@@ -125,8 +123,8 @@ public class ArtWorkFragment extends BaseFragment {
                 String url1 = "https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg";
                 for (int i = 0; i < 4; i++) {
                     Product product = new Product();
-                    product.setType("测试衍生商品 " + i);
-                    product.setUrl(url1);
+//                    product.setType("测试衍生商品 " + i);
+//                    product.setUrl(url1);
                     productList.add(product);
                 }
                 listView.completeRefresh();
@@ -138,8 +136,8 @@ public class ArtWorkFragment extends BaseFragment {
                 String url1 = "https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg";
                 for (int i = 0; i < 4; i++) {
                     Product product = new Product();
-                    product.setType("测试衍生商品 " + i);
-                    product.setUrl(url1);
+//                    product.setType("测试衍生商品 " + i);
+//                    product.setUrl(url1);
                     productList.add(product);
                 }
                 listView.completeLoadMore();

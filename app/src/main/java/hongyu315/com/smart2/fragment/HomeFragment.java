@@ -1,15 +1,17 @@
 package hongyu315.com.smart2.fragment;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
@@ -22,22 +24,45 @@ import hongyu315.com.smart2.R;
 import hongyu315.com.smart2.activity.ProductDetailActivity;
 import hongyu315.com.smart2.activity.SearchActivity;
 import hongyu315.com.smart2.adapter.ProductAdapter;
+import hongyu315.com.smart2.api.API;
+import hongyu315.com.smart2.api.URL;
 import hongyu315.com.smart2.bean.Product;
+import hongyu315.com.smart2.bean.ProductBean;
+import hongyu315.com.smart2.constant.Constant;
 import hongyu315.com.smart2.util.SysUtils;
-import hongyu315.com.smart2.view.TopTitleBarView;
+import hongyu315.com.smart2.util.ToastUtils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener, OnRefreshListener, OnLoadMoreListener, AdapterView.OnItemClickListener {
 
     protected Activity mActivity;
-    private TopTitleBarView titleBarView;
 
     private List<Product> productList = new ArrayList();
+
+    //上架时间
+    private TextView onStoreTextView;
+    private ImageView onStoreArrowUp,onStoreArrowDown;
+
+    //产品价格
+    private TextView onStorePriceText;
+    private ImageView onStorePriceArrowUp,onStorePriceArrowDown;
 
     private SwipeToLoadLayout swipeToLoadLayout;
 
     private GridView gridView;
-    private LinearLayout headerLayout;
     private ProductAdapter adapter;
+
+    private int page = 1;
+
+    //按上架时间排序，1 倒序 2 升序，默认 1
+    private String saleTimeSortType = Constant.SORT_TYPE_INVERTED;
+
+    //按商品价格排序，1 倒序 2 升序，默认 2
+    private String priceSortType = Constant.SORT_TYPE_ASCENDING;
 
     public HomeFragment() {
     }
@@ -70,15 +95,24 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     protected void initViews(View paramView){
-        this.titleBarView = ((TopTitleBarView) paramView.findViewById(R.id.topTitleBarView));
-        this.titleBarView.mTvLeftImageMenu.setOnClickListener(this);
-        this.titleBarView.mTvRightSearch.setOnClickListener(this);
 
-        swipeToLoadLayout = (SwipeToLoadLayout) paramView.findViewById(R.id.swipeToLoadLayout);
-        gridView = (GridView) paramView.findViewById(R.id.swipe_target);
+        paramView.findViewById(R.id.home_search_layout).setOnClickListener(this);
 
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        headerLayout = (LinearLayout) inflater.inflate(R.layout.home_header_layout,null);
+        //上架时间
+        paramView.findViewById(R.id.home_on_store_text_layout).setOnClickListener(this);
+        onStoreTextView = paramView.findViewById(R.id.home_on_store_time_text);
+        onStoreArrowUp = paramView.findViewById(R.id.home_on_store_time_arrow_up);
+        onStoreArrowDown = paramView.findViewById(R.id.home_on_store_time_arrow_down);
+
+        //产品价格
+        paramView.findViewById(R.id.home_on_store_price_layout).setOnClickListener(this);
+        onStorePriceText = paramView.findViewById(R.id.home_on_store_price_text);
+        onStorePriceArrowUp = paramView.findViewById(R.id.home_on_store_price_arrow_up);
+        onStorePriceArrowDown = paramView.findViewById(R.id.home_on_store_price_arrow_down);
+
+        swipeToLoadLayout = paramView.findViewById(R.id.swipeToLoadLayout);
+        gridView = paramView.findViewById(R.id.swipe_target);
+        gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
 
         swipeToLoadLayout.setOnRefreshListener(this);
         swipeToLoadLayout.setOnLoadMoreListener(this);
@@ -88,54 +122,148 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         gridView.setAdapter(adapter);
     }
 
+    /**
+     * 搜索按钮点击
+     */
+    public void onSearchLayoutClick(){
+        SysUtils.startActivity(getActivity(),SearchActivity.class);
+    }
+
+    /**
+     * 上架时间点击排序
+     */
+    public void onStoreTextViewClick(){
+        onStoreTextView.setTextColor(getResources().getColor(R.color.home_glod_text_select));
+        onStorePriceText.setTextColor(getResources().getColor(R.color.home_glod_text_unselect));
+        onStorePriceArrowUp.setImageDrawable(getResources().getDrawable(R.mipmap.home_arrow_unselect_up));
+        onStorePriceArrowDown.setImageDrawable(getResources().getDrawable(R.mipmap.home_arrow_unselect_down));
+
+        boolean selected = Boolean.valueOf(onStoreTextView.getTag() + "");
+
+       //为被选中，把状态改为选中，同时设置箭头
+        onStoreArrowUp.setImageDrawable(selected ? getResources().getDrawable(R.mipmap.home_arrow_selected_up) : getResources().getDrawable(R.mipmap.home_arrow_unselect_up));
+        onStoreArrowDown.setImageDrawable(selected ? getResources().getDrawable(R.mipmap.home_arrow_unselect_down) : getResources().getDrawable(R.mipmap.home_arrow_selected_down));
+
+        onStoreTextView.setTag(String.valueOf(!selected));
+
+        saleTimeSortType = selected ? Constant.SORT_TYPE_INVERTED : Constant.SORT_TYPE_ASCENDING;
+        getProductList();
+    }
+
+    /**
+     * 上架时间点击排序
+     */
+    public void onStorePriceViewClick(){
+        onStorePriceText.setTextColor(getResources().getColor(R.color.home_glod_text_select));
+        onStoreTextView.setTextColor(getResources().getColor(R.color.home_glod_text_unselect));
+        onStoreArrowUp.setImageDrawable(getResources().getDrawable(R.mipmap.home_arrow_unselect_up));
+        onStoreArrowDown.setImageDrawable(getResources().getDrawable(R.mipmap.home_arrow_unselect_down));
+
+        boolean selected = Boolean.valueOf(onStorePriceText.getTag() + "");
+
+        //为被选中，把状态改为选中，同时设置箭头
+        onStorePriceArrowUp.setImageDrawable(selected ? getResources().getDrawable(R.mipmap.home_arrow_selected_up) : getResources().getDrawable(R.mipmap.home_arrow_unselect_up));
+        onStorePriceArrowDown.setImageDrawable(selected ? getResources().getDrawable(R.mipmap.home_arrow_unselect_down) : getResources().getDrawable(R.mipmap.home_arrow_selected_down));
+
+        onStorePriceText.setTag(String.valueOf(!selected));
+
+        priceSortType = selected ? Constant.SORT_TYPE_ASCENDING : Constant.SORT_TYPE_INVERTED;
+        getProductList();
+    }
+
+    private void getProductList(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<ProductBean> products = api.getProductList(Constant.PRODUCT_SIZE,
+                page + "",saleTimeSortType,priceSortType);
+        products.enqueue(new Callback<ProductBean>() {
+            @Override
+            public void onResponse(Call<ProductBean> call, Response<ProductBean> response) {
+                if (swipeToLoadLayout.isRefreshing()) swipeToLoadLayout.setRefreshing(false);
+                if (swipeToLoadLayout.isLoadingMore()) swipeToLoadLayout.setLoadingMore(false);
+
+                try {
+                    ProductBean productBean = response.body();
+
+                    if (Constant.SUCCESSFUL == productBean.getCode()){
+//                        if (productList != null && productList.size() > 0) productList.clear();
+                        productList.addAll(productBean.getData().getList());
+                        adapter.notifyDataSetChanged();
+                    }else {
+                        ToastUtils.showToast(getActivity(),response.body().getMessage());
+                    }
+                } catch (Exception e) {
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ProductBean> call, Throwable t) {
+                if (swipeToLoadLayout.isRefreshing()) swipeToLoadLayout.setRefreshing(false);
+                if (swipeToLoadLayout.isLoadingMore()) swipeToLoadLayout.setLoadingMore(false);
+                ToastUtils.showToast(getActivity(), t.getLocalizedMessage());
+            }
+        });
+    }
+
     @Override
     protected void initData() {
         super.initData();
 
-        for (int i = 0 ; i < 10 ; i++){
-            Product product = new Product();
-            product.setUrl("http://img3.imgtn.bdimg.com/it/u=2949159174,2649619291&fm=11&gp=0.jpg");
-            productList.add(product);
-        }
-
-        adapter.notifyDataSetChanged();
+        getProductList();
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
+            case R.id.home_search_layout:
+                onSearchLayoutClick();
+                break;
+            case R.id.home_on_store_text_layout:
+                onStoreTextViewClick();
+                break;
+            case R.id.home_on_store_price_layout:
+                onStorePriceViewClick();
+                break;
             default:
-                return;
-            case R.id.top_title_bar_search:
-                Log.e(TAG, "onClick: search" );
-                SysUtils.startActivity(getActivity(),SearchActivity.class);
                 return;
         }
     }
 
     @Override
     public void onRefresh() {
+        page = 1;
         swipeToLoadLayout.postDelayed(new Runnable() {
             @Override
             public void run() {
-                swipeToLoadLayout.setRefreshing(false);
+                getProductList();
             }
-        }, 3000);
+        }, 10);
     }
-
 
     @Override
     public void onLoadMore() {
         swipeToLoadLayout.postDelayed(new Runnable() {
             @Override
             public void run() {
-                swipeToLoadLayout.setLoadingMore(false);
+                page = page + 1;
+                getProductList();
             }
-        }, 3000);
+        }, 10);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        SysUtils.startActivity(getActivity(),ProductDetailActivity.class);
+        Product product = productList.get(position);
+        String itemId = product.getId() + "";
+
+        Intent intent = new Intent(getActivity(),ProductDetailActivity.class);
+        intent.putExtra("itemId",itemId);
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+
     }
 }

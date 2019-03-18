@@ -7,6 +7,7 @@ import android.view.KeyEvent;
 
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
+import com.jaeger.library.StatusBarUtil;
 
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ import hongyu315.com.smart2.util.ToastUtils;
 public class MainActivity extends FragmentActivity {
 
     private String[] mTitles = { "首页", "购物车", "我的" };
+
     private long exitTime = 0L;
     private ArrayList<Fragment> mFragments = new ArrayList();
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList();
@@ -32,15 +34,10 @@ public class MainActivity extends FragmentActivity {
 
         setContentView(R.layout.content_main);
 
+        StatusBarUtil.setColor(MainActivity.this,getResources().getColor(R.color.white),1);
+//        StatusBarUtil.setTranslucent(MainActivity.this,0);
+
         findViews();
-//        try
-//        {
-////            if ((Product)getIntent().getSerializableExtra("product") != null) {
-////                setCurrentTab(2);
-////            }
-//            return;
-//        }
-//        catch (Exception paramBundle) {}
     }
 
     protected void findViews()
@@ -55,7 +52,7 @@ public class MainActivity extends FragmentActivity {
             this.mTabEntities.add(new TabEntity(mTitles[i], this.mIconSelectIds[i], this.mIconUnselectIds[i]));
             i += 1;
         }
-        mTabLayout = (CommonTabLayout)findViewById(R.id.mainTabLayout);
+        mTabLayout = findViewById(R.id.mainTabLayout);
         mTabLayout.setTabData(this.mTabEntities,this,R.id.container_layout,this.mFragments);
     }
 

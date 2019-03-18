@@ -23,7 +23,7 @@ public class OrderDetailActivity extends BaseActivity {
     protected void findViews() {
         super.findViews();
 
-        topTitleBarView = (TopTitleBarView) findViewById(R.id.order_detail_activity_title_bar);
+        topTitleBarView = findViewById(R.id.order_detail_activity_title_bar);
 //        topTitleBarView.mTvTitle.setText(getResources().getString(R.string.order_detail));
         topTitleBarView.mTvRightSearch.setVisibility(View.GONE);
         topTitleBarView.mTvLeftImageMenu.setVisibility(View.VISIBLE);

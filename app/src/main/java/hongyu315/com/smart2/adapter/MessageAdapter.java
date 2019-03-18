@@ -56,15 +56,15 @@ public class MessageAdapter extends BaseAdapter implements View.OnClickListener 
 
                 convertView = mInflater.inflate(R.layout.message_item_layout,null);
 
-                viewHolder.msgIcon = (ImageView)convertView.findViewById(R.id.message_item_icon);
-                viewHolder.msgStatus = (TextView) convertView.findViewById(R.id.order_status_text);
-                viewHolder.msgName = (TextView) convertView.findViewById(R.id.order_name_text);
-                viewHolder.msgNum = (TextView) convertView.findViewById(R.id.order_num_text);
-                viewHolder.msgTime = (TextView) convertView.findViewById(R.id.message_item_time);
+                viewHolder.msgIcon = convertView.findViewById(R.id.message_item_icon);
+                viewHolder.msgStatus = convertView.findViewById(R.id.order_status_text);
+                viewHolder.msgName = convertView.findViewById(R.id.order_name_text);
+                viewHolder.msgNum = convertView.findViewById(R.id.order_num_text);
+                viewHolder.msgTime = convertView.findViewById(R.id.message_item_time);
 
-                viewHolder.bottomLayout = (RelativeLayout) convertView.findViewById(R.id.item_bottom_layout);
-                viewHolder.deleteBtn = (Button) convertView.findViewById(R.id.delete_product);
-                viewHolder.addShoppingCar = (Button) convertView.findViewById(R.id.add_to_shopping_car);
+                viewHolder.bottomLayout = convertView.findViewById(R.id.item_bottom_layout);
+                viewHolder.deleteBtn = convertView.findViewById(R.id.delete_product);
+                viewHolder.addShoppingCar = convertView.findViewById(R.id.add_to_shopping_car);
 
                 convertView.setTag(viewHolder);
             }else {

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import hongyu315.com.smart2.R;
+import hongyu315.com.smart2.util.DensityUtil;
 
 /**
  * <p>文件描述：<p>
@@ -70,12 +71,17 @@ public class DialogSizeItemAdapter extends BaseAdapter {
         viewHolder.sizeItem.setText(sizeItems.get(position));
 
         if (mSelect == position){
-            viewHolder.sizeItem.setBackgroundColor(mContext.getResources().getColor(R.color.black));
+            viewHolder.sizeItem.setBackgroundColor(mContext.getResources().getColor(R.color.home_glod_text_unselect));
             viewHolder.sizeItem.setTextColor(mContext.getResources().getColor(R.color.white));
         }else {
-            viewHolder.sizeItem.setBackgroundColor(mContext.getResources().getColor(R.color.white));
-            viewHolder.sizeItem.setTextColor(mContext.getResources().getColor(R.color.black));
+            viewHolder.sizeItem.setBackground(mContext.getDrawable(R.drawable.bg_amount_layout));
+            viewHolder.sizeItem.setTextColor(mContext.getResources().getColor(R.color.home_glod_text_unselect));
         }
+
+        viewHolder.sizeItem.setPadding(DensityUtil.dp2px(mContext,8),
+                DensityUtil.dp2px(mContext,9),
+                DensityUtil.dp2px(mContext,8),
+                DensityUtil.dp2px(mContext,9));
 
         return convertView;
     }

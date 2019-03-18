@@ -2,10 +2,17 @@ package hongyu315.com.smart2.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.hjq.bar.OnTitleBarListener;
+import com.hjq.bar.TitleBar;
 
 import hongyu315.com.smart2.R;
 import hongyu315.com.smart2.activity.AccountManagerActivity;
@@ -13,13 +20,13 @@ import hongyu315.com.smart2.activity.FavoriteActivity;
 import hongyu315.com.smart2.activity.LoginActivity;
 import hongyu315.com.smart2.activity.MessageActivity;
 import hongyu315.com.smart2.activity.MyOrderActivity;
+import hongyu315.com.smart2.constant.Constant;
 import hongyu315.com.smart2.manager.UserManager;
 import hongyu315.com.smart2.util.SysUtils;
-import hongyu315.com.smart2.view.TopTitleBarView;
 
 public class UserCenterFragment extends BaseFragment implements View.OnClickListener {
 
-    private TopTitleBarView titleBarView;
+    private TitleBar titleBar;
 
     //个人中心登录模块
     private LinearLayout loginLayout;
@@ -34,6 +41,13 @@ public class UserCenterFragment extends BaseFragment implements View.OnClickList
     private LinearLayout waitForReceiveLayout;
     //收藏夹
     private LinearLayout favoriteLayout;
+
+    //用户头像
+    private ImageView userIcon;
+    //立刻登录
+    private TextView loginRightNowTextView;
+    //登录后权益
+    private TextView loginRigtsTextView;
 
     public UserCenterFragment() {
     }
@@ -64,19 +78,38 @@ public class UserCenterFragment extends BaseFragment implements View.OnClickList
     protected void findViews(View paramView) {
         super.findViews(paramView);
 
-        titleBarView = ((TopTitleBarView) paramView.findViewById(R.id.topTitleBarView));
-        titleBarView.mTopTitleBarViewBg.setBackgroundResource(R.color.bg_color);
-        titleBarView.mTvTitle.setTextColor(getResources().getColor(R.color.white));
-        titleBarView.mTvTitle.setText(getResources().getString(R.string.user_center));
-        titleBarView.mTvRightSearch.setImageResource(R.mipmap.menu_icon);
-        titleBarView.mTvRightSearch.setOnClickListener(this);
+        titleBar = paramView.findViewById(R.id.user_center_title_bar);
+        titleBar.setLineVisible(false);
+        titleBar.setOnTitleBarListener(new OnTitleBarListener() {
+            @Override
+            public void onLeftClick(View v) {
+            }
 
-        loginLayout = (LinearLayout) paramView.findViewById(R.id.user_center_login_layout);
-        haveDoneLayout = (LinearLayout)paramView.findViewById(R.id.have_done_layout);
-        waitForPayLayout = (LinearLayout)paramView.findViewById(R.id.wait_for_pay);
-        waitForDeliverLayout = (LinearLayout)paramView.findViewById(R.id.wait_for_deliver);
-        waitForReceiveLayout = (LinearLayout)paramView.findViewById(R.id.wait_for_receive);
-        favoriteLayout = (LinearLayout)paramView.findViewById(R.id.favorite_layout);
+            @Override
+            public void onTitleClick(View v) {
+            }
+
+            @Override
+            public void onRightClick(View v) {
+                if (UserManager.getInstance().isLogin()){
+                    SysUtils.startActivity(getActivity(),MessageActivity.class);
+                }else {
+                    SysUtils.startActivity(getActivity(),LoginActivity.class);
+                }
+            }
+        });
+
+        loginLayout = paramView.findViewById(R.id.user_center_login_layout);
+        userIcon = paramView.findViewById(R.id.user_center_icon);
+
+        haveDoneLayout = paramView.findViewById(R.id.have_done_layout);
+        waitForPayLayout = paramView.findViewById(R.id.wait_for_pay);
+        waitForDeliverLayout = paramView.findViewById(R.id.wait_for_deliver);
+        waitForReceiveLayout = paramView.findViewById(R.id.wait_for_receive);
+        favoriteLayout = paramView.findViewById(R.id.favorite_layout);
+
+        loginRightNowTextView = paramView.findViewById(R.id.login_right_now);
+        loginRigtsTextView = paramView.findViewById(R.id.login_rights_text);
 
         loginLayout.setOnClickListener(this);
         haveDoneLayout.setOnClickListener(this);
@@ -84,6 +117,22 @@ public class UserCenterFragment extends BaseFragment implements View.OnClickList
         waitForDeliverLayout.setOnClickListener(this);
         waitForReceiveLayout.setOnClickListener(this);
         favoriteLayout.setOnClickListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (UserManager.getInstance().isLogin()){
+            String nickName = (String) UserManager.getInstance().getUser().getData().getNickname();
+            String userIconUrl = (String) UserManager.getInstance().getUser().getData().getAvatar();
+            if (!TextUtils.isEmpty(userIconUrl)){
+                Glide.with(this).load(userIconUrl).into(userIcon);
+            }
+
+            loginRigtsTextView.setVisibility(View.GONE);
+            loginRightNowTextView.setText(TextUtils.isEmpty(nickName) ?
+                    UserManager.getInstance().getUser().getData().getMobile() : nickName);
+        }
     }
 
     private void onLoginClick(){
@@ -100,31 +149,55 @@ public class UserCenterFragment extends BaseFragment implements View.OnClickList
             case R.id.user_center_login_layout:
                 onLoginClick();
                 break;
-            case R.id.top_title_bar_search:
-                SysUtils.startActivity(getActivity(),MessageActivity.class);
-                break;
             case R.id.have_done_layout:
-                Intent intent = new Intent(getActivity(),MyOrderActivity.class);
-                intent.putExtra("index",0);
-                getActivity().startActivity(intent);
+                if (UserManager.getInstance().isLogin()){
+                    Intent intent = new Intent(getActivity(),MyOrderActivity.class);
+                    intent.putExtra("index",0);
+                    getActivity().startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+                }else {
+                    SysUtils.startActivity(getActivity(),LoginActivity.class);
+                }
                 break;
             case R.id.wait_for_pay:
-                Intent intent1 = new Intent(getActivity(),MyOrderActivity.class);
-                intent1.putExtra("index",1);
-                getActivity().startActivity(intent1);
+                if (UserManager.getInstance().isLogin()){
+                    Intent intent1 = new Intent(getActivity(),MyOrderActivity.class);
+                    intent1.putExtra("index",1);
+                    getActivity().startActivity(intent1);
+                    getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+                }else {
+                    SysUtils.startActivity(getActivity(),LoginActivity.class);
+                }
                 break;
             case R.id.wait_for_deliver:
-                Intent intent2 = new Intent(getActivity(),MyOrderActivity.class);
-                intent2.putExtra("index",2);
-                getActivity().startActivity(intent2);
+                if (UserManager.getInstance().isLogin()){
+                    Intent intent2 = new Intent(getActivity(),MyOrderActivity.class);
+                    intent2.putExtra("index",2);
+                    getActivity().startActivity(intent2);
+                    getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+                }else {
+                    SysUtils.startActivity(getActivity(),LoginActivity.class);
+                }
                 break;
             case R.id.wait_for_receive:
-                Intent intent3 = new Intent(getActivity(),MyOrderActivity.class);
-                intent3.putExtra("index",3);
-                getActivity().startActivity(intent3);
+                if (UserManager.getInstance().isLogin()){
+                    Intent intent3 = new Intent(getActivity(),MyOrderActivity.class);
+                    intent3.putExtra("index",3);
+                    getActivity().startActivity(intent3);
+                    getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+                }else {
+                    SysUtils.startActivity(getActivity(),LoginActivity.class);
+                }
                 break;
             case R.id.favorite_layout:
-                SysUtils.startActivity(getActivity(),FavoriteActivity.class);
+                if (UserManager.getInstance().isLogin()){
+                    SysUtils.startActivity(getActivity(),FavoriteActivity.class);
+                }else {
+                    Intent intent3 = new Intent(getActivity(),LoginActivity.class);
+                    intent3.putExtra(Constant.PAGE,FavoriteActivity.class.getName());
+                    getActivity().startActivity(intent3);
+                    getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+                }
                 break;
             default:
                 break;

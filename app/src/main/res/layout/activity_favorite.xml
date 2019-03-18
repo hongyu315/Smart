@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cutline_gray"
     android:orientation="vertical"
     >
 
@@ -24,11 +23,11 @@
             android:id="@id/swipe_refresh_header"
             layout="@layout/layout_weibo_header"/>
 
-        <ListView
+        <com.baoyz.swipemenulistview.SwipeMenuListView
             android:id="@id/swipe_target"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/cutline_gray"
+            android:background="@color/grey_200"
             android:divider="#00000000"
             android:dividerHeight="@dimen/dimen_10_dp"
             android:padding="@dimen/dimen_10_dp"/>

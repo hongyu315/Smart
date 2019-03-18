@@ -3,17 +3,19 @@ package hongyu315.com.smart2.activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.google.gson.Gson;
+import com.hjq.bar.OnTitleBarListener;
+import com.hjq.bar.TitleBar;
 
 import hongyu315.com.smart2.R;
 import hongyu315.com.smart2.adapter.LogisticsAdapter;
 import hongyu315.com.smart2.bean.LogisticsJson;
-import hongyu315.com.smart2.view.TopTitleBarView;
 
 public class LogisticsActivity extends BaseActivity {
 
-    private TopTitleBarView topTitleBarView;
+    private TitleBar topTitleBarView;
     private RecyclerView recyclerView;
 
     @Override
@@ -29,9 +31,22 @@ public class LogisticsActivity extends BaseActivity {
     protected void findViews() {
         super.findViews();
 
-        topTitleBarView = (TopTitleBarView)findViewById(R.id.logistics_topTitleBarView);
-        topTitleBarView.mTvTitle.setText(getResources().getString(R.string.logistics));
-        recyclerView = (RecyclerView) findViewById(R.id.logistics_recycler_view);
+        topTitleBarView = findViewById(R.id.logistics_topTitleBarView);
+        topTitleBarView.setOnTitleBarListener(new OnTitleBarListener() {
+            @Override
+            public void onLeftClick(View v) {
+                mFinish();
+            }
+
+            @Override
+            public void onTitleClick(View v) {
+            }
+
+            @Override
+            public void onRightClick(View v) {
+            }
+        });
+        recyclerView = findViewById(R.id.logistics_recycler_view);
 
     }
 

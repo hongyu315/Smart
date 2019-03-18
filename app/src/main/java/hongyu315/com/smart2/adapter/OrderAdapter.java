@@ -54,22 +54,22 @@ public class OrderAdapter extends BaseAdapter implements View.OnClickListener {
             viewHolder = new ViewHolder();
 
             convertView = mInflater.inflate(R.layout.order_item_layout,null);
-            viewHolder.orderItemLayout = (LinearLayout) convertView.findViewById(R.id.order_item_layout);
+            viewHolder.orderItemLayout = convertView.findViewById(R.id.order_item_layout);
 
-            viewHolder.orderTime = (TextView) convertView.findViewById(R.id.order_time_txt);
-            viewHolder.orderStatus = (TextView) convertView.findViewById(R.id.order_status_text);
+            viewHolder.orderTime = convertView.findViewById(R.id.order_time_txt);
+            viewHolder.orderStatus = convertView.findViewById(R.id.order_status_text);
 
-            viewHolder.productIcon = (ImageView) convertView.findViewById(R.id.message_item_icon);
-            viewHolder.productName = (TextView) convertView.findViewById(R.id.product_name);
-            viewHolder.productType = (TextView) convertView.findViewById(R.id.order_name_text);
-            viewHolder.productSize = (TextView) convertView.findViewById(R.id.order_num_text);
-            viewHolder.productPrice = (TextView) convertView.findViewById(R.id.product_price);
-            viewHolder.productNum = (TextView) convertView.findViewById(R.id.product_num);
+            viewHolder.productIcon = convertView.findViewById(R.id.message_item_icon);
+            viewHolder.productName = convertView.findViewById(R.id.product_name);
+            viewHolder.productType = convertView.findViewById(R.id.order_name_text);
+            viewHolder.productSize = convertView.findViewById(R.id.order_num_text);
+            viewHolder.productPrice = convertView.findViewById(R.id.product_price);
+            viewHolder.productNum = convertView.findViewById(R.id.product_num);
 
-            viewHolder.totalProduct = (TextView) convertView.findViewById(R.id.total_product);
+            viewHolder.totalProduct = convertView.findViewById(R.id.total_product);
 
-            viewHolder.leftBtn = (Button) convertView.findViewById(R.id.bottom_left);
-            viewHolder.rightBtn = (Button) convertView.findViewById(R.id.bottom_right);
+            viewHolder.leftBtn = convertView.findViewById(R.id.bottom_left);
+            viewHolder.rightBtn = convertView.findViewById(R.id.bottom_right);
 
             convertView.setTag(viewHolder);
         }else {

@@ -4,36 +4,43 @@
               android:layout_height="match_parent">
 
     <LinearLayout
-        android:paddingBottom="@dimen/dimen_10_dp"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/dimen_10_dp">
 
         <ImageView
             android:id="@+id/product_item_icon"
-            android:scaleType="fitXY"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_200_dp"
+            android:layout_height="@dimen/dimen_170_dp"
+            android:scaleType="fitXY"
             android:src="@mipmap/art_user"/>
+
         <TextView
             android:id="@+id/product_item_time"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_10_dp"
             android:text="上架时间：2019-1-13"
-            android:textColor="@color/gray"
-            android:textSize="@dimen/dimen_12_dp"
-            android:layout_height="wrap_content"/>
+            android:textColor="@color/text_title_black"
+            android:textSize="14sp"/>
+
         <TextView
             android:id="@+id/product_item_title"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_2_dp"
             android:text="饮食男士打到几点睡袍"
-            android:textColor="@color/gray"
-            android:layout_height="wrap_content"/>
+            android:textColor="@color/on_store_text_time"
+            android:textSize="10sp"/>
+
         <TextView
             android:id="@+id/product_item_price"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="￥960"
-            android:textColor="@color/gray"
-            android:layout_height="wrap_content"/>
+            android:textColor="@color/text_title_black"
+            android:textSize="14sp"/>
     </LinearLayout>
 
 </LinearLayout>

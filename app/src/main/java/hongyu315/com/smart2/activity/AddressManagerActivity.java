@@ -13,15 +13,27 @@ import java.util.List;
 
 import hongyu315.com.smart2.R;
 import hongyu315.com.smart2.adapter.AddressAdapter;
+import hongyu315.com.smart2.api.API;
+import hongyu315.com.smart2.api.URL;
 import hongyu315.com.smart2.bean.Address;
+import hongyu315.com.smart2.bean.SuccessfulMode;
+import hongyu315.com.smart2.constant.Constant;
+import hongyu315.com.smart2.manager.TokenManager;
 import hongyu315.com.smart2.util.SysUtils;
+import hongyu315.com.smart2.util.ToastUtils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AddressManagerActivity extends BaseActivity implements AddressAdapter.OnAddressItemClickListener {
 
     private TitleBar titleBar;
     private ListView listView;
     private AddressAdapter adapter;
-    private List<Address> addressList = new ArrayList<>();
+    private boolean getAddressSuccessful = false;
+    private List<Address.DataBean.AddressBean> addressList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +41,20 @@ public class AddressManagerActivity extends BaseActivity implements AddressAdapt
         setContentView(R.layout.activity_address_manager);
 
         findViews();
-        initData();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        try{
+            if (!getAddressSuccessful){
+                initData();
+            }
+        }catch (Exception e){
+        }
+
+    }
 
     @Override
     protected void findViews() {
@@ -63,24 +86,37 @@ public class AddressManagerActivity extends BaseActivity implements AddressAdapt
     protected void initData() {
         super.initData();
 
-        Address address = new Address();
-        address.setDefault(true);
-        address.setUserLocate("上海市泗泾镇");
-        address.setUserDetailAddress("鼓浪路2399号");
-        address.setUserName("张三");
-        address.setUserPhone("138****2222");
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<Address> products = api.getMyAddresses(TokenManager.getInstance().getLoginToken().getData().getToken(),"1000");
+        products.enqueue(new Callback<Address>() {
+            @Override
+            public void onResponse(Call<Address> call, Response<Address> response) {
 
-        Address address1 = new Address();
-        address1.setDefault(false);
-        address.setUserLocate("上海市泗泾镇");
-        address.setUserDetailAddress("鼓浪路2399号");
-        address1.setUserName("张三");
-        address1.setUserPhone("138****2222");
+                try {
+                    Address userProfile = response.body();
 
-        addressList.add(address);
-        addressList.add(address1);
+                    if (Constant.SUCCESSFUL == userProfile.getCode()){
+                        getAddressSuccessful = true;
+                        addressList.addAll(userProfile.getData().getList());
+                        adapter.notifyDataSetChanged();
+                    }else {
+                        ToastUtils.showToast(AddressManagerActivity.this,response.body().getMessage());
+                    }
+                } catch (Exception e) {
+                }
 
-        adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<Address> call, Throwable t) {
+                ToastUtils.showToast(AddressManagerActivity.this, t.getLocalizedMessage());
+            }
+        });
+
     }
 
     public void onAddNewAddressLayoutClick(View view){
@@ -91,17 +127,57 @@ public class AddressManagerActivity extends BaseActivity implements AddressAdapt
     public void onDefaultAddressClick(View view, boolean isChecked) {
         int position = (int) view.getTag();
 
+        Address.DataBean.AddressBean addressBean = addressList.get(position);
         //如果已经是默认地址的，则不能再次点击本身进行取消，只能通过设置其他地址为默认地址后生效；
-        if (addressList.get(position).isDefault()){
+        if (addressBean.getDefaultX() == 1){
             return;
         }
 
-        for (Address address:addressList) {
-           address.setDefault(false);
-        }
+        updateAddress(addressBean);
+    }
 
-        addressList.get(position).setDefault(isChecked);
-        adapter.notifyDataSetChanged();
+    private void updateAddress(final Address.DataBean.AddressBean addressBean){
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<SuccessfulMode> products = api.updateAddress(TokenManager.getInstance().getLoginToken().getData().getToken(),
+                addressBean.getId() + "",
+                addressBean.getName(),
+                addressBean.getMobile(),
+                addressBean.getArea(),
+                addressBean.getAddress(),
+                "1");
+        products.enqueue(new Callback<SuccessfulMode>() {
+            @Override
+            public void onResponse(Call<SuccessfulMode> call, Response<SuccessfulMode> response) {
+
+                try {
+                    SuccessfulMode userProfile = response.body();
+
+                    if (Constant.SUCCESSFUL == userProfile.getCode()){
+
+                        for (Address.DataBean.AddressBean address:addressList) {
+                            address.setDefaultX(2);
+                        }
+
+                        addressBean.setDefaultX(1);
+                        adapter.notifyDataSetChanged();
+                    }else {
+                        ToastUtils.showToast(AddressManagerActivity.this,response.body().getMessage());
+                    }
+                } catch (Exception e) {
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<SuccessfulMode> call, Throwable t) {
+                ToastUtils.showToast(AddressManagerActivity.this, t.getLocalizedMessage());
+            }
+        });
+
     }
 
     @Override
@@ -115,7 +191,38 @@ public class AddressManagerActivity extends BaseActivity implements AddressAdapt
     @Override
     public void onDeleteAddressClick(View view) {
         int position = (int) view.getTag();
-        addressList.remove(position);
-        adapter.notifyDataSetChanged();
+        deleteAddress(position,addressList.get(position).getId() + "");
+    }
+
+    private void deleteAddress(final int position, String addressID){
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<SuccessfulMode> products = api.deleteAddress(TokenManager.getInstance().getLoginToken().getData().getToken(),addressID);
+        products.enqueue(new Callback<SuccessfulMode>() {
+            @Override
+            public void onResponse(Call<SuccessfulMode> call, Response<SuccessfulMode> response) {
+
+                try {
+                    SuccessfulMode userProfile = response.body();
+
+                    if (Constant.SUCCESSFUL == userProfile.getCode()){
+                        addressList.remove(position);
+                        adapter.notifyDataSetChanged();
+                    }else {
+                        ToastUtils.showToast(AddressManagerActivity.this,response.body().getMessage());
+                    }
+                } catch (Exception e) {
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<SuccessfulMode> call, Throwable t) {
+                ToastUtils.showToast(AddressManagerActivity.this, t.getLocalizedMessage());
+            }
+        });
     }
 }

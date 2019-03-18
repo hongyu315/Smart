@@ -37,7 +37,7 @@
                         android:layout_marginRight="5.0dip"
                         android:padding="10.0dip"
                         android:scaleType="centerInside"
-                        android:src="@mipmap/comm_close"/>
+                        android:src="@mipmap/close"/>
 
                     <TextView
                         android:id="@+id/tv_info"

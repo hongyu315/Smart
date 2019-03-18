@@ -65,14 +65,19 @@ public class BannerViewManager {
 
     public ImageView createImageViewBanner(final Activity context, LinearLayout.LayoutParams lp, final String imageUrl){
         final ImageView imageView = new ImageView(context);
-        imageView.setLayoutParams(lp);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Glide.with(context).load(imageUrl).into(imageView);
-            }
-        });
+        try{
+            imageView.setLayoutParams(lp);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            context.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (context !=null && !context.isDestroyed()){
+                        Glide.with(context).load(imageUrl).into(imageView);
+                    }
+                }
+            });
+        }catch (Exception e){
+        }
         return imageView;
     }
 

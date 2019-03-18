@@ -43,10 +43,10 @@ public class TopTitleBarView
     private void initView()
     {
         LayoutInflater.from(this.mContext).inflate(R.layout.top_title_bar_layout, this);
-        this.mTopTitleBarViewBg = (RelativeLayout) findViewById(R.id.top_title_bar_bg);
-        this.mTvLeftImageMenu = ((ImageView)findViewById(R.id.top_title_bar_menu));
-        this.mTvTitle = ((TextView)findViewById(R.id.top_title_bar_title));
-        this.mTvRightSearch = ((ImageView)findViewById(R.id.top_title_bar_search));
+        this.mTopTitleBarViewBg = findViewById(R.id.top_title_bar_bg);
+        this.mTvLeftImageMenu = findViewById(R.id.top_title_bar_menu);
+        this.mTvTitle = findViewById(R.id.top_title_bar_title);
+        this.mTvRightSearch = findViewById(R.id.top_title_bar_search);
 
         mTvLeftImageMenu.setOnClickListener(this);
         mTvRightSearch.setOnClickListener(this);

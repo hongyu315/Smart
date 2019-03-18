@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="@dimen/dimen_48_dp"
-        android:background="@color/bg_color">
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="购物车"
-            android:textColor="@color/white"
+            android:textColor="@color/home_glod_text_unselect"
             android:textSize="@dimen/dimen_18_dp"/>
 
         <TextView
@@ -30,18 +30,22 @@
             android:layout_centerVertical="true"
             android:padding="@dimen/dimen_10_dp"
             android:text="编辑"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_18_dp"/>
+            android:textColor="@color/home_glod_text_unselect"
+            android:textSize="12sp"/>
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/ll_cart"
+        android:background="@color/grey_200"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/check_LL"
+            android:layout_marginLeft="@dimen/dimen_10_dp"
+            android:layout_marginRight="@dimen/dimen_10_dp"
+            android:layout_marginTop="@dimen/dimen_10_dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -58,35 +62,15 @@
                 android:drawableLeft="@drawable/checkbox_bg"
                 android:drawablePadding="10.0dip"
                 android:text="@string/all"
-                android:textSize="16.0sp"/>
+                android:textSize="12.0sp"/>
 
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="0.5dip"
-                android:background="@color/gray"/>
+                android:layout_marginLeft="@dimen/dimen_15_dp"
+                android:layout_marginRight="@dimen/dimen_15_dp"
+                android:background="#ffeeeeee"/>
         </LinearLayout>
-
-
-        <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
-            android:layout_below="@+id/check_LL"
-            android:id="@+id/swipeToLoadLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <include
-                android:id="@id/swipe_refresh_header"
-                layout="@layout/layout_weibo_header"/>
-
-            <ListView
-                android:id="@id/swipe_target"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="none"/>
-
-            <include
-                android:id="@id/swipe_load_more_footer"
-                layout="@layout/layout_weibo_header"/>
-        </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
 
         <LinearLayout
             android:id="@+id/bottom_menu"
@@ -112,7 +96,7 @@
                     android:layout_width="0.0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.7"
-                    android:background="@color/white"
+                    android:background="@color/home_glod_text_unselect"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -130,21 +114,43 @@
                             android:gravity="left"
                             android:orientation="horizontal">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="5.0dip"
-                                android:text="@string/order_total"
-                                android:textColor="@android:color/black"
-                                android:textSize="18.0sp"/>
+                            <CheckBox
+                                android:id="@+id/all_checkBox_bottom"
+                                android:layout_width="@dimen/dimen_60_dp"
+                                android:layout_height="@dimen/dimen_40_dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/dimen_10_dp"
+                                android:button="@null"
+                                android:clickable="true"
+                                android:drawableLeft="@drawable/checkbox_glod_bg"
+                                android:drawablePadding="10.0dip"
+                                android:text="@string/all"
+                                android:textColor="@color/white"
+                                android:textSize="14.0sp"/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:gravity="center_vertical"
+                                android:orientation="vertical"
+                                android:layout_height="match_parent">
 
-                            <TextView
-                                android:id="@+id/total_price"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="￥0.00"
-                                android:textColor="@color/ic_taobao"
-                                android:textSize="18.0sp"/>
+                                <TextView
+                                    android:id="@+id/total_price"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="共计：￥1900"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="14.0sp"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="不含运费"
+                                    android:textColor="@color/white"
+                                    android:textSize="9.0sp"/>
+
+                            </LinearLayout>
+
+
                         </LinearLayout>
                     </LinearLayout>
 
@@ -152,12 +158,10 @@
                         android:id="@+id/go_pay"
                         android:layout_width="0.0dip"
                         android:layout_height="60.0dip"
-                        android:layout_weight="0.5"
-                        android:background="@color/ic_taobao"
+                        android:layout_weight="0.3"
+                        android:background="@color/home_glod_text_select"
                         android:gravity="center"
-                        android:text="去结算"
-                        android:textColor="@android:color/white"
-                        android:textSize="16.0sp"/>
+                        android:text="去结算"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -166,6 +170,31 @@
                 android:layout_height="0.5dip"
                 android:background="@color/gray"/>
         </LinearLayout>
+
+        <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+            android:layout_below="@+id/check_LL"
+            android:layout_above="@+id/bottom_menu"
+            android:id="@+id/swipeToLoadLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                android:id="@id/swipe_refresh_header"
+                layout="@layout/layout_weibo_header"/>
+
+            <ListView
+                android:id="@id/swipe_target"
+                android:layout_marginLeft="@dimen/dimen_10_dp"
+                android:layout_marginRight="@dimen/dimen_10_dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"/>
+
+            <include
+                android:id="@id/swipe_load_more_footer"
+                layout="@layout/layout_weibo_header"/>
+        </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
+
     </RelativeLayout>
 
     <include

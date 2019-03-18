@@ -3,31 +3,46 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_color"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@mipmap/user_center_bg"
     >
 
-    <hongyu315.com.smart2.view.TopTitleBarView
-        android:id="@+id/topTitleBarView"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/dimen_48_dp"
-        android:layout_alignParentStart="true"/>
-
-    <RelativeLayout
+    <com.hjq.bar.TitleBar
+        android:id="@+id/user_center_title_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        app:icon_left="@color/transparent"
+        app:size_title="18sp"
+        app:color_title="#fafafa"
+        app:icon_right="@mipmap/user_message"
+        app:title="@string/user_center"
+        />
+
 
         <RelativeLayout
             android:id="@+id/center_inside_user_center_layout"
             android:layout_width="match_parent"
             android:layout_centerInParent="true"
-            android:layout_height="@dimen/dimen_80_dp"
-            android:background="@color/gray">
+            android:layout_height="@dimen/dimen_80_dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dimen_20_dp"
+                android:layout_marginRight="@dimen/dimen_20_dp"
+                android:layout_marginBottom="@dimen/dimen_30_dp"
+                android:background="@color/home_glod_text_unselect"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_70_dp"
+                android:layout_marginLeft="@dimen/dimen_15_dp"
+                android:layout_marginRight="@dimen/dimen_15_dp"
+                android:layout_marginTop="@dimen/dimen_5_dp"
                 android:orientation="horizontal"
-                android:background="@color/light_white"
+                android:background="#fafafa"
                 android:weightSum="5">
 
                 <LinearLayout
@@ -42,11 +57,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@mipmap/search_icon"/>
+                        android:src="@mipmap/have_finished"/>
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dimen_5_dp"
+                        style="@style/user_center_item_text"
                         android:text="已完成"/>
 
                 </LinearLayout>
@@ -62,11 +75,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@mipmap/search_icon"/>
+                        android:src="@mipmap/wait_for_pay"/>
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dimen_5_dp"
+                        style="@style/user_center_item_text"
                         android:text="待付款"/>
 
                 </LinearLayout>
@@ -82,11 +93,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@mipmap/search_icon"/>
+                        android:src="@mipmap/wait_for_send"/>
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dimen_5_dp"
+                        style="@style/user_center_item_text"
                         android:text="待发货"/>
 
                 </LinearLayout>
@@ -102,11 +111,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@mipmap/search_icon"/>
+                        android:src="@mipmap/wait_for_receive"/>
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dimen_5_dp"
+                        style="@style/user_center_item_text"
                         android:text="待收货"/>
 
                 </LinearLayout>
@@ -122,51 +129,56 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@mipmap/search_icon"/>
+                        android:src="@mipmap/my_love"/>
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dimen_5_dp"
+                        style="@style/user_center_item_text"
                         android:text="收藏夹"/>
 
                 </LinearLayout>
 
             </LinearLayout>
+
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/user_center_title_bar"
             android:layout_above="@+id/center_inside_user_center_layout">
 
             <LinearLayout
                 android:id="@+id/user_center_login_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:orientation="vertical">
                 <ImageView
                     android:id="@+id/user_center_icon"
-                    android:layout_width="@dimen/dimen_60_dp"
-                    android:layout_height="@dimen/dimen_60_dp"
-                    android:src="@mipmap/art_user"/>
+                    android:layout_width="@dimen/dimen_70_dp"
+                    android:layout_height="@dimen/dimen_70_dp"
+                    android:src="@mipmap/user_default_icon"/>
                 <TextView
+                    android:id="@+id/login_right_now"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/gray"
+                    android:textSize="14sp"
+                    android:layout_marginTop="@dimen/dimen_17_dp"
+                    android:textColor="@color/home_glod_text_select"
                     android:text="立刻登录"/>
 
                 <TextView
+                    android:id="@+id/login_rights_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/gray"
+                    android:layout_marginTop="@dimen/dimen_8_dp"
+                    android:textColor="#7B7B7A"
+                    android:textSize="12sp"
                     android:text="登录后可查看您的会员权益"/>
             </LinearLayout>
 
 
 
-        </RelativeLayout>
     </RelativeLayout>
 
 </RelativeLayout>

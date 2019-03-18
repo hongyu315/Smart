@@ -58,7 +58,7 @@ public class ScreeningFragment extends BaseFragment implements SuperBaseAdapter.
     protected void findViews(View paramView) {
         super.findViews(paramView);
 
-        listView = ((SuperRecyclerView) paramView.findViewById(R.id.screen_fragment_super_recycler_view));
+        listView = paramView.findViewById(R.id.screen_fragment_super_recycler_view);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(),2);
         listView.setLayoutManager(layoutManager);
@@ -82,8 +82,8 @@ public class ScreeningFragment extends BaseFragment implements SuperBaseAdapter.
             String url1 = "https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg";
             for (int i = 0; i < 4; i++) {
                 Product product = new Product();
-                product.setType("测试艺术商品 " + i);
-                product.setUrl(url1);
+//                product.setType("测试艺术商品 " + i);
+//                product.setUrl(url1);
                 productList.add(product);
             }
 
@@ -125,8 +125,8 @@ public class ScreeningFragment extends BaseFragment implements SuperBaseAdapter.
                 String url1 = "https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg";
                 for (int i = 0; i < 4; i++) {
                     Product product = new Product();
-                    product.setType("测试艺术商品 " + i);
-                    product.setUrl(url1);
+//                    product.setType("测试艺术商品 " + i);
+//                    product.setUrl(url1);
                     productList.add(product);
                 }
                 listView.completeRefresh();
@@ -138,8 +138,8 @@ public class ScreeningFragment extends BaseFragment implements SuperBaseAdapter.
                 String url1 = "https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg";
                 for (int i = 0; i < 4; i++) {
                     Product product = new Product();
-                    product.setType("测试艺术商品 " + i);
-                    product.setUrl(url1);
+//                    product.setType("测试艺术商品 " + i);
+//                    product.setUrl(url1);
                     productList.add(product);
                 }
                 listView.completeLoadMore();
@@ -150,7 +150,7 @@ public class ScreeningFragment extends BaseFragment implements SuperBaseAdapter.
     @Override
     public void onItemClick(View view, Object item, int position) {
         Bundle bundleParm = new Bundle();
-        bundleParm.putSerializable("key",productList.get(position).getUrl());
+//        bundleParm.putSerializable("key",productList.get(position).getUrl());
         SysUtils.startActivity(getActivity(),ShoppingDetailActivity.class,bundleParm);
     }
 }

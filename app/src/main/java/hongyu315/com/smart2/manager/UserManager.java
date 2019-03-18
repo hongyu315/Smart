@@ -1,8 +1,12 @@
 package hongyu315.com.smart2.manager;
 
-import hongyu315.com.smart2.bean.User;
+import android.text.TextUtils;
+
+import hongyu315.com.smart2.bean.UserProfile;
 
 public class UserManager {
+
+    private UserProfile mUser;
 
     private static class SingletonClassInstance{
         private static final UserManager instance = new UserManager();
@@ -16,10 +20,22 @@ public class UserManager {
     }
 
     public Boolean isLogin(){
-        return User.getInstance().isLogin();
+        if (mUser != null){
+            return !TextUtils.isEmpty(mUser.getData().getMobile());
+        }
+        return false;
     }
 
     public void logout(){
-        User.getInstance().logout();
+        mUser = null;
     }
+
+    public UserProfile getUser(){
+        return mUser;
+    }
+
+    public void setUser(UserProfile user){
+        mUser = user;
+    }
+
 }

@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
         <color name="divider">#ffd2d2d2</color>
+        <color name="line">#c7c7c7</color>
+
+        <color name="home_glod_text_select">#C1A465</color>
+        <color name="home_glod_text_unselect">#232323</color>
+        <color name="on_store_text_time">#ff7a7a7b</color>
+        <color name="btn_black_bg">#232321</color>
+        <color name="edit_text_hint_color">#ffaaaaaa</color>
+
 
         <color name="abc_input_method_navigation_guard">@android:color/black</color>
         <color name="abc_search_url_text_normal">#ff7fa87f</color>

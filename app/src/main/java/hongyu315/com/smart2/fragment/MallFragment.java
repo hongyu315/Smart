@@ -92,23 +92,23 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
     }
 
     protected void findViews(View paramView){
-        this.titleBarView = ((TopTitleBarView) paramView.findViewById(R.id.topTitleBarView));
+        this.titleBarView = paramView.findViewById(R.id.topTitleBarView);
         this.titleBarView.mTvLeftImageMenu.setOnClickListener(this);
-        this.drawerLayout = ((DrawerLayout) paramView.findViewById(R.id.home_fragment_drawer));
-        this.navigationView = ((NavigationView) paramView.findViewById(R.id.navigation));
+        this.drawerLayout = paramView.findViewById(R.id.home_fragment_drawer);
+        this.navigationView = paramView.findViewById(R.id.navigation);
 
-        this.screening = ((RelativeLayout)paramView.findViewById(R.id.screening));
-        this.screeningImagView = ((ImageView)paramView.findViewById(R.id.screening_image));
-        this.screeningImagView.setImageResource(R.mipmap.more_bottom);
-        this.artwork_layout = ((LinearLayout)paramView.findViewById(R.id.artwork_layout));
-        this.derivatives_layout = ((LinearLayout)paramView.findViewById(R.id.derivatives_layout));
-        this.screening_text = ((TextView)paramView.findViewById(R.id.screening_text));
-        this.artwork = ((TextView)paramView.findViewById(R.id.artwork));
-        this.derivatives = ((TextView)paramView.findViewById(R.id.derivatives));
+        this.screening = paramView.findViewById(R.id.screening);
+        this.screeningImagView = paramView.findViewById(R.id.screening_image);
+//        this.screeningImagView.setImageResource(R.mipmap.more_bottom);
+        this.artwork_layout = paramView.findViewById(R.id.artwork_layout);
+        this.derivatives_layout = paramView.findViewById(R.id.derivatives_layout);
+        this.screening_text = paramView.findViewById(R.id.screening_text);
+        this.artwork = paramView.findViewById(R.id.artwork);
+        this.derivatives = paramView.findViewById(R.id.derivatives);
 
 //        this.layout = ((LinearLayout)this.mActivity.getLayoutInflater().inflate(2130968674, null, false));
-        this.viewPager = ((ViewPager)paramView.findViewById(R.id.vPager));
-        this.cursorIv = ((ImageView)paramView.findViewById(R.id.iv_tab_bottom_img));
+        this.viewPager = paramView.findViewById(R.id.vPager);
+        this.cursorIv = paramView.findViewById(R.id.iv_tab_bottom_img);
 
         this.navigationView.setNavigationItemSelectedListener(new NavigationItemSelected());
         this.screening_text.setOnClickListener(this);

@@ -8,13 +8,15 @@
     android:orientation="vertical"
     tools:context=".activity.LogisticsActivity">
 
-    <hongyu315.com.smart2.view.TopTitleBarView
+    <com.hjq.bar.TitleBar
         android:id="@+id/logistics_topTitleBarView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        app:title="@string/logistics"
+        app:icon_left="@mipmap/back"/>
 
     <LinearLayout
-        android:background="@color/yellow"
+        android:background="@color/home_glod_text_select"
         android:layout_width="match_parent"
         android:gravity="center_vertical"
         android:layout_height="@dimen/dimen_45_dp">
@@ -23,6 +25,7 @@
             android:text="顺丰快递 88888382388283828382838"
             android:layout_marginLeft="@dimen/dimen_40_dp"
             android:layout_width="match_parent"
+            android:textColor="@color/white"
             android:layout_height="wrap_content"/>
     </LinearLayout>
 

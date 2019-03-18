@@ -70,11 +70,11 @@ public class ShoppingDetailActivity extends FragmentActivity implements View.OnC
         int i = 0;
         while (i < this.titles.size())
         {
-            this.mFragments.add(ChildFragment.getInstance(((MenuBean)this.titles.get(i)).getMenuName()));
+            this.mFragments.add(ChildFragment.getInstance(this.titles.get(i).getMenuName()));
             i += 1;
         }
         View localView = getWindow().getDecorView();
-        viewPager = (ViewPager)ViewHolder.get(localView,R.id.vPager);
+        viewPager = ViewHolder.get(localView,R.id.vPager);
         viewPager.setOffscreenPageLimit(this.titles.size());
         this.mAdapter = new ShoppingTitleBarAdapter(getSupportFragmentManager(), this.mFragments, this.titles);
         viewPager.setAdapter(this.mAdapter);
@@ -85,18 +85,18 @@ public class ShoppingDetailActivity extends FragmentActivity implements View.OnC
     {
         final Dialog localDialog = new Dialog(mActivity, R.style.BottomDialog);
         View localView = LayoutInflater.from(mActivity).inflate(R.layout.dialog_product, null);
-        mIbClose = (ImageButton)localView.findViewById(R.id.ib_close);
-        mTvInfo = (TextView)localView.findViewById(R.id.tv_info);
-        mTvSellingPrice = (TextView)localView.findViewById(R.id.tv_selling_price);
-        mTvSellingPriceUnit = (TextView)localView.findViewById(R.id.tv_selling_price_unit);
-        mLlPrice = (LinearLayout)localView.findViewById(R.id.ll_price);
-        mTvQuantityLabel = (TextView)localView.findViewById(R.id.tv_quantity_label);
-        mTvQuantity = (TextView)localView.findViewById(R.id.tv_quantity);
-        mBtnQuantityMinus = (TextView)localView.findViewById(R.id.btn_quantity_minus);
-        mEtQuantityInput = (EditText)localView.findViewById(R.id.et_quantity_input);
-        mBtnQuantityPlus = (TextView)localView.findViewById(R.id.btn_quantity_plus);
-        mBtnSubmit = (Button)localView.findViewById(R.id.btn_submit);
-        mIvLogo = (ImageView)localView.findViewById(R.id.iv_logo);
+        mIbClose = localView.findViewById(R.id.ib_close);
+        mTvInfo = localView.findViewById(R.id.tv_info);
+        mTvSellingPrice = localView.findViewById(R.id.tv_selling_price);
+        mTvSellingPriceUnit = localView.findViewById(R.id.tv_selling_price_unit);
+        mLlPrice = localView.findViewById(R.id.ll_price);
+        mTvQuantityLabel = localView.findViewById(R.id.tv_quantity_label);
+        mTvQuantity = localView.findViewById(R.id.tv_quantity);
+        mBtnQuantityMinus = localView.findViewById(R.id.btn_quantity_minus);
+        mEtQuantityInput = localView.findViewById(R.id.et_quantity_input);
+        mBtnQuantityPlus = localView.findViewById(R.id.btn_quantity_plus);
+        mBtnSubmit = localView.findViewById(R.id.btn_submit);
+        mIvLogo = localView.findViewById(R.id.iv_logo);
         mIbClose.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View paramAnonymousView)
@@ -104,7 +104,7 @@ public class ShoppingDetailActivity extends FragmentActivity implements View.OnC
                 localDialog.dismiss();
             }
         });
-        Glide.with(mActivity).load(product.getUrl()).into(mIvLogo);
+        Glide.with(mActivity).load(product.getThumb_url()).into(mIvLogo);
         mTvSellingPrice.setText("3");
         mTvSellingPriceUnit.setText("2");
         mEtQuantityInput.setText("1");
@@ -162,11 +162,11 @@ public class ShoppingDetailActivity extends FragmentActivity implements View.OnC
 
     public void initView()
     {
-        this.mIvLeftImageMenu = ((ImageView)findViewById(R.id.iv_left_image_menu));
-        this.mTl3 = ((SlidingTabLayout)findViewById(R.id.tl_3));
-        this.mIvRightImageMenu = ((ImageView)findViewById(R.id.iv_right_image_menu));
-        this.mAddShoppingCart = ((TextView)findViewById(R.id.add_shopping_cart));
-        this.mGoPay = ((TextView)findViewById(R.id.go_pay));
+        this.mIvLeftImageMenu = findViewById(R.id.iv_left_image_menu);
+        this.mTl3 = findViewById(R.id.tl_3);
+        this.mIvRightImageMenu = findViewById(R.id.iv_right_image_menu);
+        this.mAddShoppingCart = findViewById(R.id.add_shopping_cart);
+        this.mGoPay = findViewById(R.id.go_pay);
         this.mIvLeftImageMenu.setImageResource(R.mipmap.back);
         this.mIvRightImageMenu.setImageResource(R.mipmap.share);
         this.mIvLeftImageMenu.setOnClickListener(this);
@@ -199,17 +199,8 @@ public class ShoppingDetailActivity extends FragmentActivity implements View.OnC
             i += 1;
         }
         product = new Product();
-        product.setType("tpe");
-        product.setUrl("https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg");
-//        product.setId("1");
-//        product.setName("������");
-//        product.setSellingPrice(245L);
-//        product.setMainImage("https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg");
-//        product.setSellingPrice(154L);
-//        product.setCurrencyUnit("456");
-//        product.setOriginPrice(446L);
-//        product.setStockQuantity(22);
-//        product.setStatus("������");
+//        product.setType("tpe");
+//        product.setUrl("https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg");
     }
 
     @Override

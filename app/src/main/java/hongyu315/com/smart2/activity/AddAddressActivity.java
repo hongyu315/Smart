@@ -12,9 +12,19 @@ import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 
 import hongyu315.com.smart2.R;
+import hongyu315.com.smart2.api.API;
+import hongyu315.com.smart2.api.URL;
 import hongyu315.com.smart2.bean.Address;
+import hongyu315.com.smart2.bean.SuccessfulMode;
+import hongyu315.com.smart2.constant.Constant;
+import hongyu315.com.smart2.manager.TokenManager;
 import hongyu315.com.smart2.util.SysUtils;
 import hongyu315.com.smart2.util.ToastUtils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AddAddressActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 
@@ -24,7 +34,7 @@ public class AddAddressActivity extends BaseActivity implements CompoundButton.O
     private EditText locate;
     private EditText detailAddress;
     private CheckBox checkbox;
-    private Address address;
+    private Address.DataBean.AddressBean address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +78,13 @@ public class AddAddressActivity extends BaseActivity implements CompoundButton.O
         super.initData();
 
         Intent intent = getIntent();
-        address = (Address) intent.getSerializableExtra("address");
-        if (address != null && !TextUtils.isEmpty(address.getUserName())){//点击编辑进来的
-            userName.setText(address.getUserName());
-            userPhone.setText(address.getUserPhone());
-            locate.setText(address.getUserLocate());
-            detailAddress.setText(address.getUserDetailAddress());
-            checkbox.setChecked(address.isDefault());
+        address = (Address.DataBean.AddressBean) intent.getSerializableExtra("address");
+        if (address != null && !TextUtils.isEmpty(address.getName())){//点击编辑进来的
+            userName.setText(address.getName());
+            userPhone.setText(address.getMobile());
+            locate.setText(address.getArea());
+            detailAddress.setText(address.getAddress());
+            checkbox.setChecked(address.getDefaultX() == 1 ? true : false);
         }else {//点击新增收货地址进来的
 
         }
@@ -127,15 +137,44 @@ public class AddAddressActivity extends BaseActivity implements CompoundButton.O
                 return;
             }
 
-            updateAddress(name, phone, locateStr, detailAddressStr);
+            updateAddress(name, phone, locateStr, detailAddressStr,checkbox.isChecked() ? "1" : "2");
 
         }catch (Exception e){
         }
     }
 
-    private void updateAddress(String name, String phone, String locate, String detail){
-        //if update successful
-        //mFinish();
+    private void updateAddress(String name, String phone, String locate, String detail, String isDefaultAddress){
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<SuccessfulMode> products = api.createAddress(TokenManager.getInstance().getLoginToken().getData().getToken(),
+                name,phone,locate,detail,isDefaultAddress);
+        products.enqueue(new Callback<SuccessfulMode>() {
+            @Override
+            public void onResponse(Call<SuccessfulMode> call, Response<SuccessfulMode> response) {
+
+                try {
+                    SuccessfulMode userProfile = response.body();
+
+                    if (Constant.SUCCESSFUL == userProfile.getCode()){
+                        //if update successful
+                        mFinish();
+                    }else {
+                        ToastUtils.showToast(AddAddressActivity.this,response.body().getMessage());
+                    }
+                } catch (Exception e) {
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<SuccessfulMode> call, Throwable t) {
+                ToastUtils.showToast(AddAddressActivity.this, t.getLocalizedMessage());
+            }
+        });
+
     }
 
     @Override

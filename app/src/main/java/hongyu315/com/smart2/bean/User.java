@@ -1,5 +1,7 @@
 package hongyu315.com.smart2.bean;
 
+import android.text.TextUtils;
+
 public class User {
 
     public String userIcon;
@@ -20,13 +22,12 @@ public class User {
     }
 
     public Boolean isLogin(){
-        return false;
+        return !TextUtils.isEmpty(getUserNick());
     }
 
     public void logout(){
 
     }
-
 
     public String getUserIcon() {
         return userIcon;

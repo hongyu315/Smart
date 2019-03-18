@@ -45,7 +45,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     protected void initData(){
         for (int i = 0; i < 10; i++) {
             Product product = new Product();
-            product.setUrl("http://img3.imgtn.bdimg.com/it/u=2949159174,2649619291&fm=11&gp=0.jpg");            SearchContent content = new SearchContent();
+            product.setThumb_url("http://img3.imgtn.bdimg.com/it/u=2949159174,2649619291&fm=11&gp=0.jpg");            SearchContent content = new SearchContent();
             dataList.add(product);
         }
 

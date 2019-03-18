@@ -52,7 +52,7 @@ public class ProductAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
 
@@ -68,10 +68,17 @@ public class ProductAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        product = products.get(position);
+        try{
+            product = products.get(position);
 
-        Glide.with(mContext).load(product.getUrl()).into(viewHolder.productIcon);
-//        viewHolder.productName.setText(product.get);
+            if (product.getIs_on_sale() == 1){
+                Glide.with(mContext).load(product.getThumb_url()).into(viewHolder.productIcon);
+                viewHolder.productTime.setText("上架时间：" + product.getCreated_at());
+                viewHolder.productName.setText(product.getTitle() + "");
+                viewHolder.productPrice.setText("￥" + ( product.getIs_promote() == 1 ? product.getPromote_price() : product.getMarket_price()));
+            }
+        }catch (Exception e){
+        }
 
         return convertView;
     }

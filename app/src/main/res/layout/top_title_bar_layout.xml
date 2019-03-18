@@ -16,7 +16,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/menu_icon"
             android:visibility="gone"/>
 
         <TextView
@@ -35,8 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/search_icon"/>
+            android:layout_centerVertical="true"/>
     </RelativeLayout>
 
 </LinearLayout>

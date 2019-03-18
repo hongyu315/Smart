@@ -3,7 +3,7 @@
                 xmlns:tl="http://schemas.android.com/apk/res-auto"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@color/ghostwhite"
+                android:background="@color/white"
                 android:clipToPadding="true"
                 android:fitsSystemWindows="true">
 
@@ -18,17 +18,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#ffdddddd"
+        android:background="@color/home_glod_text_unselect"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
         tl:tl_iconHeight="25.0dip"
         tl:tl_iconWidth="25.0dip"
-        tl:tl_indicator_color="#ff2c97de"
+        tl:tl_indicator_color="@color/home_glod_text_select"
         tl:tl_indicator_height="0.0dip"
-        tl:tl_textSelectColor="#ff2c97de"
-        tl:tl_textUnselectColor="#66000000"
+        tl:tl_textSelectColor="@color/home_glod_text_select"
+        tl:tl_textUnselectColor="#ff7b7b7a"
         tl:tl_underline_color="#ffdddddd"
-        tl:tl_underline_height="1dip"/>
+        tl:tl_underline_height="0dip"/>
 
 
 </RelativeLayout>

@@ -44,7 +44,7 @@ public class LogisticsAdapter extends RecyclerView.Adapter<LogisticsAdapter.Logi
 
             if (position == 0) {
                 //红色的圆点
-                holder.iv_status.setImageResource(R.mipmap.love_click);
+                holder.iv_status.setImageResource(R.mipmap.close);
                 RelativeLayout.LayoutParams pointParams = new RelativeLayout.LayoutParams(DensityUtil.dp2px(context, 20), DensityUtil.dp2px(context, 20));
                 pointParams.addRule(RelativeLayout.CENTER_IN_PARENT);
                 holder.iv_status.setLayoutParams(pointParams);
@@ -60,7 +60,7 @@ public class LogisticsAdapter extends RecyclerView.Adapter<LogisticsAdapter.Logi
 
             } else {
 //                holder.iv_status.setBackgroundResource(R.mipmap.ic_logistics_bottom);
-                holder.iv_status.setImageResource(R.mipmap.love);
+                holder.iv_status.setImageResource(R.mipmap.close);
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(DensityUtil.dp2px(context, 10), DensityUtil.dp2px(context, 10));
                 lp.addRule(RelativeLayout.CENTER_IN_PARENT);
 
@@ -93,10 +93,10 @@ public class LogisticsAdapter extends RecyclerView.Adapter<LogisticsAdapter.Logi
 
         LogisticsAdapterHolder(View view) {
             super(view);
-            iv_line = (ImageView) view.findViewById(R.id.iv_line);
-            iv_status = (ImageView) view.findViewById(R.id.iv_status);
-            tv_status = (TextView) view.findViewById(R.id.tv_status);
-            tv_time = (TextView) view.findViewById(R.id.tv_time);
+            iv_line = view.findViewById(R.id.iv_line);
+            iv_status = view.findViewById(R.id.iv_status);
+            tv_status = view.findViewById(R.id.tv_status);
+            tv_time = view.findViewById(R.id.tv_time);
 
         }
     }

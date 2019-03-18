@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/search_cancal"
             android:layout_marginRight="@dimen/dimen_20_dp"
-            android:background="@color/gray"
+            android:background="@color/grey_200"
             android:gravity="center">
 
             <ImageView
@@ -38,7 +38,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_margin="@dimen/dimen_5_dp"
-                android:src="@mipmap/search_icon"/>
+                android:src="@mipmap/search"/>
 
             <EditText
                 android:id="@+id/search_edit_text"
@@ -109,6 +109,7 @@
             android:numColumns="2"
             android:horizontalSpacing="@dimen/dimen_10_dp"
             android:padding="@dimen/dimen_10_dp"
+            android:background="@color/grey_200"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
+import com.hjq.bar.OnTitleBarListener;
+import com.hjq.bar.TitleBar;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,11 +14,10 @@ import hongyu315.com.smart2.R;
 import hongyu315.com.smart2.adapter.MessageAdapter;
 import hongyu315.com.smart2.bean.Message;
 import hongyu315.com.smart2.constant.Constant;
-import hongyu315.com.smart2.view.TopTitleBarView;
 
 public class MessageActivity extends BaseActivity implements View.OnClickListener {
 
-    private TopTitleBarView titleBarView;
+    private TitleBar titleBarView;
 
     private ListView messageList;
     private MessageAdapter adapter;
@@ -33,14 +35,23 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void findViews() {
         super.findViews();
-        titleBarView = ((TopTitleBarView) findViewById(R.id.topTitleBarView));
-        titleBarView.mTvLeftImageMenu.setVisibility(View.VISIBLE);
-        titleBarView.mTvLeftImageMenu.setImageResource(R.mipmap.back);
-        titleBarView.mTvLeftImageMenu.setOnClickListener(this);
-        titleBarView.mTvTitle.setText(R.string.message);
-        titleBarView.mTvRightSearch.setVisibility(View.GONE);
+        titleBarView = findViewById(R.id.message_list_activity_title_bar);
+        titleBarView.setOnTitleBarListener(new OnTitleBarListener() {
+            @Override
+            public void onLeftClick(View v) {
+                mFinish();
+            }
 
-        messageList = (ListView) findViewById(R.id.message_list);
+            @Override
+            public void onTitleClick(View v) {
+            }
+
+            @Override
+            public void onRightClick(View v) {
+            }
+        });
+
+        messageList = findViewById(R.id.message_list);
 
         adapter = new MessageAdapter(this,messages);
 

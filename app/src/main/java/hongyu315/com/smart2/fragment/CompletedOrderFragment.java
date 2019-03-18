@@ -59,8 +59,8 @@ public class CompletedOrderFragment extends BaseFragment implements OrderAdapter
     protected void findViews(View paramView) {
         super.findViews(paramView);
 
-        swipeToLoadLayout = (SwipeToLoadLayout) paramView.findViewById(R.id.swipeToLoadLayout);
-        listView = (ListView) paramView.findViewById(R.id.swipe_target);
+        swipeToLoadLayout = paramView.findViewById(R.id.swipeToLoadLayout);
+        listView = paramView.findViewById(R.id.swipe_target);
 
         swipeToLoadLayout.setRefreshEnabled(false);
         swipeToLoadLayout.setLoadMoreEnabled(false);

@@ -296,8 +296,8 @@ public class WeakHandler
 
         public void run()
         {
-            Runnable localRunnable = (Runnable)this.mDelegate.get();
-            WeakHandler.ChainedRef localChainedRef = (WeakHandler.ChainedRef)this.mReference.get();
+            Runnable localRunnable = this.mDelegate.get();
+            WeakHandler.ChainedRef localChainedRef = this.mReference.get();
             if (localChainedRef != null) {
                 localChainedRef.remove();
             }

@@ -10,7 +10,7 @@
         android:paddingBottom="@dimen/dimen_5_dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/light_white"
+        android:background="@color/white"
         android:orientation="horizontal">
 
         <CheckBox
@@ -44,7 +44,7 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/goods_name"
@@ -52,28 +52,29 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:text="武汉站"
-                    android:textColor="@android:color/black"
-                    android:textSize="15.0dip"/>
+                    android:textColor="@color/home_glod_text_unselect"
+                    android:textSize="12sp"/>
                 <TextView
                     android:id="@+id/goods_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="门票:内场 类型:憨人"
-                    android:textSize="14.0dip"/>
+                    android:textColor="#ffaaaaaa"
+                    android:textSize="12sp"/>
                 <TextView
                     android:id="@+id/goods_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="门票:内场 类型:憨人"
-                    android:textSize="14.0dip"/>
+                    android:textColor="#ffaaaaaa"
+                    android:textSize="12sp"/>
 
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerVertical="true">
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_alignParentBottom="true">
 
                     <TextView
                         android:id="@+id/goods_price"
@@ -82,19 +83,18 @@
                         android:layout_centerVertical="true"
                         android:lines="1"
                         android:text="￥1000.00"
-                        android:textColor="@color/ic_taobao"
-                        android:textSize="16.5sp"
-                        android:textStyle="bold"/>
+                        android:textColor="@color/home_glod_text_unselect"
+                        android:textSize="14sp"/>
 
 
                     <hongyu315.com.smart2.view.AmountView
                         android:id="@+id/amount_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
+                        android:layout_width="@dimen/dimen_100_dp"
+                        android:layout_height="@dimen/dimen_20_dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="10dp"
-                        app:btnTextSize="14sp"
-                        app:btnWidth="36dp"
+                        app:btnTextSize="12sp"
+                        app:btnWidth="20dp"
                         app:tvWidth="50dp"/>
 
                 </RelativeLayout>

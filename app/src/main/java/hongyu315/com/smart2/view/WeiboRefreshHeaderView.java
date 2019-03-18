@@ -52,9 +52,9 @@ public class WeiboRefreshHeaderView extends SwipeRefreshHeaderLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        tvRefresh = (TextView) findViewById(R.id.tvRefresh);
-        ivArrow = (ImageView) findViewById(R.id.ivArrow);
-        progressBar = (ProgressBar) findViewById(R.id.progressbar);
+        tvRefresh = findViewById(R.id.tvRefresh);
+        ivArrow = findViewById(R.id.ivArrow);
+        progressBar = findViewById(R.id.progressbar);
     }
 
     @Override

@@ -31,7 +31,7 @@ public class ViewHolder
 
     public static <T extends View> T get(View paramView, int paramInt)
     {
-        Object localObject2 = (SparseArray)paramView.getTag();
+        Object localObject2 = paramView.getTag();
         Object localObject1 = localObject2;
         if (localObject2 == null)
         {
@@ -68,7 +68,7 @@ public class ViewHolder
 
     public View getView(int paramInt)
     {
-        View localView2 = (View)this.mViews.get(paramInt);
+        View localView2 = this.mViews.get(paramInt);
         View localView1 = localView2;
         if (localView2 == null)
         {

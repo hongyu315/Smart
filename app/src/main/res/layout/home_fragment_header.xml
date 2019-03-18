@@ -53,7 +53,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/setting"/>
+                android:src="@mipmap/search"/>
 
             <ImageView
                 android:id="@+id/iv_portrait"
@@ -94,7 +94,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/dimen_15_dp"
-                android:drawableRight="@mipmap/enter"
+                android:drawableRight="@mipmap/search"
                 android:drawablePadding="@dimen/dimen_10_dp"
                 android:text="@string/my_all_shopping"
                 android:textColor="@color/black_8"
@@ -464,7 +464,6 @@
                 android:layout_alignBottom="@+id/tv_other_goods"
                 android:layout_alignParentLeft="true"
                 android:layout_marginRight="@dimen/dimen_15_dp"
-                android:drawableRight="@mipmap/enter"
                 android:drawablePadding="@dimen/dimen_10_dp"
                 android:gravity="center|right"
                 android:textColor="@color/black_8"

@@ -7,6 +7,8 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.flyco.tablayout.SlidingTabLayout;
+import com.hjq.bar.OnTitleBarListener;
+import com.hjq.bar.TitleBar;
 
 import java.util.ArrayList;
 
@@ -17,11 +19,10 @@ import hongyu315.com.smart2.fragment.Wait4DeliverFragment;
 import hongyu315.com.smart2.fragment.Wait4PayFragment;
 import hongyu315.com.smart2.fragment.Wait4TakeDeliveryFragment;
 import hongyu315.com.smart2.util.SysUtils;
-import hongyu315.com.smart2.view.TopTitleBarView;
 
-public class MyOrderActivity extends BaseActivity implements TopTitleBarView.TopTitleBarClickListener {
+public class MyOrderActivity extends BaseActivity {
 
-    private TopTitleBarView topTitleBarView;
+    private TitleBar topTitleBarView;
     private SlidingTabLayout commonTabLayout;
     private ViewPager viewPager;
     private ArrayList<Fragment> mFragments = new ArrayList<>();
@@ -43,15 +44,26 @@ public class MyOrderActivity extends BaseActivity implements TopTitleBarView.Top
         super.findViews();
 
         //标题栏
-        topTitleBarView = (TopTitleBarView)findViewById(R.id.topTitleBarView);
-        topTitleBarView.mTvLeftImageMenu.setVisibility(View.VISIBLE);
-        topTitleBarView.mTvLeftImageMenu.setImageResource(R.mipmap.back);
-        topTitleBarView.mTvTitle.setText(R.string.my_order);
-        topTitleBarView.setTopBarClickListener(this);
+        topTitleBarView = findViewById(R.id.my_order_title_bar);
+        topTitleBarView.setOnTitleBarListener(new OnTitleBarListener() {
+            @Override
+            public void onLeftClick(View v) {
+                mFinish();
+            }
+
+            @Override
+            public void onTitleClick(View v) {
+            }
+
+            @Override
+            public void onRightClick(View v) {
+                SysUtils.startActivity(MyOrderActivity.this,SearchActivity.class);
+            }
+        });
 
         //tab滑动栏
-        commonTabLayout = (SlidingTabLayout) findViewById(R.id.slidingTabLayout);
-        viewPager = (ViewPager) findViewById(R.id.my_order_view_pager);
+        commonTabLayout = findViewById(R.id.slidingTabLayout);
+        viewPager = findViewById(R.id.my_order_view_pager);
 
         mFragments.add(CompletedOrderFragment.getInstance());
         mFragments.add(Wait4PayFragment.getInstance());
@@ -72,13 +84,4 @@ public class MyOrderActivity extends BaseActivity implements TopTitleBarView.Top
         commonTabLayout.setCurrentTab(index);
     }
 
-    @Override
-    public void onTopTitleBarLeftIconClickListener() {
-        mFinish();
-    }
-
-    @Override
-    public void onTopTitleBarRightIconClickListener() {
-        SysUtils.startActivity(this,SearchActivity.class);
-    }
 }

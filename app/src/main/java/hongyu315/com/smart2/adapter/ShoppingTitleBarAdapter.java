@@ -42,11 +42,11 @@ public class ShoppingTitleBarAdapter
         if (paramInt == 2) {
             return GoodsCommentsFragment.getInstance();
         }
-        return (Fragment)this.mFragments.get(paramInt);
+        return this.mFragments.get(paramInt);
     }
 
     public CharSequence getPageTitle(int paramInt)
     {
-        return ((MenuBean)this.mTitles.get(paramInt)).getMenuName();
+        return this.mTitles.get(paramInt).getMenuName();
     }
 }

@@ -21,6 +21,10 @@ public class SysUtils {
 
     public static <T> void startActivity(Activity paramActivity, Class<T> paramClass, Bundle paramBundle)
     {
+//        Intent intent = new Intent(paramActivity,paramClass);
+//        intent.putExtra("address",addressList.get(position));
+//        startActivity(intent);
+
 //        paramClass = new Intent(paramActivity, paramClass);
 //        if (paramBundle != null) {
 //            paramClass.putExtras(paramBundle);

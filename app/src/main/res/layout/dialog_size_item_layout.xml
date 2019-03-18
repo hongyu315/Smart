@@ -6,7 +6,9 @@
     <TextView
         android:id="@+id/dialog_size_item"
         android:layout_marginTop="@dimen/dimen_5_dp"
-        android:padding="@dimen/dimen_4_dp"
+        android:padding="@dimen/dimen_8_dp"
+        android:textSize="12sp"
+        android:textColor="@color/home_glod_text_unselect"
         android:background="@drawable/bg_amount_layout"
         android:text="M 睡衣175/92A 睡裤175/80A"
         android:layout_width="wrap_content"

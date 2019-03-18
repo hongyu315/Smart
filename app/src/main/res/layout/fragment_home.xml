@@ -2,18 +2,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
               android:fitsSystemWindows="true"
+              android:background="@color/white"
               android:orientation="vertical">
 
-    <hongyu315.com.smart2.view.TopTitleBarView
-        android:id="@+id/topTitleBarView"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/dimen_48_dp"
-        android:layout_alignParentStart="true"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_45_dp">
+
+        <ImageView
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/index_title_icon"/>
+
+        <LinearLayout
+            android:id="@+id/home_search_layout"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/dimen_20_dp"
+            android:layout_width="@dimen/dimen_40_dp"
+            android:layout_height="@dimen/dimen_40_dp">
+            <ImageView
+                android:src="@mipmap/search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
 
     <LinearLayout
+        android:background="#FAFAFA"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_49_dp"
+        android:layout_height="@dimen/dimen_45_dp"
         android:orientation="vertical">
 
         <include layout="@layout/gray_line_view"/>
@@ -25,34 +50,80 @@
             android:weightSum="2">
 
             <RelativeLayout
+                android:id="@+id/home_on_store_text_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
 
                 <TextView
+                    android:id="@+id/home_on_store_time_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
+                    android:textSize="@dimen/dimen_13_dp"
+                    android:tag="true"
+                    android:textColor="@color/home_glod_text_select"
                     android:text="上架时间"/>
+                <ImageView
+                    android:id="@+id/home_on_store_time_arrow_up"
+                    android:layout_toRightOf="@+id/home_on_store_time_text"
+                    android:src="@mipmap/home_arrow_unselect_up"
+                    android:layout_alignTop="@+id/home_on_store_time_text"
+                    android:layout_marginTop="@dimen/dimen_5_dp"
+                    android:layout_marginLeft="@dimen/dimen_5_dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:id="@+id/home_on_store_time_arrow_down"
+                    android:layout_toRightOf="@+id/home_on_store_time_text"
+                    android:src="@mipmap/home_arrow_selected_down"
+                    android:layout_alignBottom="@+id/home_on_store_time_text"
+                    android:layout_marginBottom="@dimen/dimen_5_dp"
+                    android:layout_marginLeft="@dimen/dimen_5_dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
             </RelativeLayout>
 
             <TextView
                 android:layout_marginTop="@dimen/dimen_10_dp"
                 android:layout_marginBottom="@dimen/dimen_10_dp"
-                android:background="@color/gray"
+                android:background="@color/line"
                 android:layout_width="0.5dp"
                 android:layout_height="match_parent"/>
 
             <RelativeLayout
+                android:id="@+id/home_on_store_price_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
 
                 <TextView
+                    android:id="@+id/home_on_store_price_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
+                    android:textSize="@dimen/dimen_13_dp"
+                    android:tag="false"
                     android:text="产品价格"/>
+
+                <ImageView
+                    android:id="@+id/home_on_store_price_arrow_up"
+                    android:layout_toRightOf="@+id/home_on_store_price_text"
+                    android:src="@mipmap/home_arrow_unselect_up"
+                    android:layout_alignTop="@+id/home_on_store_price_text"
+                    android:layout_marginTop="@dimen/dimen_5_dp"
+                    android:layout_marginLeft="@dimen/dimen_5_dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:id="@+id/home_on_store_price_arrow_down"
+                    android:layout_toRightOf="@+id/home_on_store_price_text"
+                    android:src="@mipmap/home_arrow_unselect_down"
+                    android:layout_alignBottom="@+id/home_on_store_price_text"
+                    android:layout_marginBottom="@dimen/dimen_5_dp"
+                    android:layout_marginLeft="@dimen/dimen_5_dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
             </RelativeLayout>
         </LinearLayout>
 
@@ -75,15 +146,13 @@
             android:fillViewport="true"
             android:horizontalSpacing="@dimen/dimen_10_dp"
             android:numColumns="2"
-            android:orientation="vertical"
             android:padding="@dimen/dimen_10_dp"
+            android:orientation="vertical"
             android:scrollbars="none"/>
 
         <include
             android:id="@id/swipe_load_more_footer"
             layout="@layout/layout_weibo_header"/>
     </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
-
-
 
 </LinearLayout>
