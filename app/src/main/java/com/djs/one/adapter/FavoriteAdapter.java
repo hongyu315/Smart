@@ -9,11 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-
-import java.util.List;
-
 import com.djs.one.R;
 import com.djs.one.bean.Product;
+
+import java.util.List;
 
 /**
  * <p>文件描述：<p>

@@ -1,4 +1,4 @@
-package com.com.one.activity;
+package com.djs.one.activity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,16 +9,16 @@ import android.widget.TextView;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 
-import com.com.one.R;
-import com.com.one.api.API;
-import com.com.one.api.URL;
-import com.com.one.bean.SuccessfulMode;
-import com.com.one.constant.Constant;
-import com.com.one.manager.CacheManager;
-import com.com.one.manager.TokenManager;
-import com.com.one.manager.UserManager;
-import com.com.one.util.SysUtils;
-import com.com.one.util.ToastUtils;
+import com.djs.one.R;
+import com.djs.one.api.API;
+import com.djs.one.api.URL;
+import com.djs.one.bean.SuccessfulMode;
+import com.djs.one.constant.Constant;
+import com.djs.one.manager.CacheManager;
+import com.djs.one.manager.TokenManager;
+import com.djs.one.manager.UserManager;
+import com.djs.one.util.SysUtils;
+import com.djs.one.util.ToastUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

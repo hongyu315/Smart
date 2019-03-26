@@ -1,4 +1,4 @@
-package com.com.one.fragment;
+package com.djs.one.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -24,12 +24,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.com.one.R;
-import com.com.one.activity.ShoppingDetailActivity;
-import com.com.one.adapter.MyPagerAdapter;
-import com.com.one.adapter.SearchAdapter;
-import com.com.one.util.SysUtils;
-import com.com.one.view.TopTitleBarView;
+import com.djs.one.R;
+import com.djs.one.activity.ShoppingDetailActivity;
+import com.djs.one.adapter.MyPagerAdapter;
+import com.djs.one.adapter.SearchAdapter;
+import com.djs.one.util.SysUtils;
+import com.djs.one.view.TopTitleBarView;
 
 public class MallFragment extends BaseFragment implements View.OnClickListener {
 

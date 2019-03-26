@@ -1,4 +1,4 @@
-package com.com.one.view;
+package com.djs.one.view;
 
 /**
  * Created by zhou on 16-4-6.

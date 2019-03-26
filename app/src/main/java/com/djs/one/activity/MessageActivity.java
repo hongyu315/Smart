@@ -1,4 +1,4 @@
-package com.com.one.activity;
+package com.djs.one.activity;
 
 import android.os.Bundle;
 import android.view.View;
@@ -10,10 +10,10 @@ import com.hjq.bar.TitleBar;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.com.one.R;
-import com.com.one.adapter.MessageAdapter;
-import com.com.one.bean.Message;
-import com.com.one.constant.Constant;
+import com.djs.one.R;
+import com.djs.one.adapter.MessageAdapter;
+import com.djs.one.bean.Message;
+import com.djs.one.constant.Constant;
 
 public class MessageActivity extends BaseActivity implements View.OnClickListener {
 

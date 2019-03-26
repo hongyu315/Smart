@@ -1,4 +1,4 @@
-package com.com.one.activity;
+package com.djs.one.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,9 +9,9 @@ import com.google.gson.Gson;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 
-import com.com.one.R;
-import com.com.one.adapter.LogisticsAdapter;
-import com.com.one.bean.LogisticsJson;
+import com.djs.one.R;
+import com.djs.one.adapter.LogisticsAdapter;
+import com.djs.one.bean.LogisticsJson;
 
 public class LogisticsActivity extends BaseActivity {
 

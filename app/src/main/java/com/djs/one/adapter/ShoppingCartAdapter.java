@@ -1,4 +1,4 @@
-package com.com.one.adapter;
+package com.djs.one.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -15,9 +15,9 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import com.com.one.R;
-import com.com.one.bean.GoodsInfo;
-import com.com.one.view.AmountView;
+import com.djs.one.R;
+import com.djs.one.bean.GoodsInfo;
+import com.djs.one.view.AmountView;
 
 public class ShoppingCartAdapter
         extends BaseAdapter

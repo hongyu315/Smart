@@ -1,9 +1,9 @@
-package com.com.one.view.pickdatetime.adapter.datetime;
+package com.djs.one.view.pickdatetime.adapter.datetime;
 
 import android.support.annotation.NonNull;
 
-import com.com.one.view.pickdatetime.bean.DateParams;
-import com.com.one.view.pickdatetime.bean.DatePick;
+import com.djs.one.view.pickdatetime.bean.DateParams;
+import com.djs.one.view.pickdatetime.bean.DatePick;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.com.one.fragment;
+package com.djs.one.fragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -6,8 +6,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -27,37 +25,41 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alipay.sdk.app.PayTask;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
-import com.tencent.mm.opensdk.constants.ConstantsAPI;
-import com.tencent.mm.opensdk.modelbase.BaseReq;
-import com.tencent.mm.opensdk.modelbase.BaseResp;
-import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.opensdk.modelmsg.WXTextObject;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.djs.one.R;
+import com.djs.one.adapter.DialogSizeItemAdapter;
+import com.djs.one.adapter.ShoppingCartAdapter;
+import com.djs.one.bean.GoodsInfo;
+import com.djs.one.util.DensityUtil;
+import com.djs.one.util.OrderInfoUtil2_0;
+import com.djs.one.util.SysUtils;
+import com.djs.one.view.AmountView;
+import com.umeng.commonsdk.UMConfigure;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.com.one.R;
-import com.com.one.adapter.DialogSizeItemAdapter;
-import com.com.one.adapter.ShoppingCartAdapter;
-import com.com.one.bean.GoodsInfo;
-import com.com.one.bean.PayResult;
-import com.com.one.constant.Constant;
-import com.com.one.util.DensityUtil;
-import com.com.one.util.OrderInfoUtil2_0;
-import com.com.one.util.SysUtils;
-import com.com.one.util.WXPayUtils;
-import com.com.one.view.AmountView;
+//import com.djs.one.util.WXPayUtils;
+//import com.tencent.mm.opensdk.constants.ConstantsAPI;
+//import com.tencent.mm.opensdk.modelbase.BaseReq;
+//import com.tencent.mm.opensdk.modelbase.BaseResp;
+//import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+//import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+//import com.tencent.mm.opensdk.modelmsg.WXTextObject;
+//import com.tencent.mm.opensdk.openapi.IWXAPI;
+//import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
+//import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
+//import com.alipay.sdk.app.PayTask;
 
 public class ShoppingFragment extends BaseFragment implements View.OnClickListener,
         ShoppingCartAdapter.onCheckboxClickListener,
-        ShoppingCartAdapter.onAmountValueChangeListener,IWXAPIEventHandler {
+        ShoppingCartAdapter.onAmountValueChangeListener {//,IWXAPIEventHandler
 
 
     public LinearLayout check_LL;
@@ -124,33 +126,33 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
     }
 
     @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler() {
-        @SuppressWarnings("unused")
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case SDK_PAY_FLAG: {
-                    @SuppressWarnings("unchecked")
-                    PayResult payResult = new PayResult((Map<String, String>) msg.obj);
-                    /**
-                     * 对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
-                     */
-                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
-                    String resultStatus = payResult.getResultStatus();
-                    // 判断resultStatus 为9000则代表支付成功
-                    if (TextUtils.equals(resultStatus, "9000")) {
-                        // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-//                        showAlert(PayDemoActivity.this, getString(R.string.pay_success) + payResult);
-                    } else {
-                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-//                        showAlert(PayDemoActivity.this, getString(R.string.pay_failed) + payResult);
-                    }
-                    break;
-                }
-                default:
-                    break;
-            }
-        };
-    };
+//    private Handler mHandler = new Handler() {
+//        @SuppressWarnings("unused")
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case SDK_PAY_FLAG: {
+//                    @SuppressWarnings("unchecked")
+//                    PayResult payResult = new PayResult((Map<String, String>) msg.obj);
+//                    /**
+//                     * 对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+//                     */
+//                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+//                    String resultStatus = payResult.getResultStatus();
+//                    // 判断resultStatus 为9000则代表支付成功
+//                    if (TextUtils.equals(resultStatus, "9000")) {
+//                        // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+////                        showAlert(PayDemoActivity.this, getString(R.string.pay_success) + payResult);
+//                    } else {
+//                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
+////                        showAlert(PayDemoActivity.this, getString(R.string.pay_failed) + payResult);
+//                    }
+//                    break;
+//                }
+//                default:
+//                    break;
+//            }
+//        };
+//    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -274,6 +276,58 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
+    private void test(){
+        UMConfigure.init(getActivity(),"5c8ef97261f564f490000a1c"
+                ,"umeng",UMConfigure.DEVICE_TYPE_PHONE,"70d6885b210ad186c508eee7fa687019");
+        PlatformConfig.setWeixin("wxdc1e388c3822c80b", "3baf1193c85774b3fd9d18447d76cab0");
+        new ShareAction(getActivity())
+                .setPlatform(SHARE_MEDIA.QQ)//传入平台
+                .withText("hello")//分享内容
+                .setCallback(shareListener)//回调监听器
+                .share();
+    }
+
+    private UMShareListener shareListener = new UMShareListener() {
+        /**
+         * @descrption 分享开始的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+            Toast.makeText(getActivity(),"onStart",Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享成功的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            Toast.makeText(getActivity(),"成功了",Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享失败的回调
+         * @param platform 平台类型
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(getActivity(),"失 败"+t.getMessage(),Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享取消的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(getActivity(),"取消 了",Toast.LENGTH_LONG).show();
+
+        }
+    };
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId())
@@ -284,6 +338,7 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
                 onEditClick();
                 return;
             case R.id.go_pay:
+                test();
 //                sendToWeixin();
 //                onGoPlayClick();
 //                showBottomDialog();
@@ -538,52 +593,52 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
 
     private void onWeixinPaySignOnNet(){
         //假装请求了服务器 获取到了所有的数据,注意参数不能少
-        WXPayUtils.WXPayBuilder builder = new WXPayUtils.WXPayBuilder();
-        builder.setAppId("123")
-                .setPartnerId("56465")
-                .setPrepayId("41515")
-                .setPackageValue("5153")
-                .setNonceStr("5645")
-                .setTimeStamp("56512")
-                .setSign("54615")
-                .build().toWXPayNotSign(getActivity());
+//        WXPayUtils.WXPayBuilder builder = new WXPayUtils.WXPayBuilder();
+//        builder.setAppId("123")
+//                .setPartnerId("56465")
+//                .setPrepayId("41515")
+//                .setPackageValue("5153")
+//                .setNonceStr("5645")
+//                .setTimeStamp("56512")
+//                .setSign("54615")
+//                .build().toWXPayNotSign(getActivity());
     }
 
     private void onWeixinPaySignOnLocal(){
         //假装请求了服务器 获取到了所有的数据,注意参数不能少
         //假装请求了服务端信息，并获取了appid、partnerId、prepayId，注意参数不能少
-        WXPayUtils.WXPayBuilder builder = new WXPayUtils.WXPayBuilder();
-        builder.setAppId("123")
-                .setPartnerId("213")
-                .setPrepayId("3213")
-                .setPackageValue("Sign=WXPay")
-                .build()
-                .toWXPayAndSign(getActivity(),"123","key");
+//        WXPayUtils.WXPayBuilder builder = new WXPayUtils.WXPayBuilder();
+//        builder.setAppId("123")
+//                .setPartnerId("213")
+//                .setPrepayId("3213")
+//                .setPackageValue("Sign=WXPay")
+//                .build()
+//                .toWXPayAndSign(getActivity(),"123","key");
     }
 
     private void sendToWeixin(){
-        IWXAPI api = WXAPIFactory.createWXAPI(getActivity(),Constant.APP_ID);
-        api.registerApp(Constant.APP_ID);
-
-        // 初始化一个WXTextObject对象
-        WXTextObject textObj = new WXTextObject();
-        textObj.text = "Text";
-
-        // 用WXTextObject对象初始化一个WXMediaMessage对象
-        WXMediaMessage msg = new WXMediaMessage();
-        msg.mediaObject = textObj;
-        // 发送文本类型的消息时，title字段不起作用
-        // msg.title = "Will be ignored";
-        msg.description = "Des";
-
-        // 构造一个Req
-        SendMessageToWX.Req req = new SendMessageToWX.Req();
-        req.transaction = String.valueOf(System.currentTimeMillis()); // transaction字段用于唯一标识一个请求
-        req.message = msg;
-        req.scene = true ? SendMessageToWX.Req.WXSceneTimeline : SendMessageToWX.Req.WXSceneSession;
-        req.openId = Constant.APP_ID;//getOpenId();
-        // 调用api接口发送数据到微信
-        api.sendReq(req);
+//        IWXAPI api = WXAPIFactory.createWXAPI(getActivity(),Constant.APP_ID);
+//        api.registerApp(Constant.APP_ID);
+//
+//        // 初始化一个WXTextObject对象
+//        WXTextObject textObj = new WXTextObject();
+//        textObj.text = "Text";
+//
+//        // 用WXTextObject对象初始化一个WXMediaMessage对象
+//        WXMediaMessage msg = new WXMediaMessage();
+//        msg.mediaObject = textObj;
+//        // 发送文本类型的消息时，title字段不起作用
+//        // msg.title = "Will be ignored";
+//        msg.description = "Des";
+//
+//        // 构造一个Req
+//        SendMessageToWX.Req req = new SendMessageToWX.Req();
+//        req.transaction = String.valueOf(System.currentTimeMillis()); // transaction字段用于唯一标识一个请求
+//        req.message = msg;
+//        req.scene = true ? SendMessageToWX.Req.WXSceneTimeline : SendMessageToWX.Req.WXSceneSession;
+//        req.openId = Constant.APP_ID;//getOpenId();
+//        // 调用api接口发送数据到微信
+//        api.sendReq(req);
     }
 
     /**
@@ -614,14 +669,14 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
 
             @Override
             public void run() {
-                PayTask alipay = new PayTask(getActivity());
-                Map<String, String> result = alipay.payV2(orderInfo, true);
-                Log.i("msp", result.toString());
-
-                Message msg = new Message();
-                msg.what = SDK_PAY_FLAG;
-                msg.obj = result;
-                mHandler.sendMessage(msg);
+//                PayTask alipay = new PayTask(getActivity());
+//                Map<String, String> result = alipay.payV2(orderInfo, true);
+//                Log.i("msp", result.toString());
+//
+//                Message msg = new Message();
+//                msg.what = SDK_PAY_FLAG;
+//                msg.obj = result;
+//                mHandler.sendMessage(msg);
             }
         };
 
@@ -682,24 +737,24 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
-    @Override
-    public void onReq(BaseReq baseReq) {
-        Log.e("onReq", "onReq, errCode = " + baseReq.toString());
-    }
-
-    @Override
-    public void onResp(BaseResp baseResp) {
-        Log.e("onReq", "onPayFinish, errCode = " + baseResp.errCode);
-
-        if (baseResp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
-            int errCord = baseResp.errCode;
-            if (errCord == 0) {
-                Toast.makeText(getActivity(), "支付成功", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getActivity(), "支付失败", Toast.LENGTH_SHORT).show();
-            }
-            //这里接收到了返回的状态码可以进行相应的操作，如果不想在这个页面操作可以把状态码存在本地然后finish掉这个页面，这样就回到了你调起支付的那个页面
-            //获取到你刚刚存到本地的状态码进行相应的操作就可以了
-        }
-    }
+//    @Override
+//    public void onReq(BaseReq baseReq) {
+//        Log.e("onReq", "onReq, errCode = " + baseReq.toString());
+//    }
+//
+//    @Override
+//    public void onResp(BaseResp baseResp) {
+//        Log.e("onReq", "onPayFinish, errCode = " + baseResp.errCode);
+//
+//        if (baseResp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
+//            int errCord = baseResp.errCode;
+//            if (errCord == 0) {
+//                Toast.makeText(getActivity(), "支付成功", Toast.LENGTH_SHORT).show();
+//            } else {
+//                Toast.makeText(getActivity(), "支付失败", Toast.LENGTH_SHORT).show();
+//            }
+//            //这里接收到了返回的状态码可以进行相应的操作，如果不想在这个页面操作可以把状态码存在本地然后finish掉这个页面，这样就回到了你调起支付的那个页面
+//            //获取到你刚刚存到本地的状态码进行相应的操作就可以了
+//        }
+//    }
 }

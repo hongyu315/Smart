@@ -1,4 +1,4 @@
-package com.com.one.adapter;
+package com.djs.one.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,9 +9,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.com.one.R;
-import com.com.one.bean.LogisticsJson;
-import com.com.one.util.DensityUtil;
+import com.djs.one.R;
+import com.djs.one.bean.LogisticsJson;
+import com.djs.one.util.DensityUtil;
 
 public class LogisticsAdapter extends RecyclerView.Adapter<LogisticsAdapter.LogisticsAdapterHolder> {
 

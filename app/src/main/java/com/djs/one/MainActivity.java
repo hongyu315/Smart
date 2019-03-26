@@ -1,21 +1,22 @@
-package com.com.one;
+package com.djs.one;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 
+import com.djs.one.bean.TabEntity;
+import com.djs.one.fragment.HomeFragment;
+import com.djs.one.fragment.ShoppingFragment;
+import com.djs.one.fragment.UserCenterFragment;
+import com.djs.one.util.ToastUtils;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.jaeger.library.StatusBarUtil;
 
 import java.util.ArrayList;
 
-import com.com.one.bean.TabEntity;
-import com.com.one.fragment.HomeFragment;
-import com.com.one.fragment.ShoppingFragment;
-import com.com.one.fragment.UserCenterFragment;
-import com.com.one.util.ToastUtils;
+//import com.umeng.message.PushAgent;
 
 public class MainActivity extends FragmentActivity {
 
@@ -38,6 +39,8 @@ public class MainActivity extends FragmentActivity {
 //        StatusBarUtil.setTranslucent(MainActivity.this,0);
 
         findViews();
+
+//        PushAgent.getInstance(MainActivity.this).onAppStart();
     }
 
     protected void findViews()
@@ -94,6 +97,5 @@ public class MainActivity extends FragmentActivity {
         finish();
         System.exit(0);
     }
-
 
 }

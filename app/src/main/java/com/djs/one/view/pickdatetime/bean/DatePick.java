@@ -1,4 +1,4 @@
-package com.com.one.view.pickdatetime.bean;
+package com.djs.one.view.pickdatetime.bean;
 
 import java.util.Calendar;
 

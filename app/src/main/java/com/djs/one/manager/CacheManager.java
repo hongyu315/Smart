@@ -1,4 +1,4 @@
-package com.com.one.manager;
+package com.djs.one.manager;
 
 import android.content.Context;
 import android.os.Environment;

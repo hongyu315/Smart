@@ -1,4 +1,4 @@
-package com.com.one.activity;
+package com.djs.one.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -21,12 +21,12 @@ import com.flyco.tablayout.SlidingTabLayout;
 
 import java.util.ArrayList;
 
-import com.com.one.R;
-import com.com.one.adapter.ShoppingTitleBarAdapter;
-import com.com.one.bean.MenuBean;
-import com.com.one.bean.Product;
-import com.com.one.fragment.ChildFragment;
-import com.com.one.view.ViewHolder;
+import com.djs.one.R;
+import com.djs.one.adapter.ShoppingTitleBarAdapter;
+import com.djs.one.bean.MenuBean;
+import com.djs.one.bean.Product;
+import com.djs.one.fragment.ChildFragment;
+import com.djs.one.view.ViewHolder;
 
 public class ShoppingDetailActivity extends FragmentActivity implements View.OnClickListener {
 

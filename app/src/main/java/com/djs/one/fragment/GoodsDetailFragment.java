@@ -1,11 +1,11 @@
-package com.com.one.fragment;
+package com.djs.one.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.com.one.R;
+import com.djs.one.R;
 
 public class GoodsDetailFragment extends BaseFragment {
 

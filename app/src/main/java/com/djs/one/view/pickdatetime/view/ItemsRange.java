@@ -17,7 +17,7 @@
  *  limitations under the License.
  */
 
-package com.com.one.view.pickdatetime.view;
+package com.djs.one.view.pickdatetime.view;
 
 /**
  * Range for visible items.

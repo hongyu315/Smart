@@ -1,6 +1,7 @@
-package com.com.one.bean;
+package com.djs.one.bean;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>文件描述：<p>
@@ -14,7 +15,7 @@ public class ProductDetailBean {
     /**
      * code : 1000
      * message : success
-     * data : {"id":1,"title":"男士印花里布丝绒睡袍","composition":"面料：100%棉，辅料除外\n                        尺寸-上衣XL XXL\n                        衣长 74 75\n                        肩宽 48 49\n                        胸围半围 56 58\n                        ","content":"        <!DOCTYPE html>\n        <html>\n        <head>\n            <meta charset=\"utf-8\">\n            <meta name=\"viewport\" content=\"width=device-width,initial-scale=1,user-scalable=0\">\n            <title>产品详情<\/title>\n        <\/head>\n        <body>\n            <img src=\"https://pro.modao.cc/uploads3/images/2967/29678726/v2_pky5oy.jpg\" width=\"100%\" />\n        <\/body>\n        <\/html>","story":"野兽派获得法国Le Petit Prince原作授权推广小王子系列产品，远伴你度过美好的每一天","market_price":96000,"promote_price":96000,"on_sale_time":1549974432,"attributes":[{"attr_id":2,"attr_name":"颜色","weight":2,"values":[{"id":1,"value":"蓝色","weight":1},{"id":2,"value":"绿色","weight":2},{"id":3,"value":"红色","weight":3},{"id":4,"value":"白色","weight":4}]},{"attr_id":1,"attr_name":"尺寸","weight":1,"values":[{"id":13,"value":"L 睡衣180/96A 睡裤180/84A","weight":8},{"id":12,"value":"M 睡衣175/92A 睡裤175/80A","weight":9}]}],"skus":[{"id":81,"specs":"{\"1\":1,\"2\":12}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":82,"specs":"{\"1\":2,\"2\":12}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":83,"specs":"{\"1\":3,\"2\":12}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":84,"specs":"{\"1\":4,\"2\":12}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":85,"specs":"{\"1\":1,\"2\":13}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":86,"specs":"{\"1\":2,\"2\":13}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":87,"specs":"{\"1\":3,\"2\":13}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":88,"specs":"{\"1\":4,\"2\":13}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null}]}
+     * data : {"id":1,"title":"男士印花里布丝绒睡袍","composition":"面料：100%棉，辅料除外\n                        尺寸-上衣XL XXL\n                        衣长 74 75\n                        肩宽 48 49\n                        胸围半围 56 58\n                        ","content":"        <!DOCTYPE html>\n        <html>\n        <head>\n            <meta charset=\"utf-8\">\n            <meta name=\"viewport\" content=\"width=device-width,initial-scale=1,user-scalable=0\">\n            <title>产品详情<\/title>\n        <\/head>\n        <body>\n            <img src=\"https://pro.modao.cc/uploads3/images/2967/29678726/v2_pky5oy.jpg\" width=\"100%\" />\n        <\/body>\n        <\/html>","story":"野兽派获得法国Le Petit Prince原作授权推广小王子系列产品，远伴你度过美好的每一天","market_price":96000,"promote_price":96000,"on_sale_time":1549974432,"attributes":[{"attr_id":2,"attr_name":"颜色","weight":2,"values":[{"id":1,"value":"蓝色","weight":1},{"id":2,"value":"绿色","weight":2},{"id":3,"value":"红色","weight":3},{"id":4,"value":"白色","weight":4}]},{"attr_id":1,"attr_name":"尺寸","weight":1,"values":[{"id":13,"value":"L 睡衣180/96A 睡裤180/84A","weight":8},{"id":12,"value":"M 睡衣175/92A 睡裤175/80A","weight":9}]}],"sku":[{"id":81,"specs":"{\"1\":1,\"2\":12}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":82,"specs":"{\"1\":2,\"2\":12}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":83,"specs":"{\"1\":3,\"2\":12}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":84,"specs":"{\"1\":4,\"2\":12}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":85,"specs":"{\"1\":1,\"2\":13}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":86,"specs":"{\"1\":2,\"2\":13}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":87,"specs":"{\"1\":3,\"2\":13}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":88,"specs":"{\"1\":4,\"2\":13}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null}]}
      */
 
     private int code;
@@ -71,7 +72,7 @@ public class ProductDetailBean {
          * promote_price : 96000
          * on_sale_time : 1549974432
          * attributes : [{"attr_id":2,"attr_name":"颜色","weight":2,"values":[{"id":1,"value":"蓝色","weight":1},{"id":2,"value":"绿色","weight":2},{"id":3,"value":"红色","weight":3},{"id":4,"value":"白色","weight":4}]},{"attr_id":1,"attr_name":"尺寸","weight":1,"values":[{"id":13,"value":"L 睡衣180/96A 睡裤180/84A","weight":8},{"id":12,"value":"M 睡衣175/92A 睡裤175/80A","weight":9}]}]
-         * skus : [{"id":81,"specs":"{\"1\":1,\"2\":12}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":82,"specs":"{\"1\":2,\"2\":12}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":83,"specs":"{\"1\":3,\"2\":12}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":84,"specs":"{\"1\":4,\"2\":12}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":85,"specs":"{\"1\":1,\"2\":13}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":86,"specs":"{\"1\":2,\"2\":13}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":87,"specs":"{\"1\":3,\"2\":13}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":88,"specs":"{\"1\":4,\"2\":13}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null}]
+         * sku : [{"id":81,"specs":"{\"1\":1,\"2\":12}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":82,"specs":"{\"1\":2,\"2\":12}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":83,"specs":"{\"1\":3,\"2\":12}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":84,"specs":"{\"1\":4,\"2\":12}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":85,"specs":"{\"1\":1,\"2\":13}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":86,"specs":"{\"1\":2,\"2\":13}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":87,"specs":"{\"1\":3,\"2\":13}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null},{"id":88,"specs":"{\"1\":4,\"2\":13}","stock":10,"market_price":96000,"promote_price":96000,"created_at":null}]
          */
 
         private int id;
@@ -79,11 +80,12 @@ public class ProductDetailBean {
         private String composition;
         private String content;
         private String story;
+        private String thumb_url;
         private int market_price;
         private int promote_price;
         private int on_sale_time;
         private List<AttributesBean> attributes;
-        private List<SkusBean> skus;
+        private Map<String,SkusBean> sku;
 
         public int getId() {
             return id;
@@ -125,6 +127,14 @@ public class ProductDetailBean {
             this.story = story;
         }
 
+        public String getThumb_url() {
+            return thumb_url;
+        }
+
+        public void setThumb_url(String thumb_url) {
+            this.thumb_url = thumb_url;
+        }
+
         public int getMarket_price() {
             return market_price;
         }
@@ -157,12 +167,12 @@ public class ProductDetailBean {
             this.attributes = attributes;
         }
 
-        public List<SkusBean> getSkus() {
-            return skus;
+        public Map<String,SkusBean> getSku() {
+            return sku;
         }
 
-        public void setSkus(List<SkusBean> skus) {
-            this.skus = skus;
+        public void setSku(Map<String,SkusBean> sku) {
+            this.sku = sku;
         }
 
         public static class AttributesBean {
@@ -258,11 +268,8 @@ public class ProductDetailBean {
              */
 
             private int id;
-            private String specs;
             private int stock;
             private int market_price;
-            private int promote_price;
-            private Object created_at;
 
             public int getId() {
                 return id;
@@ -270,14 +277,6 @@ public class ProductDetailBean {
 
             public void setId(int id) {
                 this.id = id;
-            }
-
-            public String getSpecs() {
-                return specs;
-            }
-
-            public void setSpecs(String specs) {
-                this.specs = specs;
             }
 
             public int getStock() {
@@ -296,21 +295,6 @@ public class ProductDetailBean {
                 this.market_price = market_price;
             }
 
-            public int getPromote_price() {
-                return promote_price;
-            }
-
-            public void setPromote_price(int promote_price) {
-                this.promote_price = promote_price;
-            }
-
-            public Object getCreated_at() {
-                return created_at;
-            }
-
-            public void setCreated_at(Object created_at) {
-                this.created_at = created_at;
-            }
         }
     }
 }

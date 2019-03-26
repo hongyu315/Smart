@@ -1,4 +1,4 @@
-package com.com.one.adapter;
+package com.djs.one.adapter;
 
 import android.app.Activity;
 
@@ -7,7 +7,7 @@ import com.superrecycleview.superlibrary.adapter.SuperBaseAdapter;
 
 import java.util.List;
 
-import com.com.one.bean.Product;
+import com.djs.one.bean.Product;
 
 public class GoodsAdapter
         extends SuperBaseAdapter<Product>

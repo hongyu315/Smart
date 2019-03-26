@@ -1,6 +1,6 @@
-package com.com.one.manager;
+package com.djs.one.manager;
 
-import com.com.one.bean.LoginToken;
+import com.djs.one.bean.LoginToken;
 
 /**
  * <p>文件描述：<p>

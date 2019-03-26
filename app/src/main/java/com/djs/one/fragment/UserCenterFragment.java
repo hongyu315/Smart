@@ -1,4 +1,4 @@
-package com.com.one.fragment;
+package com.djs.one.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,15 +14,15 @@ import com.bumptech.glide.Glide;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 
-import com.com.one.R;
-import com.com.one.activity.AccountManagerActivity;
-import com.com.one.activity.FavoriteActivity;
-import com.com.one.activity.LoginActivity;
-import com.com.one.activity.MessageActivity;
-import com.com.one.activity.MyOrderActivity;
-import com.com.one.constant.Constant;
-import com.com.one.manager.UserManager;
-import com.com.one.util.SysUtils;
+import com.djs.one.R;
+import com.djs.one.activity.AccountManagerActivity;
+import com.djs.one.activity.FavoriteActivity;
+import com.djs.one.activity.LoginActivity;
+import com.djs.one.activity.MessageActivity;
+import com.djs.one.activity.MyOrderActivity;
+import com.djs.one.constant.Constant;
+import com.djs.one.manager.UserManager;
+import com.djs.one.util.SysUtils;
 
 public class UserCenterFragment extends BaseFragment implements View.OnClickListener {
 

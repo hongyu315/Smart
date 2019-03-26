@@ -1,4 +1,4 @@
-package com.com.one.activity;
+package com.djs.one.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -20,6 +20,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.djs.one.R;
+import com.djs.one.bean.User;
+import com.djs.one.constant.Constant;
+import com.djs.one.util.DensityUtil;
+import com.djs.one.util.ImgUtil;
+import com.djs.one.util.SPUtils;
+import com.djs.one.view.pickdatetime.DatePickDialog;
+import com.djs.one.view.pickdatetime.OnSureListener;
+import com.djs.one.view.pickdatetime.bean.DateParams;
 import com.hb.dialog.myDialog.MyAlertInputDialog;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
@@ -28,16 +37,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import com.com.one.R;
-import com.com.one.bean.User;
-import com.com.one.constant.Constant;
-import com.com.one.util.DensityUtil;
-import com.com.one.util.ImgUtil;
-import com.com.one.util.SPUtils;
-import com.com.one.view.pickdatetime.DatePickDialog;
-import com.com.one.view.pickdatetime.OnSureListener;
-import com.com.one.view.pickdatetime.bean.DateParams;
 
 public class UserInfoActivity extends BaseActivity {
 

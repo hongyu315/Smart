@@ -1,4 +1,4 @@
-package com.com.one.adapter;
+package com.djs.one.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,9 +14,9 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import com.com.one.R;
-import com.com.one.bean.Order;
-import com.com.one.constant.Constant;
+import com.djs.one.R;
+import com.djs.one.bean.Order;
+import com.djs.one.constant.Constant;
 
 public class OrderAdapter extends BaseAdapter implements View.OnClickListener {
 

@@ -1,4 +1,4 @@
-package com.com.one.fragment;
+package com.djs.one.fragment;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,12 +13,12 @@ import com.superrecycleview.superlibrary.recycleview.SuperRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.com.one.R;
-import com.com.one.adapter.ScreenAdapter;
-import com.com.one.api.API;
-import com.com.one.api.URL;
-import com.com.one.bean.Product;
-import com.com.one.bean.ProductList;
+import com.djs.one.R;
+import com.djs.one.adapter.ScreenAdapter;
+import com.djs.one.api.API;
+import com.djs.one.api.URL;
+import com.djs.one.bean.Product;
+import com.djs.one.bean.ProductList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

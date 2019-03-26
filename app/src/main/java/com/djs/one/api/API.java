@@ -1,16 +1,18 @@
-package com.com.one.api;
+package com.djs.one.api;
 
-import com.com.one.bean.Address;
-import com.com.one.bean.ImageVerifyCode;
-import com.com.one.bean.LoginToken;
-import com.com.one.bean.PhoneCheckCode;
-import com.com.one.bean.ProductBean;
-import com.com.one.bean.ProductDetailBannerBean;
-import com.com.one.bean.ProductDetailBean;
-import com.com.one.bean.ProductList;
-import com.com.one.bean.SuccessfulMode;
-import com.com.one.bean.SuccessfulModeBean;
-import com.com.one.bean.UserProfile;
+import com.djs.one.bean.AddToShoppingCarBean;
+import com.djs.one.bean.Address;
+import com.djs.one.bean.ImageVerifyCode;
+import com.djs.one.bean.LoginToken;
+import com.djs.one.bean.PhoneCheckCode;
+import com.djs.one.bean.ProductBean;
+import com.djs.one.bean.ProductDetailBannerBean;
+import com.djs.one.bean.ProductDetailBean;
+import com.djs.one.bean.ProductList;
+import com.djs.one.bean.SuccessfulMode;
+import com.djs.one.bean.SuccessfulModeBean;
+import com.djs.one.bean.UserProfile;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -107,4 +109,16 @@ public interface API {
     Call<ProductBean> getMyCollects(@Header("Authorization") String authorization,
                                  @Query("pageSize") String pageSize,
                                 @Query("page") String page);
+
+
+
+
+    // ========== 购物车 ===========
+
+    //将商品添加到购物车
+    @POST("api/cart/addItem?")
+    Call<AddToShoppingCarBean> addItem(@Header("Authorization") String authorization,
+                                       @Query("itemId")String itemId,
+                                       @Query("skuId") String skuId,
+                                       @Query("quantity") String quantity);
 }

@@ -1,4 +1,4 @@
-package com.com.one.view;
+package com.djs.one.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.com.one.R;
+import com.djs.one.R;
 
 /**
  * 自定义组件：购买数量，带减少增加按钮

@@ -17,7 +17,7 @@
  *  limitations under the License.
  */
 
-package com.com.one.view.pickdatetime.view;
+package com.djs.one.view.pickdatetime.view;
 
 import android.content.Context;
 import android.database.DataSetObserver;
@@ -34,7 +34,7 @@ import android.widget.LinearLayout;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.com.one.view.pickdatetime.adapter.WheelAdapter;
+import com.djs.one.view.pickdatetime.adapter.WheelAdapter;
 
 /**
  * Numeric wheel2 view.

@@ -109,7 +109,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <hongyu315.com.smart2.view.Banner
+                <com.djs.one.view.Banner
                     android:id="@+id/product_detail_banner"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimen_300_dp"/>

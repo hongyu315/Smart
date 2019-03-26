@@ -1,4 +1,4 @@
-package com.com.one.view.pickdatetime;
+package com.djs.one.view.pickdatetime;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -13,16 +13,16 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.com.one.view.pickdatetime.adapter.datetime.DatePickAdapter;
-import com.com.one.view.pickdatetime.adapter.datetime.DayAdapter;
-import com.com.one.view.pickdatetime.adapter.datetime.HourAdapter;
-import com.com.one.view.pickdatetime.adapter.datetime.MinuteAdapter;
-import com.com.one.view.pickdatetime.adapter.datetime.MonthAdapter;
-import com.com.one.view.pickdatetime.adapter.datetime.YearAdapter;
-import com.com.one.view.pickdatetime.bean.DateParams;
-import com.com.one.view.pickdatetime.bean.DatePick;
-import com.com.one.view.pickdatetime.view.OnWheelChangedListener;
-import com.com.one.view.pickdatetime.view.WheelView;
+import com.djs.one.view.pickdatetime.adapter.datetime.DatePickAdapter;
+import com.djs.one.view.pickdatetime.adapter.datetime.DayAdapter;
+import com.djs.one.view.pickdatetime.adapter.datetime.HourAdapter;
+import com.djs.one.view.pickdatetime.adapter.datetime.MinuteAdapter;
+import com.djs.one.view.pickdatetime.adapter.datetime.MonthAdapter;
+import com.djs.one.view.pickdatetime.adapter.datetime.YearAdapter;
+import com.djs.one.view.pickdatetime.bean.DateParams;
+import com.djs.one.view.pickdatetime.bean.DatePick;
+import com.djs.one.view.pickdatetime.view.OnWheelChangedListener;
+import com.djs.one.view.pickdatetime.view.WheelView;
 
 /**
  * Created by fhf11991 on 2017/8/29.

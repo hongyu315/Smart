@@ -1,4 +1,4 @@
-package com.com.one.activity;
+package com.djs.one.activity;
 
 import android.os.Bundle;
 import android.view.View;
@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 
-import com.com.one.R;
+import com.djs.one.R;
 
 public class AboutActivity extends BaseActivity {
 

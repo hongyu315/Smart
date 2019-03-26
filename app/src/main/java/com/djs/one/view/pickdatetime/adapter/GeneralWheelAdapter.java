@@ -1,4 +1,4 @@
-package com.com.one.view.pickdatetime.adapter;
+package com.djs.one.view.pickdatetime.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.com.one.R;
+import com.djs.one.R;
 
 /**
  * Created by fhf11991 on 2017/8/29.

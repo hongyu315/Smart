@@ -1,4 +1,4 @@
-package com.com.one.bean;
+package com.djs.one.bean;
 
 /**
  * <p>文件描述：<p>

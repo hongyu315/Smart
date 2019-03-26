@@ -1,4 +1,4 @@
-package com.com.one.adapter;
+package com.djs.one.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -6,10 +6,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 
-import com.com.one.bean.MenuBean;
-import com.com.one.fragment.GoodsCommentsFragment;
-import com.com.one.fragment.GoodsDetailFragment;
-import com.com.one.fragment.GoodsFragment;
+import com.djs.one.bean.MenuBean;
+import com.djs.one.fragment.GoodsCommentsFragment;
+import com.djs.one.fragment.GoodsDetailFragment;
+import com.djs.one.fragment.GoodsFragment;
 
 public class ShoppingTitleBarAdapter
         extends FragmentPagerAdapter

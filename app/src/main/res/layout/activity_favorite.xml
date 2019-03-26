@@ -6,7 +6,7 @@
     android:orientation="vertical"
     >
 
-    <hongyu315.com.smart2.view.TopTitleBarView
+    <com.djs.one.view.TopTitleBarView
         android:id="@+id/topTitleBarView"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/dimen_48_dp"

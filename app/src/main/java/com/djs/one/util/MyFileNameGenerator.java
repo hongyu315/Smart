@@ -1,4 +1,4 @@
-package com.com.one.util;
+package com.djs.one.util;
 
 import com.danikula.videocache.file.FileNameGenerator;
 

@@ -87,7 +87,7 @@
                         android:textSize="14sp"/>
 
 
-                    <hongyu315.com.smart2.view.AmountView
+                    <com.djs.one.view.AmountView
                         android:id="@+id/amount_view"
                         android:layout_width="@dimen/dimen_100_dp"
                         android:layout_height="@dimen/dimen_20_dp"

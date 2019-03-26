@@ -1,4 +1,4 @@
-package com.com.one.fragment;
+package com.djs.one.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,9 +11,9 @@ import com.superrecycleview.superlibrary.recycleview.SuperRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.com.one.R;
-import com.com.one.adapter.GoodsAdapter;
-import com.com.one.bean.Product;
+import com.djs.one.R;
+import com.djs.one.adapter.GoodsAdapter;
+import com.djs.one.bean.Product;
 
 public class GoodsFragment extends BaseFragment {
 

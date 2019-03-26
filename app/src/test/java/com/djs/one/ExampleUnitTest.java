@@ -1,4 +1,4 @@
-package com.com.one;
+package com.djs.one;
 
 import org.junit.Test;
 

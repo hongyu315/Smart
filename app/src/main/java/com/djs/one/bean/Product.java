@@ -1,4 +1,4 @@
-package com.com.one.bean;
+package com.djs.one.bean;
 
 import java.io.Serializable;
 

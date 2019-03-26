@@ -1,8 +1,8 @@
-package com.com.one.manager;
+package com.djs.one.manager;
 
 import android.text.TextUtils;
 
-import com.com.one.bean.UserProfile;
+import com.djs.one.bean.UserProfile;
 
 public class UserManager {
 

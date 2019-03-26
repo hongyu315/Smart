@@ -1,4 +1,4 @@
-package com.com.one.adapter;
+package com.djs.one.adapter;
 
 import android.support.v4.view.PagerAdapter;
 import android.view.View;

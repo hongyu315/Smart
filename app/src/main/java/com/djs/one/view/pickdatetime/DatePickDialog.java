@@ -1,4 +1,4 @@
-package com.com.one.view.pickdatetime;
+package com.djs.one.view.pickdatetime;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,8 +13,8 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.com.one.R;
-import com.com.one.view.pickdatetime.bean.DateParams;
+import com.djs.one.R;
+import com.djs.one.view.pickdatetime.bean.DateParams;
 
 
 /**

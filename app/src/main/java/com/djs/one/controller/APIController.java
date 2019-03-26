@@ -1,4 +1,4 @@
-package com.com.one.controller;
+package com.djs.one.controller;
 
 /**
  * <p>文件描述：<p>

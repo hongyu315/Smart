@@ -1,4 +1,4 @@
-package com.com.one.adapter;
+package com.djs.one.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import com.com.one.R;
-import com.com.one.bean.SearchContent;
+import com.djs.one.R;
+import com.djs.one.bean.SearchContent;
 
 public class SearchAdapter extends BaseAdapter {
 

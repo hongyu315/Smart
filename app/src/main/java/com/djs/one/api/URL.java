@@ -1,4 +1,4 @@
-package com.com.one.api;
+package com.djs.one.api;
 
 /**
  * <p>文件描述：<p>

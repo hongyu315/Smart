@@ -1,4 +1,4 @@
-package com.com.one.util;
+package com.djs.one.util;
 
 import android.content.Context;
 import android.util.TypedValue;

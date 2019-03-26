@@ -1,4 +1,4 @@
-package com.com.one.manager;
+package com.djs.one.manager;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,8 +15,8 @@ import com.bumptech.glide.Glide;
 
 import java.io.IOException;
 
-import com.com.one.R;
-import com.com.one.view.MVideoView;
+import com.djs.one.R;
+import com.djs.one.view.MVideoView;
 
 /**
  * <p>文件描述：<p>

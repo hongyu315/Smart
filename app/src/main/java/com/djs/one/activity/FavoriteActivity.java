@@ -1,4 +1,4 @@
-package com.com.one.activity;
+package com.djs.one.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,23 +12,23 @@ import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.djs.one.R;
+import com.djs.one.adapter.FavoriteAdapter;
+import com.djs.one.adapter.MessageAdapter;
+import com.djs.one.api.API;
+import com.djs.one.api.URL;
+import com.djs.one.bean.Product;
+import com.djs.one.bean.ProductBean;
+import com.djs.one.bean.SuccessfulModeBean;
+import com.djs.one.constant.Constant;
+import com.djs.one.manager.TokenManager;
+import com.djs.one.util.DensityUtil;
+import com.djs.one.util.ToastUtils;
+import com.djs.one.view.TopTitleBarView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.com.one.R;
-import com.com.one.adapter.FavoriteAdapter;
-import com.com.one.adapter.MessageAdapter;
-import com.com.one.api.API;
-import com.com.one.api.URL;
-import com.com.one.bean.Product;
-import com.com.one.bean.ProductBean;
-import com.com.one.bean.SuccessfulModeBean;
-import com.com.one.constant.Constant;
-import com.com.one.manager.TokenManager;
-import com.com.one.util.DensityUtil;
-import com.com.one.util.ToastUtils;
-import com.com.one.view.TopTitleBarView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

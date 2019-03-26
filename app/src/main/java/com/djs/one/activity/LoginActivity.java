@@ -1,4 +1,4 @@
-package com.com.one.activity;
+package com.djs.one.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,18 +13,18 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
-import com.com.one.R;
-import com.com.one.api.API;
-import com.com.one.api.URL;
-import com.com.one.bean.ImageVerifyCode;
-import com.com.one.bean.LoginToken;
-import com.com.one.bean.PhoneCheckCode;
-import com.com.one.bean.UserProfile;
-import com.com.one.constant.Constant;
-import com.com.one.manager.TokenManager;
-import com.com.one.manager.UserManager;
-import com.com.one.util.SysUtils;
-import com.com.one.util.ToastUtils;
+import com.djs.one.R;
+import com.djs.one.api.API;
+import com.djs.one.api.URL;
+import com.djs.one.bean.ImageVerifyCode;
+import com.djs.one.bean.LoginToken;
+import com.djs.one.bean.PhoneCheckCode;
+import com.djs.one.bean.UserProfile;
+import com.djs.one.constant.Constant;
+import com.djs.one.manager.TokenManager;
+import com.djs.one.manager.UserManager;
+import com.djs.one.util.SysUtils;
+import com.djs.one.util.ToastUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -269,6 +269,10 @@ public class LoginActivity extends BaseActivity {
 
         Intent intent3 = null;
         try {
+            if (pageName.equalsIgnoreCase(ProductDetailActivity.class.getName())){
+                setResult(2);
+                return;
+            }
             intent3 = new Intent();
             intent3.setClass(getApplicationContext(),Class.forName(pageName));
             startActivity(intent3);

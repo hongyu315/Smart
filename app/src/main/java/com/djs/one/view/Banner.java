@@ -1,4 +1,4 @@
-package com.com.one.view;
+package com.djs.one.view;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,8 +19,8 @@ import android.widget.VideoView;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.com.one.adapter.BannerViewAdapter;
-import com.com.one.manager.BannerViewManager;
+import com.djs.one.adapter.BannerViewAdapter;
+import com.djs.one.manager.BannerViewManager;
 
 /**
  * Created by hongyu on 2019/1/14.

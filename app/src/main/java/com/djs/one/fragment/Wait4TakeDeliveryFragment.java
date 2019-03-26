@@ -1,4 +1,4 @@
-package com.com.one.fragment;
+package com.djs.one.fragment;
 
 
 import android.app.Fragment;
@@ -16,13 +16,13 @@ import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.com.one.R;
-import com.com.one.activity.LogisticsActivity;
-import com.com.one.activity.OrderDetailActivity;
-import com.com.one.adapter.OrderAdapter;
-import com.com.one.bean.Order;
-import com.com.one.constant.Constant;
-import com.com.one.util.SysUtils;
+import com.djs.one.R;
+import com.djs.one.activity.LogisticsActivity;
+import com.djs.one.activity.OrderDetailActivity;
+import com.djs.one.adapter.OrderAdapter;
+import com.djs.one.bean.Order;
+import com.djs.one.constant.Constant;
+import com.djs.one.util.SysUtils;
 
 /**
  * A simple {@link Fragment} subclass.

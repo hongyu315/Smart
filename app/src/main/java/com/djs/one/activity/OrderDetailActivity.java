@@ -1,10 +1,10 @@
-package com.com.one.activity;
+package com.djs.one.activity;
 
 import android.os.Bundle;
 import android.view.View;
 
-import com.com.one.R;
-import com.com.one.view.TopTitleBarView;
+import com.djs.one.R;
+import com.djs.one.view.TopTitleBarView;
 
 public class OrderDetailActivity extends BaseActivity {
 

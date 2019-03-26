@@ -1,4 +1,4 @@
-package com.com.one.adapter;
+package com.djs.one.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,11 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.djs.one.R;
+import com.djs.one.bean.Product;
 
 import java.util.List;
-
-import com.com.one.R;
-import com.com.one.bean.Product;
 
 /**
  * <p>文件描述：<p>

@@ -1,4 +1,4 @@
-package com.com.one.util;
+package com.djs.one.util;
 
 import android.content.Context;
 import android.os.Handler;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.com.one.R;
+import com.djs.one.R;
 
 public class ToastUtils
 {

@@ -1,4 +1,4 @@
-package com.com.one.activity;
+package com.djs.one.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,13 +12,13 @@ import com.hjq.bar.TitleBar;
 
 import java.util.ArrayList;
 
-import com.com.one.R;
-import com.com.one.adapter.MyPagerAdapter;
-import com.com.one.fragment.CompletedOrderFragment;
-import com.com.one.fragment.Wait4DeliverFragment;
-import com.com.one.fragment.Wait4PayFragment;
-import com.com.one.fragment.Wait4TakeDeliveryFragment;
-import com.com.one.util.SysUtils;
+import com.djs.one.R;
+import com.djs.one.adapter.MyPagerAdapter;
+import com.djs.one.fragment.CompletedOrderFragment;
+import com.djs.one.fragment.Wait4DeliverFragment;
+import com.djs.one.fragment.Wait4PayFragment;
+import com.djs.one.fragment.Wait4TakeDeliveryFragment;
+import com.djs.one.util.SysUtils;
 
 public class MyOrderActivity extends BaseActivity {
 

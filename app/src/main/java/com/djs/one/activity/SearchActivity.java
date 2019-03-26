@@ -1,4 +1,4 @@
-package com.com.one.activity;
+package com.djs.one.activity;
 
 import android.os.Bundle;
 import android.view.View;
@@ -9,10 +9,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.com.one.R;
-import com.com.one.adapter.ProductAdapter;
-import com.com.one.bean.Product;
-import com.com.one.bean.SearchContent;
+import com.djs.one.R;
+import com.djs.one.adapter.ProductAdapter;
+import com.djs.one.bean.Product;
+import com.djs.one.bean.SearchContent;
 
 public class SearchActivity extends BaseActivity implements View.OnClickListener {
 

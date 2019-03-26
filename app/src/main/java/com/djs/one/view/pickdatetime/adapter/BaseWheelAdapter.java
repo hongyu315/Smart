@@ -1,4 +1,4 @@
-package com.com.one.view.pickdatetime.adapter;
+package com.djs.one.view.pickdatetime.adapter;
 
 import android.database.DataSetObserver;
 import android.view.View;

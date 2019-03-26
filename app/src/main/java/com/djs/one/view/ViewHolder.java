@@ -1,4 +1,4 @@
-package com.com.one.view;
+package com.djs.one.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;

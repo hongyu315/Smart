@@ -1,4 +1,4 @@
-package com.com.one.listener;
+package com.djs.one.listener;
 
 
 public interface OnBannerListener

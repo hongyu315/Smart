@@ -1,4 +1,4 @@
-package com.com.one.constant;
+package com.djs.one.constant;
 
 public class Constant {
 

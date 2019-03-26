@@ -1,4 +1,4 @@
-package com.com.one.util;
+package com.djs.one.util;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,7 +10,7 @@ import android.util.DisplayMetrics;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.com.one.R;
+import com.djs.one.R;
 
 public class SysUtils {
     public static <T> void startActivity(Activity paramActivity, Class<T> paramClass)

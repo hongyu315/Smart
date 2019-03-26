@@ -37,7 +37,7 @@
         android:layout_height="1px"
         android:background="#dddddd"/>
 
-    <hongyu315.com.smart2.view.pickdatetime.DateTimePickerView
+    <com.djs.one.view.pickdatetime.DateTimePickerView
         android:id="@+id/wheelLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
