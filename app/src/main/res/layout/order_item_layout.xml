@@ -7,6 +7,10 @@
         android:id="@+id/order_item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_15_dp"
+        android:layout_marginRight="@dimen/dimen_15_dp"
+        android:layout_marginTop="@dimen/dimen_15_dp"
+        android:paddingRight="@dimen/dimen_15_dp"
         android:background="@color/white"
         android:orientation="vertical">
 
@@ -17,6 +21,8 @@
 
             <TextView
                 android:id="@+id/order_time_txt"
+                android:textColor="@color/order_item_time"
+                android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2018-12-22 20:22:22"/>
@@ -24,8 +30,10 @@
             <TextView
                 android:id="@+id/order_status_text"
                 android:layout_width="wrap_content"
+                android:textSize="12sp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:textColor="@color/home_glod_text_select"
                 android:text="交易完成"/>
 
         </RelativeLayout>
@@ -41,7 +49,7 @@
             <ImageView
                 android:id="@+id/message_item_icon"
                 android:layout_width="@dimen/dimen_60_dp"
-                android:layout_height="@dimen/dimen_60_dp"
+                android:layout_height="@dimen/dimen_63_dp"
                 android:scaleType="fitXY"
                 android:src="@mipmap/art_user"/>
 
@@ -50,10 +58,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:textSize="14sp"
+                android:textColor="@color/home_glod_text_unselect"
                 android:text="2019-1-7"/>
             <TextView
                 android:id="@+id/product_num"
-                android:textSize="@dimen/dimen_10_dp"
+                android:textSize="9sp"
                 android:layout_below="@+id/product_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,6 +83,8 @@
                     android:id="@+id/product_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/home_glod_text_unselect"
+                    android:textSize="14sp"
                     android:singleLine="true"
                     android:text="订单已签收"/>
 
@@ -80,6 +92,8 @@
                     android:id="@+id/order_name_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="@color/edit_text_hint_color"
                     android:singleLine="true"
                     android:text="订单已签收"/>
 
@@ -87,6 +101,8 @@
                     android:id="@+id/order_num_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="@color/edit_text_hint_color"
                     android:singleLine="true"
                     android:text="订单已签收"/>
             </LinearLayout>
@@ -96,7 +112,7 @@
         <include layout="@layout/line_view"/>
 
         <RelativeLayout
-            android:layout_marginBottom="@dimen/dimen_1_dp"
+            android:layout_margin="@dimen/dimen_10_dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -105,6 +121,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:textColor="@color/order_item_time"
+                android:textSize="12sp"
                 android:gravity="right"
                 android:text="一件商品"/>
         </RelativeLayout>
@@ -112,21 +130,26 @@
         <include layout="@layout/line_view"/>
 
         <RelativeLayout
-            android:layout_marginTop="@dimen/dimen_1_dp"
+            android:layout_marginTop="@dimen/dimen_5_dp"
+            android:layout_marginBottom="@dimen/dimen_5_dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/bottom_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dimen_65_dp"
+                android:layout_height="@dimen/dimen_25_dp"
+                android:background="@drawable/bg_amount_layout"
+                android:textSize="12sp"
                 android:layout_alignParentRight="true"
                 android:text="查看详情"/>
             <Button
                 android:id="@+id/bottom_left"
                 android:layout_toLeftOf="@+id/bottom_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:background="@drawable/bg_amount_layout"
+                android:layout_width="@dimen/dimen_65_dp"
+                android:layout_height="@dimen/dimen_25_dp"
                 android:text="查看详情"/>
         </RelativeLayout>
     </LinearLayout>

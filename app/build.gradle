@@ -34,7 +34,7 @@ repositories {
 }
 
 dependencies {
-    //    compile(name: 'alipaySdk-15.5.9-20181123210601', ext: 'aar')
+    compile(name: 'alipaySdk-15.6.0-20190226104104-noUtdid', ext: 'aar')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:design:27.1.1'
@@ -72,4 +72,6 @@ dependencies {
     //PushSDK
     implementation 'com.umeng.umsdk:push:5.0.2'
     implementation files('libs/umeng-share-core-6.9.4.jar')
+
+    compile 'com.aliyun.dpa:oss-android-sdk:+'
 }

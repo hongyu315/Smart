@@ -144,6 +144,7 @@
                                 android:background="@null"
                                 android:textColor="@color/edit_text_hint_color"
                                 android:textSize="14sp"
+                                android:inputType="phone"
                                 android:hint="短信验证码"
                                 android:textCursorDrawable="@null"/>
 

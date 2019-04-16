@@ -2,6 +2,7 @@ package com.djs.one.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -83,6 +84,9 @@ public class LoginActivity extends BaseActivity {
         imageVerifyCodeImg = findViewById(R.id.image_verifier);
         licenceCheckBox = findViewById(R.id.licence_checkbox);
 
+        phoneEditText.setText("13721042453");
+        imageCodeEditText.setText("test");
+
         imageVerifyCodeImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,6 +139,7 @@ public class LoginActivity extends BaseActivity {
 
                 try {
                     mPhoneCheckCode = response.body();
+                    msgCodeEditText.setText(mPhoneCheckCode.getData().getCode());
                     Log.e("xxx", "onResponse: " + mPhoneCheckCode.getData().getCode() );
                 } catch (Exception e) {
                 }
@@ -143,6 +148,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<PhoneCheckCode> call, Throwable t) {
+                ToastUtils.showToast(LoginActivity.this, "请检查网络连接");
             }
         });
     }
@@ -205,7 +211,7 @@ public class LoginActivity extends BaseActivity {
                 .baseUrl(URL.BASE_URL)
                 .build();
         API api = retrofit.create(API.class);
-        Call<LoginToken> products = api.login(mobile,checkCode,"1");
+        Call<LoginToken> products = api.login(mobile,checkCode,"1","1", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
         products.enqueue(new Callback<LoginToken>() {
             @Override
             public void onResponse(Call<LoginToken> call, Response<LoginToken> response) {
@@ -213,6 +219,7 @@ public class LoginActivity extends BaseActivity {
                 try {
                     LoginToken loginToken = response.body();
                     if (Constant.SUCCESSFUL == loginToken.getCode()){
+                        Log.e("xxx", "onResponse: token = " + loginToken.getData().getToken());
                         TokenManager.getInstance().setLoginToken(loginToken);
                         getUser();
                     }else {
@@ -274,6 +281,8 @@ public class LoginActivity extends BaseActivity {
                 return;
             }
             intent3 = new Intent();
+            int index = getIntent().getIntExtra("index",0);
+            intent3.putExtra("index",index);
             intent3.setClass(getApplicationContext(),Class.forName(pageName));
             startActivity(intent3);
             overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);

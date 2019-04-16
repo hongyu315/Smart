@@ -26,7 +26,7 @@
         android:background="#FAFAFA"
         tl:tl_textSelectColor="@color/home_glod_text_select"
         tl:tl_indicator_color="@color/home_glod_text_select"
-        tl:tl_textUnselectColor="@color/home_glod_text_select"
+        tl:tl_textUnselectColor="@color/home_glod_text_unselect"
         tl:tl_tab_padding="0dp"
         tl:tl_tab_width="90dp"
         tl:tl_textsize="15sp"/>

@@ -13,6 +13,7 @@ import com.djs.one.util.ToastUtils;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.jaeger.library.StatusBarUtil;
+import com.umeng.message.PushAgent;
 
 import java.util.ArrayList;
 
@@ -40,7 +41,7 @@ public class MainActivity extends FragmentActivity {
 
         findViews();
 
-//        PushAgent.getInstance(MainActivity.this).onAppStart();
+        PushAgent.getInstance(MainActivity.this).onAppStart();
     }
 
     protected void findViews()

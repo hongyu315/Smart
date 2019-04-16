@@ -9,26 +9,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
+import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
+import com.djs.one.R;
+import com.djs.one.activity.OrderDetailActivity;
+import com.djs.one.adapter.OrderAdapter;
+import com.djs.one.api.API;
+import com.djs.one.api.URL;
+import com.djs.one.bean.MyOrdersBean;
+import com.djs.one.constant.Constant;
+import com.djs.one.manager.TokenManager;
+import com.djs.one.util.SysUtils;
+import com.djs.one.util.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.djs.one.R;
-import com.djs.one.activity.OrderDetailActivity;
-import com.djs.one.adapter.OrderAdapter;
-import com.djs.one.bean.Order;
-import com.djs.one.constant.Constant;
-import com.djs.one.util.SysUtils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Wait4DeliverFragment extends BaseFragment implements OrderAdapter.onOrderItemBtnClickListener {
+public class Wait4DeliverFragment extends BaseFragment implements OrderAdapter.onOrderItemBtnClickListener, OnRefreshListener, OnLoadMoreListener {
     private SwipeToLoadLayout swipeToLoadLayout;
     private ListView listView;
-    private List<Order> orders = new ArrayList<>();
+    private List<MyOrdersBean.DataBean.ListBean> orders = new ArrayList<>();
     private OrderAdapter adapter;
+    private int page = 1;
 
 
     public Wait4DeliverFragment() {
@@ -62,35 +74,57 @@ public class Wait4DeliverFragment extends BaseFragment implements OrderAdapter.o
         swipeToLoadLayout = paramView.findViewById(R.id.swipeToLoadLayout);
         listView = paramView.findViewById(R.id.swipe_target);
 
-        swipeToLoadLayout.setRefreshEnabled(false);
-        swipeToLoadLayout.setLoadMoreEnabled(false);
-
         adapter = new OrderAdapter(getActivity(),orders);
         adapter.setOnOrderItemBtnClickListener(this);
+        swipeToLoadLayout.setOnRefreshListener(this);
+        swipeToLoadLayout.setOnLoadMoreListener(this);
         listView.setAdapter(adapter);
     }
 
     @Override
     protected void initData() {
         super.initData();
-        for (int i = 0; i < 3; i++) {
-            Order order = new Order();
-            order.order_kind = Constant.WAIT4DELIVER;
+        getOrders();
+    }
 
-            order.setOrder_time("2019-01-11 20:10:10");
-            order.setOrder_status("待发货");
+    private void getOrders(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<MyOrdersBean> products = api.myOrders(TokenManager.getInstance().getLoginToken().getData().getToken(),"" + Constant.WAIT4DELIVER,"20","" + page);
+        products.enqueue(new Callback<MyOrdersBean>() {
+            @Override
+            public void onResponse(Call<MyOrdersBean> call, Response<MyOrdersBean> response) {
 
-            order.setProduct_icon("http://img3.imgtn.bdimg.com/it/u=1023765318,2535906339&fm=26&gp=0.jpg");
-            order.setProduct_name("樱花小睡袍");
-            order.setProduct_type("蓝色小丸子");
-            order.setProduct_size("尺寸：L 睡衣180");
-            order.setProduct_price("960");
-            order.setProduct_num("1");
+                try {
+                    if (swipeToLoadLayout.isRefreshing()) swipeToLoadLayout.setRefreshing(false);
+                    if (swipeToLoadLayout.isLoadingMore()) swipeToLoadLayout.setLoadingMore(false);
 
-            orders.add(order);
-        }
+                    MyOrdersBean productBean = response.body();
+                    if (Constant.SUCCESSFUL == productBean.getCode()){
+                        if (productBean.getData() == null) return;
+                        if (productBean.getData().getList() == null) return;
+                        if (productBean.getData().getList().size() > 0){
+                            orders.clear();
+                            orders.addAll(productBean.getData().getList());
+                            adapter.notifyDataSetChanged();
+                        }
+                    }else {
+                        ToastUtils.showToast(getActivity(),response.body().getMessage());
+                    }
+                } catch (Exception e) {
+                }
+            }
 
-        adapter.notifyDataSetChanged();
+            @Override
+            public void onFailure(Call<MyOrdersBean> call, Throwable t) {
+                if (swipeToLoadLayout.isRefreshing()) swipeToLoadLayout.setRefreshing(false);
+                if (swipeToLoadLayout.isLoadingMore()) swipeToLoadLayout.setLoadingMore(false);
+                ToastUtils.showToast(getActivity(), t.getLocalizedMessage());
+            }
+        });
     }
 
     @Override
@@ -110,5 +144,27 @@ public class Wait4DeliverFragment extends BaseFragment implements OrderAdapter.o
     public void onRightBtnClick(View v) {
         int position = (Integer)v.getTag();
         Log.e(TAG, "onLeftBtnClick: right" + position );
+    }
+
+    @Override
+    public void onRefresh() {
+        page = 1;
+        swipeToLoadLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getOrders();
+            }
+        }, 10);
+    }
+
+    @Override
+    public void onLoadMore() {
+        swipeToLoadLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                page = page + 1;
+                getOrders();
+            }
+        }, 10);
     }
 }

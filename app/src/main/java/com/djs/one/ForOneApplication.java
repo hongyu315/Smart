@@ -3,8 +3,9 @@ package com.djs.one;
 import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
-import android.support.v4.app.NotificationCompat;
+import android.content.Intent;
 import android.util.Log;
 
 import com.danikula.videocache.HttpProxyCacheServer;
@@ -72,34 +73,36 @@ public class ForOneApplication extends Application {
                          *  创建通知栏管理工具
                          */
 
-                        NotificationManager notificationManager = (NotificationManager) getSystemService
-                                (NOTIFICATION_SERVICE);
+//                        NotificationManager notificationManager = (NotificationManager) getSystemService
+//                                (NOTIFICATION_SERVICE);
+//
+//                        /**
+//                         *  实例化通知栏构造器
+//                         */
+//
+//                        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
+//
+//                        /**
+//                         *  设置Builder
+//                         */
+//                        //设置标题
+//                        mBuilder.setContentTitle(msg.title)
+//                                //设置内容
+//                                .setContentText(msg.text)
+//                                //设置大图标
+//                                .setLargeIcon(getLargeIcon(context, msg))
+//                                //设置小图标
+//                                .setSmallIcon(R.mipmap.user_default_icon)
+//                                //设置通知时间
+//                                .setWhen(System.currentTimeMillis())
+//                                //首次进入时显示效果
+//                                .setTicker(msg.ticker)
+//                                //设置通知方式，声音，震动，呼吸灯等效果，这里通知方式为声音
+//                                .setDefaults(Notification.DEFAULT_SOUND);
+//                        //发送通知请求
+//                        notificationManager.notify(10, mBuilder.build());
 
-                        /**
-                         *  实例化通知栏构造器
-                         */
-
-                        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
-
-                        /**
-                         *  设置Builder
-                         */
-                        //设置标题
-                        mBuilder.setContentTitle(msg.title)
-                                //设置内容
-                                .setContentText(msg.text)
-                                //设置大图标
-                                .setLargeIcon(getLargeIcon(context, msg))
-                                //设置小图标
-                                .setSmallIcon(R.mipmap.user_default_icon)
-                                //设置通知时间
-                                .setWhen(System.currentTimeMillis())
-                                //首次进入时显示效果
-                                .setTicker(msg.ticker)
-                                //设置通知方式，声音，震动，呼吸灯等效果，这里通知方式为声音
-                                .setDefaults(Notification.DEFAULT_SOUND);
-                        //发送通知请求
-                        notificationManager.notify(10, mBuilder.build());
+                        //https://www.cnblogs.com/qianyukun/p/5946792.html
 
 //                        Notification.Builder builder = new Notification.Builder(context);
 //                        RemoteViews myNotificationView = new RemoteViews(context.getPackageName(),
@@ -113,8 +116,14 @@ public class ForOneApplication extends Application {
 //                                .setSmallIcon(getSmallIconId(context, msg))
 //                                .setTicker(msg.ticker)
 //                                .setAutoCancel(true);
-
+//
 //                        return builder.getNotification();
+                        Intent intent = new Intent();
+                        int id = (int)System.currentTimeMillis() / 10000;
+
+                        PendingIntent clickIntent = PendingIntent.getBroadcast(context, id,intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                        createNotification(msg.title,msg.text,context,clickIntent,id);
                     default:
                         //默认为0，若填写的builder_id并不存在，也使用默认。
                         return super.getNotification(context, msg);
@@ -133,6 +142,25 @@ public class ForOneApplication extends Application {
         };
 
         mPushAgent.setNotificationClickHandler(notificationClickHandler);
+    }
+
+    public void createNotification(String title, String content, Context ctx, PendingIntent intent, int id) {
+
+        NotificationManager nm =  (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = null;
+        //有两种方式来创建notification
+        //一
+//        notification = new Notification(icon, title, id);
+//        notification.setLatestEventInfo(ctx, title, content,intent);
+        //二
+        Notification.Builder builder = new Notification.Builder(ctx);
+        builder.setContentText(title); // 下拉通知栏内容
+        builder.setContentTitle(content);// 下拉通知栏标题
+        builder.setSmallIcon(R.mipmap.user_default_icon);//通知栏图标
+        builder.setAutoCancel(true);
+        builder.setContentIntent(intent);
+        notification = builder.build();
+        nm.notify(id, notification);
     }
 
     public static HttpProxyCacheServer getProxy(Context context) {

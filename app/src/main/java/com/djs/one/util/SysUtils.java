@@ -7,10 +7,10 @@ import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
+import com.djs.one.R;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.djs.one.R;
 
 public class SysUtils {
     public static <T> void startActivity(Activity paramActivity, Class<T> paramClass)
@@ -83,5 +83,8 @@ public class SysUtils {
         }
         return false;
     }
+
+
+
 
 }

@@ -2,13 +2,19 @@ package com.djs.one.api;
 
 import com.djs.one.bean.AddToShoppingCarBean;
 import com.djs.one.bean.Address;
+import com.djs.one.bean.CreateOrderBean;
 import com.djs.one.bean.ImageVerifyCode;
 import com.djs.one.bean.LoginToken;
+import com.djs.one.bean.MyOrdersBean;
+import com.djs.one.bean.OSSBean;
+import com.djs.one.bean.OrderDetailBean;
+import com.djs.one.bean.PayCallBackBean;
 import com.djs.one.bean.PhoneCheckCode;
 import com.djs.one.bean.ProductBean;
 import com.djs.one.bean.ProductDetailBannerBean;
 import com.djs.one.bean.ProductDetailBean;
 import com.djs.one.bean.ProductList;
+import com.djs.one.bean.ShoppingCarItems;
 import com.djs.one.bean.SuccessfulMode;
 import com.djs.one.bean.SuccessfulModeBean;
 import com.djs.one.bean.UserProfile;
@@ -25,6 +31,10 @@ public interface API {
     @GET("meituApi?")
     Call<ProductList> getProducts(@Query("page")String page);
 
+    //获取OSS授权
+    @GET("api/kit/ossauth?")
+    Call<OSSBean> ossauth(@Header("Authorization") String authorization);
+
     //获取图形验证码
     @GET("captcha/api?")
     Call<ImageVerifyCode> getImageVerifyCode();
@@ -39,11 +49,21 @@ public interface API {
     @POST("api/auth/login?")
     Call<LoginToken> login(@Query("mobile")String mobile,
                            @Query("checkcode")String checkcode,
-                           @Query("agreement")String agreement);
+                           @Query("agreement")String agreement,
+                           @Query("deviceType")String deviceType,
+                           @Query("deviceToken")String deviceToken);
 
     //获取登录用户信息
     @GET("api/user/profile?")
     Call<UserProfile> getUser(@Header("Authorization") String authorization);
+
+    //登录
+    @POST("api/auth/updateProfile?")
+    Call<SuccessfulMode> updateProfile(@Header("Authorization") String authorization,
+                                       @Query("nickname")String nickname,
+                                       @Query("avatar")String avatar,
+                                       @Query("gender")String gender,
+                                       @Query("birthday")String birthday);
 
     //注销
     @POST("api/auth/logout?")
@@ -121,4 +141,47 @@ public interface API {
                                        @Query("itemId")String itemId,
                                        @Query("skuId") String skuId,
                                        @Query("quantity") String quantity);
+
+    //购物车商品列表
+    @GET("api/cart/items?")
+    Call<ShoppingCarItems> shoppingCarItems(@Header("Authorization") String authorization,
+                                            @Query("pageSize") String pageSize,
+                                            @Query("page") String page);
+
+    //添加或减少购物车中的商品购买数量
+    @POST("api/cart/quantity?")
+    Call<SuccessfulMode> changeQuantity(@Header("Authorization") String authorization,
+                                       @Query("cartId")String cartId,
+                                       @Query("type") String type);
+
+    //将商品移除购物车
+    @POST("api/cart/remove?")
+    Call<SuccessfulMode> removeShoppingCar(@Header("Authorization") String authorization,
+                                            @Query("cartId")String cartId);
+
+    // ========== 订单 ===========
+
+    //创建订单
+    @POST("api/trade/order?")
+    Call<CreateOrderBean> createOrder(@Header("Authorization") String authorization,
+                                      @Query("skus")String skus);
+
+    //获取订单详情
+    @GET("api/trade/info?")
+    Call<OrderDetailBean> orderInfo(@Header("Authorization") String authorization,
+                                    @Query("trade_no")String trade_no);
+
+    //订单支付接口 收获地址ID 支付方式：1 支付宝 2 微信
+    @POST("api/trade/pay?")
+    Call<PayCallBackBean> pay(@Header("Authorization") String authorization,
+                              @Query("addressId")String addressId,
+                              @Query("trade_no")String trade_no,
+                              @Query("payType")String payType);
+
+    //我的订单列表 订单状态type： 1 待支付, 2 已支付/待发货, 3 已发货/待收货, 4 已完成， 默认4
+    @GET("api/my/orders?")
+    Call<MyOrdersBean> myOrders(@Header("Authorization") String authorization,
+                                 @Query("type")String type,
+                                @Query("pageSize")String pageSize,
+                                @Query("page")String page);
 }

@@ -1,9 +1,9 @@
 package com.djs.one.fragment;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -25,15 +25,32 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
+import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.djs.one.R;
+import com.djs.one.activity.LoginActivity;
+import com.djs.one.activity.OrderDetailActivity;
 import com.djs.one.adapter.DialogSizeItemAdapter;
 import com.djs.one.adapter.ShoppingCartAdapter;
-import com.djs.one.bean.GoodsInfo;
+import com.djs.one.api.API;
+import com.djs.one.api.URL;
+import com.djs.one.bean.CreateOrderBean;
+import com.djs.one.bean.ShoppingCarItems;
+import com.djs.one.bean.SuccessfulMode;
+import com.djs.one.constant.Constant;
+import com.djs.one.manager.TokenManager;
+import com.djs.one.manager.UserManager;
 import com.djs.one.util.DensityUtil;
-import com.djs.one.util.OrderInfoUtil2_0;
 import com.djs.one.util.SysUtils;
+import com.djs.one.util.ToastUtils;
+import com.djs.one.util.WXPayUtils;
 import com.djs.one.view.AmountView;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXTextObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.ShareAction;
@@ -42,7 +59,12 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 //import com.djs.one.util.WXPayUtils;
 //import com.tencent.mm.opensdk.constants.ConstantsAPI;
@@ -55,7 +77,6 @@ import java.util.Map;
 //import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 //import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
-//import com.alipay.sdk.app.PayTask;
 
 public class ShoppingFragment extends BaseFragment implements View.OnClickListener,
         ShoppingCartAdapter.onCheckboxClickListener,
@@ -64,7 +85,7 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
 
     public LinearLayout check_LL;
     private int count = 0;
-    private List<GoodsInfo> datas = new ArrayList();
+    private List<ShoppingCarItems.DataBean.ListBean> datas = new ArrayList();
     public View layout_empty_shopcart;
     protected Activity mActivity;
     public CheckBox mAllCheckBox;
@@ -118,41 +139,16 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
 
     private static final int SDK_PAY_FLAG = 1;
 
+    private int page = 1;
+    private int pageSize = 20;
+
+
     public ShoppingFragment() {
     }
 
     public static ShoppingFragment getInstance() {
         return new ShoppingFragment();
     }
-
-    @SuppressLint("HandlerLeak")
-//    private Handler mHandler = new Handler() {
-//        @SuppressWarnings("unused")
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case SDK_PAY_FLAG: {
-//                    @SuppressWarnings("unchecked")
-//                    PayResult payResult = new PayResult((Map<String, String>) msg.obj);
-//                    /**
-//                     * 对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
-//                     */
-//                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
-//                    String resultStatus = payResult.getResultStatus();
-//                    // 判断resultStatus 为9000则代表支付成功
-//                    if (TextUtils.equals(resultStatus, "9000")) {
-//                        // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-////                        showAlert(PayDemoActivity.this, getString(R.string.pay_success) + payResult);
-//                    } else {
-//                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-////                        showAlert(PayDemoActivity.this, getString(R.string.pay_failed) + payResult);
-//                    }
-//                    break;
-//                }
-//                default:
-//                    break;
-//            }
-//        };
-//    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -176,6 +172,17 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
         findViews(paramView);
         initData();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (UserManager.getInstance().isLogin()){
+            mClearShoppingCart.setVisibility(View.VISIBLE);
+            getShoppingCarItems();
+        }else {
+            mClearShoppingCart.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -216,64 +223,83 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
         this.layout_empty_shopcart = paramView.findViewById(R.id.layout_empty_shopcart);
         moneyLayout = paramView.findViewById(R.id.money_layout);
 
+        layout_empty_shopcart.setOnClickListener(this);
         this.mShoppingCartAdapter = new ShoppingCartAdapter(this.mActivity, datas, this, this);
         recyclerView.setAdapter(mShoppingCartAdapter);
 
-        swipeToLoadLayout.setRefreshEnabled(false);
-        swipeToLoadLayout.setLoadMoreEnabled(false);
-//        swipeToLoadLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-//            @Override
-//            public void onLoadMore() {
-//                swipeToLoadLayout.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        swipeToLoadLayout.setLoadingMore(false);
-//                    }
-//                }, 3000);
-//            }
-//        });
-//
-//        swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                swipeToLoadLayout.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        swipeToLoadLayout.setRefreshing(false);
-//                    }
-//                }, 3000);
-//            }
-//        });
+        swipeToLoadLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                swipeToLoadLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        page = page + 1;
+                        getShoppingCarItems();
+                    }
+                }, 30);
+            }
+        });
+
+        swipeToLoadLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeToLoadLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        page = 1;
+                        getShoppingCarItems();
+                    }
+                }, 30);
+            }
+        });
     }
 
     @Override
     protected void initData() {
         super.initData();
-
-        initDataTest();
-
+//        getShoppingCarItems();
     }
 
-    private void initDataTest()
+    private void getShoppingCarItems()
     {
-        int i = 0;
-        while (i < 8)
-        {
-            GoodsInfo localGoodsInfo = new GoodsInfo();
-            localGoodsInfo.setId(i + "");
-            localGoodsInfo.setChoosed(false);
-            localGoodsInfo.setName("购物车艺术品" + i);
-            localGoodsInfo.setImageUrl("https://img.zcool.cn/community/01757d5a6a7557a8012134664d0391.jpg@2o.jpg");
-            localGoodsInfo.setDesc("具体描述");
-            localGoodsInfo.setPrice(45.0D);
-            localGoodsInfo.setPrime_price(456.0D);
-            localGoodsInfo.setPostion(i);
-            localGoodsInfo.setCount(100);
-            localGoodsInfo.setSize("1");
-            localGoodsInfo.setGoodsImg(1);
-            datas.add(localGoodsInfo);
-            i += 1;
-        }
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<ShoppingCarItems> products = api.shoppingCarItems(TokenManager.getInstance().getLoginToken().getData().getToken(),pageSize + "",page + "");
+        products.enqueue(new Callback<ShoppingCarItems>() {
+            @Override
+            public void onResponse(Call<ShoppingCarItems> call, Response<ShoppingCarItems> response) {
+
+                try {
+                    if (swipeToLoadLayout.isRefreshing()) swipeToLoadLayout.setRefreshing(false);
+                    if (swipeToLoadLayout.isLoadingMore()) swipeToLoadLayout.setLoadingMore(false);
+
+                    ShoppingCarItems productBean = response.body();
+                    if (Constant.SUCCESSFUL == productBean.getCode()){
+                        datas.clear();
+                        if (productBean.getData().getList().size() > 0){
+                            datas.addAll(productBean.getData().getList());
+                            layout_empty_shopcart.setVisibility(View.GONE);
+                            mLlCart.setVisibility(View.VISIBLE);
+                        }
+                        mShoppingCartAdapter.notifyDataSetChanged();
+
+                    }else {
+                        ToastUtils.showToast(getActivity(),response.body().getMessage());
+                    }
+                } catch (Exception e) {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ShoppingCarItems> call, Throwable t) {
+                if (swipeToLoadLayout.isRefreshing()) swipeToLoadLayout.setRefreshing(false);
+                if (swipeToLoadLayout.isLoadingMore()) swipeToLoadLayout.setLoadingMore(false);
+                ToastUtils.showToast(getActivity(), t.getLocalizedMessage());
+            }
+        });
     }
 
     private void test(){
@@ -334,15 +360,30 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
         {
             default:
                 return;
+            case R.id.layout_empty_shopcart:
+                if (!UserManager.getInstance().isLogin()){
+                    SysUtils.startActivity(getActivity(), LoginActivity.class);
+                }
+                break;
             case R.id.clear_shopping_cart:
                 onEditClick();
                 return;
             case R.id.go_pay:
-                test();
+//                defaultView();
+//                test();
 //                sendToWeixin();
-//                onGoPlayClick();
+                onGoPlayClick();
 //                showBottomDialog();
                 return;
+        }
+    }
+
+    private void defaultView(){
+        if (UserManager.getInstance().isLogin()){
+//            getShoppingCarItems();
+            onGoPlayClick();
+        }else {
+            SysUtils.startActivity(getActivity(), LoginActivity.class);
         }
     }
 
@@ -466,7 +507,7 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
         int i = 0;
         while (i < datas.size())
         {
-            GoodsInfo goodsInfo = datas.get(i);
+            ShoppingCarItems.DataBean.ListBean goodsInfo = datas.get(i);
 //            price += goodsInfo.getPrice();
             goodsInfo.setChoosed(paramBoolean);
             i += 1;
@@ -478,10 +519,10 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
             price = 0;
         }
 
-//        String status = mClearShoppingCart.getText().toString();
-//        if (status.equalsIgnoreCase("编辑")){
-//            mTotalPrice.setText("￥" + price);
-//        }
+        String status = mClearShoppingCart.getText().toString();
+        if (status.equalsIgnoreCase("编辑")){
+            mTotalPrice.setText("￥" + price);
+        }
         this.mShoppingCartAdapter.notifyDataSetChanged();
     }
 
@@ -491,9 +532,13 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
         this.mLlCart.setVisibility(View.GONE);
     }
 
-    private void delAllGoodsInfo()
+    private void delGoods()
     {
-        ArrayList localArrayList = new ArrayList();
+        removeShoppingCarRequest(getSelectedList());
+    }
+
+    private ArrayList getSelectedList(){
+        ArrayList<ShoppingCarItems.DataBean.ListBean> localArrayList = new ArrayList();
         int i = 0;
         while (i < this.datas.size())
         {
@@ -503,13 +548,54 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
             i += 1;
         }
 
-        this.datas.removeAll(localArrayList);
-        this.mShoppingCartAdapter.notifyDataSetChanged();
+        if (localArrayList.size() == 0) return null;
 
-        if (datas.size() == 0){
-            clearCart();
+        return localArrayList;
+    }
+
+    /**
+     * 删除购物车
+     * 购物车ID,$cartId等于all时表示删除全部,多个时使用,号隔开
+     */
+    private void removeShoppingCarRequest(final ArrayList<ShoppingCarItems.DataBean.ListBean> localArrayList){
+        String cartId = "";
+        for (ShoppingCarItems.DataBean.ListBean goods : localArrayList) {
+            cartId = cartId + goods.getId() + ",";
         }
 
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<SuccessfulMode> products = api.removeShoppingCar(TokenManager.getInstance().getLoginToken().getData().getToken(),cartId);
+        products.enqueue(new Callback<SuccessfulMode>() {
+            @Override
+            public void onResponse(Call<SuccessfulMode> call, Response<SuccessfulMode> response) {
+
+                try {
+                    SuccessfulMode productBean = response.body();
+                    if (Constant.SUCCESSFUL == productBean.getCode()){
+                        ToastUtils.showToast(getActivity(),"删除成功");
+
+                        datas.removeAll(localArrayList);
+                        mShoppingCartAdapter.notifyDataSetChanged();
+
+                        if (datas.size() == 0){
+                            clearCart();
+                        }
+                    }else {
+                        ToastUtils.showToast(getActivity(),response.body().getMessage());
+                    }
+                } catch (Exception e) {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SuccessfulMode> call, Throwable t) {
+                ToastUtils.showToast(getActivity(), t.getLocalizedMessage());
+            }
+        });
     }
 
     public void onEditClick(){
@@ -526,18 +612,72 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
     }
 
     /**
+     * “itemID:skuId:quantity"
+     * @return
+     */
+    private String getSelectedSKUs(){
+        String skus = "";
+        ArrayList<ShoppingCarItems.DataBean.ListBean> localArrayList = getSelectedList();
+
+        if (localArrayList == null) return skus;
+        if (localArrayList.size() == 0 ) return skus;
+
+        for (ShoppingCarItems.DataBean.ListBean bean : localArrayList) {
+            skus += bean.getItem_id() + ":" + bean.getSku_id() + ":" + bean.getQuantity() + ";";
+        }
+
+        return skus;
+    }
+
+    /**
      * 去结算、删除按钮点击
      */
     public void onGoPlayClick(){
+        String status = mClearShoppingCart.getText().toString();
+        if (status.equalsIgnoreCase("完成")){//删除购物车
+            delGoods();
+        }else {//创单 ；商品SKU,格式：itemId:skuId:quantity[;itemId:skuId:quantity]
+            if (TextUtils.isEmpty(getSelectedSKUs())) return;
+            createOrder(getSelectedSKUs());
+        }
+    }
 
+    private void createOrder(String skus){
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<CreateOrderBean> products = api.createOrder(TokenManager.getInstance().getLoginToken().getData().getToken(),skus);
+        products.enqueue(new Callback<CreateOrderBean>() {
+            @Override
+            public void onResponse(Call<CreateOrderBean> call, Response<CreateOrderBean> response) {
 
+                try {
+                    CreateOrderBean productBean = response.body();
+                    if (Constant.SUCCESSFUL == productBean.getCode()){
+                        if (productBean.getData() != null){
+                            if (!TextUtils.isEmpty(productBean.getData().getTrade_no())){
+                                Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+                                intent.putExtra("trade_no",productBean.getData().getTrade_no());
+                                getActivity().startActivity(intent);
+                                getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+                                return;
+                            }
+                        }
+                        ToastUtils.showToast(getActivity(),"创单失败");
+                    }else {
+                        ToastUtils.showToast(getActivity(),response.body().getMessage());
+                    }
+                } catch (Exception e) {
+                }
+            }
 
-//        String status = mClearShoppingCart.getText().toString();
-//        if (status.equalsIgnoreCase("完成")){
-//            delAllGoodsInfo();
-//        }else {
-//
-//        }
+            @Override
+            public void onFailure(Call<CreateOrderBean> call, Throwable t) {
+                ToastUtils.showToast(getActivity(), t.getLocalizedMessage());
+            }
+        });
     }
 
     /**
@@ -593,98 +733,52 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
 
     private void onWeixinPaySignOnNet(){
         //假装请求了服务器 获取到了所有的数据,注意参数不能少
-//        WXPayUtils.WXPayBuilder builder = new WXPayUtils.WXPayBuilder();
-//        builder.setAppId("123")
-//                .setPartnerId("56465")
-//                .setPrepayId("41515")
-//                .setPackageValue("5153")
-//                .setNonceStr("5645")
-//                .setTimeStamp("56512")
-//                .setSign("54615")
-//                .build().toWXPayNotSign(getActivity());
+        WXPayUtils.WXPayBuilder builder = new WXPayUtils.WXPayBuilder();
+        builder.setAppId("123")
+                .setPartnerId("56465")
+                .setPrepayId("41515")
+                .setPackageValue("5153")
+                .setNonceStr("5645")
+                .setTimeStamp("56512")
+                .setSign("54615")
+                .build().toWXPayNotSign(getActivity());
     }
 
     private void onWeixinPaySignOnLocal(){
         //假装请求了服务器 获取到了所有的数据,注意参数不能少
         //假装请求了服务端信息，并获取了appid、partnerId、prepayId，注意参数不能少
-//        WXPayUtils.WXPayBuilder builder = new WXPayUtils.WXPayBuilder();
-//        builder.setAppId("123")
-//                .setPartnerId("213")
-//                .setPrepayId("3213")
-//                .setPackageValue("Sign=WXPay")
-//                .build()
-//                .toWXPayAndSign(getActivity(),"123","key");
+        WXPayUtils.WXPayBuilder builder = new WXPayUtils.WXPayBuilder();
+        builder.setAppId("123")
+                .setPartnerId("213")
+                .setPrepayId("3213")
+                .setPackageValue("Sign=WXPay")
+                .build()
+                .toWXPayAndSign(getActivity(),"123","key");
     }
 
     private void sendToWeixin(){
-//        IWXAPI api = WXAPIFactory.createWXAPI(getActivity(),Constant.APP_ID);
-//        api.registerApp(Constant.APP_ID);
-//
-//        // 初始化一个WXTextObject对象
-//        WXTextObject textObj = new WXTextObject();
-//        textObj.text = "Text";
-//
-//        // 用WXTextObject对象初始化一个WXMediaMessage对象
-//        WXMediaMessage msg = new WXMediaMessage();
-//        msg.mediaObject = textObj;
-//        // 发送文本类型的消息时，title字段不起作用
-//        // msg.title = "Will be ignored";
-//        msg.description = "Des";
-//
-//        // 构造一个Req
-//        SendMessageToWX.Req req = new SendMessageToWX.Req();
-//        req.transaction = String.valueOf(System.currentTimeMillis()); // transaction字段用于唯一标识一个请求
-//        req.message = msg;
-//        req.scene = true ? SendMessageToWX.Req.WXSceneTimeline : SendMessageToWX.Req.WXSceneSession;
-//        req.openId = Constant.APP_ID;//getOpenId();
-//        // 调用api接口发送数据到微信
-//        api.sendReq(req);
-    }
+        IWXAPI api = WXAPIFactory.createWXAPI(getActivity(),Constant.APP_ID);
+        api.registerApp(Constant.APP_ID);
 
-    /**
-     * 支付宝支付业务示例
-     */
-    public void payV2(View v) {
-        if (TextUtils.isEmpty(APPID) || (TextUtils.isEmpty(RSA2_PRIVATE) && TextUtils.isEmpty(RSA_PRIVATE))) {
-//            showAlert(this, getString(R.string.error_missing_appid_rsa_private));
-            return;
-        }
+        // 初始化一个WXTextObject对象
+        WXTextObject textObj = new WXTextObject();
+        textObj.text = "Text";
 
-        /*
-         * 这里只是为了方便直接向商户展示支付宝的整个支付流程；所以Demo中加签过程直接放在客户端完成；
-         * 真实App里，privateKey等数据严禁放在客户端，加签过程务必要放在服务端完成；
-         * 防止商户私密数据泄露，造成不必要的资金损失，及面临各种安全风险；
-         *
-         * orderInfo 的获取必须来自服务端；
-         */
-        boolean rsa2 = (RSA2_PRIVATE.length() > 0);
-        Map<String, String> params = OrderInfoUtil2_0.buildOrderParamMap(APPID, rsa2);
-        String orderParam = OrderInfoUtil2_0.buildOrderParam(params);
+        // 用WXTextObject对象初始化一个WXMediaMessage对象
+        WXMediaMessage msg = new WXMediaMessage();
+        msg.mediaObject = textObj;
+        // 发送文本类型的消息时，title字段不起作用
+        // msg.title = "Will be ignored";
+        msg.description = "Des";
 
-        String privateKey = rsa2 ? RSA2_PRIVATE : RSA_PRIVATE;
-        String sign = OrderInfoUtil2_0.getSign(params, privateKey, rsa2);
-        final String orderInfo = orderParam + "&" + sign;
-
-        final Runnable payRunnable = new Runnable() {
-
-            @Override
-            public void run() {
-//                PayTask alipay = new PayTask(getActivity());
-//                Map<String, String> result = alipay.payV2(orderInfo, true);
-//                Log.i("msp", result.toString());
-//
-//                Message msg = new Message();
-//                msg.what = SDK_PAY_FLAG;
-//                msg.obj = result;
-//                mHandler.sendMessage(msg);
-            }
-        };
-
-        // 必须异步调用
-        Thread payThread = new Thread(payRunnable);
-        payThread.start();
-
-
+        // 构造一个Req
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = String.valueOf(System.currentTimeMillis()); // transaction字段用于唯一标识一个请求
+        req.message = msg;
+        req.scene = true ? SendMessageToWX.Req.WXSceneTimeline : SendMessageToWX.Req.WXSceneSession;
+        req.openId = Constant.APP_ID;//getOpenId();
+        // 调用api接口发送数据到微信
+        api.sendReq(req);
     }
 
     @Override
@@ -692,13 +786,25 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
         int position = (int) view.getTag();
         datas.get(position).setChoosed(isChecked);
 
-        GoodsInfo goodsInfo = datas.get(position);
+        ShoppingCarItems.DataBean.ListBean goodsInfo = datas.get(position);
         if (isChecked){
-            price += goodsInfo.getPrice() * Integer.valueOf(goodsInfo.getSize());
+            price += goodsInfo.getMarket_price() * goodsInfo.getQuantity();
         }else {
             if (price > 0){
-                price -= goodsInfo.getPrice() * Integer.valueOf(goodsInfo.getSize());
+                price -= goodsInfo.getMarket_price() * goodsInfo.getQuantity();//Integer.valueOf(goodsInfo.getSize());
             }
+        }
+
+        int checkNum = 0;
+        for (ShoppingCarItems.DataBean.ListBean goods : datas) {
+            if (goods.isChoosed()) {
+                checkNum ++;
+            }
+        }
+
+        if (checkNum == datas.size()){//所有的都被选中
+            mAllCheckBox.setChecked(true);
+            mAllCheckBoxBottom.setChecked(true);
         }
 
         String status = mClearShoppingCart.getText().toString();
@@ -718,16 +824,27 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
 
         if (status.equalsIgnoreCase("编辑")){
             int position = (int) view.getTag();
-            datas.get(position).setSize(amount + "");
+            ShoppingCarItems.DataBean.ListBean good = datas.get(position);
+
+            String type = "1";
+            if (amount > good.getQuantity()){//加一
+                type = "1";
+            }else{//减一
+                type = "2";
+            }
+
+            changeQuantity(good.getId() + "",type);
+
+            good.setQuantity(amount);
 
             price = 0.0;
 
             int i = 0;
             while (i < datas.size())
             {
-                GoodsInfo goods = datas.get(i);
+                ShoppingCarItems.DataBean.ListBean goods = datas.get(i);
                 if (goods.isChoosed()){
-                    price += goods.getPrice()  * Integer.valueOf(goods.getSize());
+                    price += goods.getMarket_price()  * goods.getQuantity();//Integer.valueOf(goods.getSize());
                 }
                 i += 1;
             }
@@ -735,6 +852,39 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
 
             mTotalPrice.setText("￥" + price);
         }
+    }
+
+    /**
+     *
+     * @param cardId 购物车ID
+     * @param type 	操作类型：1表示+1 2表示-1
+     */
+    private void changeQuantity(String cardId, String type){
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<SuccessfulMode> products = api.changeQuantity(TokenManager.getInstance().getLoginToken().getData().getToken(),cardId,type);
+        products.enqueue(new Callback<SuccessfulMode>() {
+            @Override
+            public void onResponse(Call<SuccessfulMode> call, Response<SuccessfulMode> response) {
+
+                try {
+                    SuccessfulMode productBean = response.body();
+                    if (Constant.SUCCESSFUL == productBean.getCode()){
+                    }else {
+                        ToastUtils.showToast(getActivity(),response.body().getMessage());
+                    }
+                } catch (Exception e) {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SuccessfulMode> call, Throwable t) {
+                ToastUtils.showToast(getActivity(), t.getLocalizedMessage());
+            }
+        });
     }
 
 //    @Override

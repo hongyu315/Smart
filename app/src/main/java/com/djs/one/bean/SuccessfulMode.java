@@ -15,6 +15,8 @@ public class SuccessfulMode {
      * code : 2000
      * message : 您当前的会话已超时，请重新登录
      * data : []
+     *
+     *
      */
 
     private int code;

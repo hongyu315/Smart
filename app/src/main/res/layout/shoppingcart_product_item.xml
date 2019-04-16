@@ -58,14 +58,12 @@
                     android:id="@+id/goods_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="门票:内场 类型:憨人"
                     android:textColor="#ffaaaaaa"
                     android:textSize="12sp"/>
                 <TextView
                     android:id="@+id/goods_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="门票:内场 类型:憨人"
                     android:textColor="#ffaaaaaa"
                     android:textSize="12sp"/>
 

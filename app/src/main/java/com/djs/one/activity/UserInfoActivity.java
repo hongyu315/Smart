@@ -2,6 +2,7 @@ package com.djs.one.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +22,31 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.sdk.android.oss.ClientConfiguration;
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.OSS;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.callback.OSSProgressCallback;
+import com.alibaba.sdk.android.oss.common.OSSLog;
+import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
+import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
+import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.djs.one.R;
+import com.djs.one.api.API;
+import com.djs.one.api.URL;
+import com.djs.one.bean.OSSBean;
+import com.djs.one.bean.SuccessfulMode;
 import com.djs.one.bean.User;
 import com.djs.one.constant.Constant;
+import com.djs.one.manager.TokenManager;
 import com.djs.one.util.DensityUtil;
 import com.djs.one.util.ImgUtil;
 import com.djs.one.util.SPUtils;
+import com.djs.one.util.ToastUtils;
 import com.djs.one.view.pickdatetime.DatePickDialog;
 import com.djs.one.view.pickdatetime.OnSureListener;
 import com.djs.one.view.pickdatetime.bean.DateParams;
@@ -37,6 +58,12 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserInfoActivity extends BaseActivity {
 
@@ -62,8 +89,12 @@ public class UserInfoActivity extends BaseActivity {
     //最后显示的图片文件
     private  String mFile;
 
-
-
+    private OSSBean ossBean;
+    private String mPicturePath = "";
+    String mObjectKey = "";
+    String nickName = "";
+    String gender = "0";//性别：0 未知 1 男 2 女
+    String birthday = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +127,125 @@ public class UserInfoActivity extends BaseActivity {
 
             @Override
             public void onRightClick(View v) {
+                onSaveUserInfoBtnClick();
+            }
+        });
+    }
+
+    private void onSaveUserInfoBtnClick(){
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<SuccessfulMode> products = api.updateProfile(TokenManager.getInstance().getLoginToken().getData().getToken(),nickName,mObjectKey,gender,birthday);
+        products.enqueue(new Callback<SuccessfulMode>() {
+            @Override
+            public void onResponse(Call<SuccessfulMode> call, Response<SuccessfulMode> response) {
+
+                try {
+                    SuccessfulMode productBean = response.body();
+                    if (Constant.SUCCESSFUL == productBean.getCode()){
+                        ToastUtils.showToast(UserInfoActivity.this, productBean.getMessage());
+                    }else {
+                    }
+                } catch (Exception e) {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SuccessfulMode> call, Throwable t) {
+                ToastUtils.showToast(UserInfoActivity.this, t.getLocalizedMessage());
+            }
+        });
+    }
+
+    private void uploadUserIconViaOSS(){
+        OSSBean.DataBean dataBean = ossBean.getData();
+        String endpoint = dataBean.getEndpoint();
+        if (TextUtils.isEmpty(endpoint)) return;
+
+        //if null , default will be init
+        ClientConfiguration conf = new ClientConfiguration();
+        conf.setConnectionTimeout(15 * 1000); // connction time out default 15s
+        conf.setSocketTimeout(15 * 1000); // socket timeout，default 15s
+        conf.setMaxConcurrentRequest(5); // synchronous request number，default 5
+        conf.setMaxErrorRetry(2); // retry，default 2
+        OSSLog.enableLog(); //write local log file ,path is SDCard_path\OSSLog\logs.csv
+
+        OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(dataBean.getAccessKeyId(),
+                dataBean.getAccessKeySecret(),
+                dataBean.getSecurityToken());
+
+        OSS oss = new OSSClient(getApplicationContext(), endpoint, credentialProvider, conf);
+
+        String tempArr[] = mPicturePath.split("/");
+        String imgName = tempArr[tempArr.length - 1];
+        mObjectKey = "avatar/" + imgName;
+
+        // Construct an upload request
+        PutObjectRequest put = new PutObjectRequest(dataBean.getBucket(), mObjectKey, mPicturePath);
+
+// You can set progress callback during asynchronous upload
+        put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
+            @Override
+            public void onProgress(PutObjectRequest request, long currentSize, long totalSize) {
+                Log.e("PutObject", "currentSize: " + currentSize + " totalSize: " + totalSize);
+            }
+        });
+
+        OSSAsyncTask task = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+            @Override
+            public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                Log.e("PutObject", "UploadSuccess");
+            }
+
+            @Override
+            public void onFailure(PutObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
+                // Request exception
+                if (clientExcepion != null) {
+                    // Local exception, such as a network exception
+                    clientExcepion.printStackTrace();
+                }
+                if (serviceException != null) {
+                    // Service exception
+                    Log.e("ErrorCode", serviceException.getErrorCode());
+                    Log.e("RequestId", serviceException.getRequestId());
+                    Log.e("HostId", serviceException.getHostId());
+                    Log.e("RawMessage", serviceException.getRawMessage());
+                }
+            }
+        });
+
+// task.cancel(); // Cancel the task
+
+// task.waitUntilFinished(); // Wait till the task is finished
+    }
+
+    private void getOSSAuth(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<OSSBean> products = api.ossauth(TokenManager.getInstance().getLoginToken().getData().getToken());
+        products.enqueue(new Callback<OSSBean>() {
+            @Override
+            public void onResponse(Call<OSSBean> call, Response<OSSBean> response) {
+
+                try {
+                    ossBean = response.body();
+                    if (Constant.SUCCESSFUL == ossBean.getCode()){
+                    }else {
+                    }
+                } catch (Exception e) {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OSSBean> call, Throwable t) {
+                ToastUtils.showToast(UserInfoActivity.this, t.getLocalizedMessage());
             }
         });
     }
@@ -103,6 +253,8 @@ public class UserInfoActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
+
+        getOSSAuth();
 
         String userSexStr = User.getInstance().getUserSex();
         if ((TextUtils.isEmpty(userSexStr))){
@@ -129,8 +281,9 @@ public class UserInfoActivity extends BaseActivity {
         myAlertInputDialog.setPositiveButton("确认", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userNick.setText(myAlertInputDialog.getResult());
-                SPUtils.put(UserInfoActivity.this,Constant.KEY_NICKNAME,myAlertInputDialog.getResult());
+                nickName = myAlertInputDialog.getResult();
+                userNick.setText(nickName);
+                SPUtils.put(UserInfoActivity.this,Constant.KEY_NICKNAME,nickName);
                 myAlertInputDialog.dismiss();
             }
         }).setNegativeButton("取消", new View.OnClickListener() {
@@ -166,6 +319,7 @@ public class UserInfoActivity extends BaseActivity {
                     @Override
                     public void onSure(Date date) {
                         String message = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                        birthday = message;
                         userBirthday.setText(message);
                     }
                 })
@@ -270,6 +424,7 @@ public class UserInfoActivity extends BaseActivity {
 
     private void handleResult(){
         if (isSexLayoutPressed){
+            gender = "" + selectedPosition + 1;
             userSex.setText(sexArray[selectedPosition]);
             SPUtils.put(UserInfoActivity.this,Constant.KEY_SEX,sexArray[selectedPosition]);
         }else {
@@ -317,6 +472,20 @@ public class UserInfoActivity extends BaseActivity {
                         bitmap = ImgUtil.handleImageBeforeKitKat(this, data);
                     }
                     userIcon.setImageBitmap(bitmap);
+
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                    Cursor cursor = getContentResolver().query(selectedImage,
+                            filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    mPicturePath = cursor.getString(columnIndex);
+                    Log.d("PickPicture", mPicturePath);
+                    cursor.close();
+
+                    uploadUserIconViaOSS();
                 }
                 break;
             case CAMERA_REQUEST_CODE:

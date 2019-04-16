@@ -12,25 +12,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.djs.one.R;
+import com.djs.one.bean.ShoppingCarItems;
+import com.djs.one.view.AmountView;
 
 import java.util.List;
-
-import com.djs.one.R;
-import com.djs.one.bean.GoodsInfo;
-import com.djs.one.view.AmountView;
 
 public class ShoppingCartAdapter
         extends BaseAdapter
 {
     public Context mContext;
-    private List<GoodsInfo> goodsInfoList;
+    private List<ShoppingCarItems.DataBean.ListBean> goodsInfoList;
     private LayoutInflater mInflater;
-    private GoodsInfo goodsInfo;
+    private ShoppingCarItems.DataBean.ListBean goodsInfo;
 
     private onCheckboxClickListener mListener;
     private onAmountValueChangeListener onAmountValueChangeListener;
 
-    public ShoppingCartAdapter(Context paramContext, List<GoodsInfo> paramList,
+    public ShoppingCartAdapter(Context paramContext, List<ShoppingCarItems.DataBean.ListBean> paramList,
                                onCheckboxClickListener listener, onAmountValueChangeListener amountValueChangeListener)
     {
         this.mContext = paramContext;
@@ -76,31 +75,45 @@ public class ShoppingCartAdapter
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        goodsInfo = goodsInfoList.get(position);
-
-        viewHolder.checkBox.setTag(position);
-        Glide.with(mContext).load(goodsInfo.getImageUrl()).into(viewHolder.icon);
-        viewHolder.name.setText(goodsInfo.getName());
-        viewHolder.goodPrice.setText("￥"  + goodsInfo.getPrice());
-        viewHolder.goodContent.setText(goodsInfo.getDesc());
-        viewHolder.checkBox.setChecked(goodsInfo.isChoosed());
-
-        viewHolder.amountView.setGoods_storage(Integer.MAX_VALUE);
-        viewHolder.amountView.etAmount.setText(goodsInfo.getSize());
-        viewHolder.amountView.setTag(position);
-        viewHolder.amountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
-            @Override
-            public void onAmountChange(View view, int amount) {
-                Log.e("Smart", "onAmountChange: mount = "  + amount );
-                onAmountValueChangeListener.onAmountValueChangeListener(view,amount);
+        try{
+            goodsInfo = goodsInfoList.get(position);
+            String colorStr = "";
+            String sizeStr = "";
+            List<ShoppingCarItems.DataBean.ListBean.SpecsBean> specs = goodsInfo.getSpecs();
+            for (ShoppingCarItems.DataBean.ListBean.SpecsBean sp : specs) {
+                if (sp.getAttr_name().equalsIgnoreCase("尺寸")) {
+                    sizeStr = sp.getValue();
+                }else if (sp.getAttr_name().equalsIgnoreCase("颜色")){
+                    colorStr = sp.getValue();
+                }
             }
-        });
-        viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mListener.onCheckboxClick(buttonView,isChecked);
-            }
-        });
+
+            viewHolder.checkBox.setTag(position);
+            Glide.with(mContext).load(goodsInfo.getThumb_url()).into(viewHolder.icon);
+            viewHolder.name.setText(goodsInfo.getTitle());
+            viewHolder.goodPrice.setText("￥"  + goodsInfo.getMarket_price());
+            viewHolder.goodContent.setText(colorStr);
+            viewHolder.goodSize.setText(sizeStr);
+            viewHolder.checkBox.setChecked(goodsInfo.isChoosed());
+
+            viewHolder.amountView.setGoods_storage(Integer.MAX_VALUE);
+            viewHolder.amountView.etAmount.setText(goodsInfo.getQuantity() + "");
+            viewHolder.amountView.setTag(position);
+            viewHolder.amountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
+                @Override
+                public void onAmountChange(View view, int amount) {
+                    Log.e("Smart", "onAmountChange: mount = "  + amount );
+                    onAmountValueChangeListener.onAmountValueChangeListener(view,amount);
+                }
+            });
+            viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    mListener.onCheckboxClick(buttonView,isChecked);
+                }
+            });
+        }catch (Exception e){
+        }
 
         return convertView;
     }

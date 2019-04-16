@@ -30,11 +30,13 @@
             android:layout_centerVertical="true"
             android:padding="@dimen/dimen_10_dp"
             android:text="编辑"
+            android:visibility="invisible"
             android:textColor="@color/home_glod_text_unselect"
             android:textSize="12sp"/>
     </RelativeLayout>
 
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/ll_cart"
         android:background="@color/grey_200"
         android:layout_width="fill_parent"
@@ -137,7 +139,7 @@
                                     android:id="@+id/total_price"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="共计：￥1900"
+                                    android:text="共计："
                                     android:textColor="@android:color/white"
                                     android:textSize="14.0sp"/>
 
@@ -196,6 +198,7 @@
         </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
 
     </RelativeLayout>
+
 
     <include
         android:id="@+id/layout_empty_shopcart"

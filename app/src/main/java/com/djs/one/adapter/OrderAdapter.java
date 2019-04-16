@@ -11,22 +11,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.djs.one.R;
+import com.djs.one.bean.MyOrdersBean;
+import com.djs.one.constant.Constant;
 
 import java.util.List;
-
-import com.djs.one.R;
-import com.djs.one.bean.Order;
-import com.djs.one.constant.Constant;
 
 public class OrderAdapter extends BaseAdapter implements View.OnClickListener {
 
     private LayoutInflater mInflater;
     private Context mContext;
-    private List<Order> orderList;
-    private Order order;
+    private List<MyOrdersBean.DataBean.ListBean> orderList;
+    private MyOrdersBean.DataBean.ListBean order;
     private onOrderItemBtnClickListener mListener;
 
-    public OrderAdapter(Context context, List<Order> orders){
+    public OrderAdapter(Context context, List<MyOrdersBean.DataBean.ListBean> orders){
         mInflater = LayoutInflater.from(context);
         mContext = context;
         orderList = orders;
@@ -77,19 +76,21 @@ public class OrderAdapter extends BaseAdapter implements View.OnClickListener {
         }
 
         order = orderList.get(position);
-        viewHolder.orderTime.setText(order.getOrder_time());
-        viewHolder.orderStatus.setText(order.getOrder_status());
+        viewHolder.orderTime.setText(order.getCreated_at().getDate());
+        viewHolder.orderStatus.setText(getStatusString(order.getStatus()));
 
-        Glide.with(mContext).load(order.getProduct_icon()).into(viewHolder.productIcon);
-        viewHolder.productName.setText(order.getProduct_name());
-        viewHolder.productType.setText(order.getProduct_type());
-        viewHolder.productSize.setText(order.getProduct_size());
-        viewHolder.productPrice.setText("￥" + order.getProduct_price());
-        viewHolder.productNum.setText("x" + order.getProduct_num());
+        if (order.getStatus() == Constant.WAIT4PAY) viewHolder.orderStatus.setTextColor(mContext.getResources().getColor(R.color.red));
 
-        viewHolder.totalProduct.setText("共计" + order.getProduct_num() + "件商品，共计￥" + order.getProduct_price());
+        Glide.with(mContext).load(order.getItem_info().getThumb_url()).into(viewHolder.productIcon);
+        viewHolder.productName.setText(order.getItem_info().getItem_title());
+        viewHolder.productType.setText(order.getItem_info().getSku_title());
+//        viewHolder.productSize.setText(order.getProduct_size());
+        viewHolder.productPrice.setText("￥" + order.getPay_amount());
+        viewHolder.productNum.setText("x" + order.getTotal_item());
 
-        switch (order.order_kind){
+        viewHolder.totalProduct.setText("共计" + order.getTotal_item() + "件商品，共计￥" + order.getPay_amount());
+
+        switch (order.getStatus()){
             case Constant.COMPLETED:
                 viewHolder.leftBtn.setVisibility(View.GONE);
                 viewHolder.rightBtn.setText("查看详情");
@@ -119,6 +120,28 @@ public class OrderAdapter extends BaseAdapter implements View.OnClickListener {
         viewHolder.rightBtn.setOnClickListener(this);
 
         return convertView;
+    }
+
+    private String getStatusString(int status){
+        String statusString = "";
+        switch (status){
+            case Constant.COMPLETED:
+                statusString = "已完成";
+                break;
+            case Constant.WAIT4DELIVER:
+                statusString = "待发货";
+                break;
+            case Constant.WAIT4PAY:
+                statusString = "待付款";
+                break;
+            case Constant.WAIT4TAKEDELIVER:
+                statusString = "待收货";
+                break;
+            default:
+                statusString = "待付款";
+                break;
+        }
+        return statusString;
     }
 
     @Override

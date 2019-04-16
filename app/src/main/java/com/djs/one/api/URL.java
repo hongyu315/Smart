@@ -9,7 +9,7 @@ package com.djs.one.api;
  */
 public class URL {
 
-    public static final String BASE_URL          = "http://101.132.128.63/";
+    public static final String BASE_URL          = "https://api.tianyi41.com";//http://101.132.128.63/";
 
 
 }

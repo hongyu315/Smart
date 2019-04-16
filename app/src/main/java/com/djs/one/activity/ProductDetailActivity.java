@@ -444,21 +444,10 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
      * 加入购物车按钮点击
      */
     public void onAddToShoppingCarBtnPressed(){
-        Log.e("xxx", "onAddToShoppingCarBtnPressed: " +  sizeListSelectedPosition );
-        Log.e("xxx", "2onAddToShoppingCarBtnPressed: " +  colorListSelectedPosition );
-
-
         String colorId = colorValues.get(colorListSelectedPosition).getId() + "";
         String sizeId = sizeValues.get(sizeListSelectedPosition).getId() + "";
 
-        Log.e("xxx", "colorId: " +  colorId );
-        Log.e("xxx", "sizeId: " +  sizeId );
-
-//        List<ProductDetailBean.ProductDetail.SkusBean> skusBeans = mProductDetail.getSku();
         Map<String, ProductDetailBean.ProductDetail.SkusBean> skuList = mProductDetail.getSku();
-//        for(Map<String,ProductDetailBean.ProductDetail.SkusBean> beanMap : skuList){
-            Log.e("xxx", "beanMap: " + skuList.get(sizeId + "-" + colorId));
-//        }
 
         String skuId = skuList.get(sizeId + "-" + colorId).getId() + "";
         String quantity = amountInDialog + "";
@@ -476,14 +465,12 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 try {
                     AddToShoppingCarBean productBean = response.body();
                     if (Constant.SUCCESSFUL == productBean.getCode()){
-//                        initBanner(productBean.getData());
-                        ToastUtils.showToast(ProductDetailActivity.this,"加入收藏夹成功");
+                        ToastUtils.showToast(ProductDetailActivity.this,"加入购物车成功");
                     }else {
-                        ToastUtils.showToast(ProductDetailActivity.this,response.body().getMessage());
+//                        ToastUtils.showToast(ProductDetailActivity.this,response.body().getMessage());
                     }
                 } catch (Exception e) {
                 }
-
             }
 
             @Override

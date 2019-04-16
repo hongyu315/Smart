@@ -10,7 +10,7 @@
     <string name="message">消息列表</string>
     <string name="user_center">个人中心</string>
     <string name="logistics">物流信息</string>
-    <string name="order_detail">订单详情</string>
+    <string name="order_detai">订单详情</string>
     <string name="wait_for_pay">等待付款</string>
 
     <string name="account_manager">账号设置</string>

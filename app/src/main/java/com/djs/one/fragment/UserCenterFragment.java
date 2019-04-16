@@ -156,7 +156,11 @@ public class UserCenterFragment extends BaseFragment implements View.OnClickList
                     getActivity().startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 }else {
-                    SysUtils.startActivity(getActivity(),LoginActivity.class);
+                    Intent intent3 = new Intent(getActivity(),LoginActivity.class);
+                    intent3.putExtra(Constant.PAGE,MyOrderActivity.class.getName());
+                    intent3.putExtra("index",0);
+                    getActivity().startActivity(intent3);
+                    getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 }
                 break;
             case R.id.wait_for_pay:
@@ -166,7 +170,11 @@ public class UserCenterFragment extends BaseFragment implements View.OnClickList
                     getActivity().startActivity(intent1);
                     getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 }else {
-                    SysUtils.startActivity(getActivity(),LoginActivity.class);
+                    Intent intent3 = new Intent(getActivity(),LoginActivity.class);
+                    intent3.putExtra(Constant.PAGE,MyOrderActivity.class.getName());
+                    intent3.putExtra("index",1);
+                    getActivity().startActivity(intent3);
+                    getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 }
                 break;
             case R.id.wait_for_deliver:
@@ -176,7 +184,11 @@ public class UserCenterFragment extends BaseFragment implements View.OnClickList
                     getActivity().startActivity(intent2);
                     getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 }else {
-                    SysUtils.startActivity(getActivity(),LoginActivity.class);
+                    Intent intent3 = new Intent(getActivity(),LoginActivity.class);
+                    intent3.putExtra(Constant.PAGE,MyOrderActivity.class.getName());
+                    intent3.putExtra("index",2);
+                    getActivity().startActivity(intent3);
+                    getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 }
                 break;
             case R.id.wait_for_receive:
@@ -186,7 +198,11 @@ public class UserCenterFragment extends BaseFragment implements View.OnClickList
                     getActivity().startActivity(intent3);
                     getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 }else {
-                    SysUtils.startActivity(getActivity(),LoginActivity.class);
+                    Intent intent3 = new Intent(getActivity(),LoginActivity.class);
+                    intent3.putExtra(Constant.PAGE,MyOrderActivity.class.getName());
+                    intent3.putExtra("index",3);
+                    getActivity().startActivity(intent3);
+                    getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 }
                 break;
             case R.id.favorite_layout:
