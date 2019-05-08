@@ -34,7 +34,6 @@
 
     </RelativeLayout>
 
-
     <LinearLayout
         android:background="#FAFAFA"
         android:layout_width="match_parent"

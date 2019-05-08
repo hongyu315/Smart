@@ -29,7 +29,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/dimen_45_dp"
             android:background="@color/grey_200"
-            android:scrollbarStyle="@null">
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -39,6 +39,7 @@
 
 
                 <RelativeLayout
+                    android:id="@+id/wait_for_pay_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/home_glod_text_select"
@@ -128,10 +129,20 @@
                                 android:id="@+id/order_detail_phone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/dimen_20_dp"
                                 android:layout_alignParentRight="true"
                                 android:text="137****1111"
                                 android:textColor="@color/home_glod_text_unselect"
                                 android:textSize="14sp"/>
+
+                            <TextView
+                                android:id="@+id/more_address"
+                                android:layout_width="@dimen/dimen_8_dp"
+                                android:layout_height="@dimen/dimen_14_dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:background="@mipmap/right_arrow"
+                                />
 
                             <TextView
                                 android:id="@+id/order_detail_address"
@@ -140,7 +151,7 @@
                                 android:layout_below="@+id/customer_name"
                                 android:layout_marginTop="@dimen/dimen_10_dp"
                                 android:layout_marginBottom="@dimen/dimen_5_dp"
-                                android:text="安徽省合肥市的借记卡的紧急等级"
+                                android:text="安徽省合肥市蜀山区望湖东路13号201"
                                 android:textColor="@color/edit_text_hint_color"
                                 android:textSize="12sp"/>
 
@@ -179,7 +190,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/dimen_15_dp"
+                                android:layout_marginTop="@dimen/dimen_10_dp"
                                 android:text="送达时间：2018-2-12 22：00前"
                                 android:textColor="@color/edit_text_hint_color"
                                 android:textSize="12sp"/>
@@ -203,7 +214,6 @@
                                     android:id="@+id/deliver_info"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/dimen_13_dp"
                                     android:text="快递已到达上海虹桥，扫描员马云"
                                     android:textColor="@color/edit_text_hint_color"
                                     android:textSize="12sp"/>
@@ -213,7 +223,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_below="@+id/deliver_info"
                                     android:layout_marginTop="@dimen/dimen_15_dp"
-                                    android:layout_marginBottom="@dimen/dimen_15_dp"
                                     android:text="2018-2-2"
                                     android:textColor="@color/edit_text_hint_color"
                                     android:textSize="12sp"/>
@@ -262,7 +271,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/dimen_3_dp"
+                                android:layout_marginLeft="@dimen/dimen_5_dp"
                                 android:layout_toLeftOf="@+id/message_item_time"
                                 android:layout_toRightOf="@+id/message_item_icon"
                                 android:gravity="center_vertical"
@@ -282,6 +291,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:singleLine="true"
+                                    android:layout_marginTop="@dimen/dimen_3_dp"
                                     android:text="订单已签收"
                                     android:textColor="@color/edit_text_hint_color"
                                     android:textSize="12sp"/>
@@ -290,6 +300,7 @@
                                     android:id="@+id/order_num_text"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/dimen_3_dp"
                                     android:singleLine="true"
                                     android:text="订单已签收"
                                     android:textColor="@color/edit_text_hint_color"
@@ -433,12 +444,14 @@
         </ScrollView>
 
         <LinearLayout
+            android:id="@+id/pay_cancel_pay_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:weightSum="2">
 
             <TextView
+                android:id="@+id/cancel_order"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dimen_40_dp"
                 android:layout_weight="1"

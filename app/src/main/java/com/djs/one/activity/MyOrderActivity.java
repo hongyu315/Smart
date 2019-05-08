@@ -6,19 +6,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import com.flyco.tablayout.SlidingTabLayout;
-import com.hjq.bar.OnTitleBarListener;
-import com.hjq.bar.TitleBar;
-
-import java.util.ArrayList;
-
 import com.djs.one.R;
 import com.djs.one.adapter.MyPagerAdapter;
 import com.djs.one.fragment.CompletedOrderFragment;
 import com.djs.one.fragment.Wait4DeliverFragment;
 import com.djs.one.fragment.Wait4PayFragment;
 import com.djs.one.fragment.Wait4TakeDeliveryFragment;
-import com.djs.one.util.SysUtils;
+import com.flyco.tablayout.SlidingTabLayout;
+import com.hjq.bar.OnTitleBarListener;
+import com.hjq.bar.TitleBar;
+
+import java.util.ArrayList;
+
+import static com.djs.one.constant.Constant.From_Order;
 
 public class MyOrderActivity extends BaseActivity {
 
@@ -57,7 +57,10 @@ public class MyOrderActivity extends BaseActivity {
 
             @Override
             public void onRightClick(View v) {
-                SysUtils.startActivity(MyOrderActivity.this,SearchActivity.class);
+                Intent intent = new Intent(MyOrderActivity.this,SearchActivity.class);
+                intent.putExtra("index",From_Order);
+                startActivity(intent);
+                overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
             }
         });
 

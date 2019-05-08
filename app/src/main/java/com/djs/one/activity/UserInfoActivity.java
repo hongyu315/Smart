@@ -35,14 +35,16 @@ import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
 import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
+import com.bumptech.glide.Glide;
 import com.djs.one.R;
 import com.djs.one.api.API;
 import com.djs.one.api.URL;
 import com.djs.one.bean.OSSBean;
 import com.djs.one.bean.SuccessfulMode;
-import com.djs.one.bean.User;
+import com.djs.one.bean.UserProfile;
 import com.djs.one.constant.Constant;
 import com.djs.one.manager.TokenManager;
+import com.djs.one.manager.UserManager;
 import com.djs.one.util.DensityUtil;
 import com.djs.one.util.ImgUtil;
 import com.djs.one.util.SPUtils;
@@ -106,6 +108,47 @@ public class UserInfoActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+//        getUser();
+    }
+
+    private void getUser(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<UserProfile> products = api.getUser(TokenManager.getInstance().getLoginToken().getData().getToken());
+        products.enqueue(new Callback<UserProfile>() {
+            @Override
+            public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
+
+                try {
+                    UserProfile userProfile = response.body();
+
+                    if (Constant.SUCCESSFUL == userProfile.getCode()){
+                        UserManager.getInstance().setUser(userProfile);
+                        String nickName = (String) userProfile.getData().getNickname();
+                        String phone = (String) userProfile.getData().getMobile();
+                        userNick.setText(TextUtils.isEmpty(nickName) ? phone : nickName);
+                        String userIconUrl = (String) userProfile.getData().getAvatar();
+                        if (!TextUtils.isEmpty(userIconUrl)){
+                            Glide.with(UserInfoActivity.this).load(userIconUrl).into(userIcon);
+                        }
+                    }
+                } catch (Exception e) {
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<UserProfile> call, Throwable t) {
+            }
+        });
+    }
+
+    @Override
     protected void findViews() {
         super.findViews();
 
@@ -148,6 +191,7 @@ public class UserInfoActivity extends BaseActivity {
                     SuccessfulMode productBean = response.body();
                     if (Constant.SUCCESSFUL == productBean.getCode()){
                         ToastUtils.showToast(UserInfoActivity.this, productBean.getMessage());
+                        onBackPressed();
                     }else {
                     }
                 } catch (Exception e) {
@@ -256,15 +300,30 @@ public class UserInfoActivity extends BaseActivity {
 
         getOSSAuth();
 
-        String userSexStr = User.getInstance().getUserSex();
-        if ((TextUtils.isEmpty(userSexStr))){
-            userSexStr = (String) SPUtils.get(UserInfoActivity.this,Constant.KEY_SEX,"");
+        String userSexStr = "";
+        int gender = UserManager.getInstance().getUser().getData().getGender();
+        if (gender != 0){
+            if (gender == 1){
+                userSexStr = "男";
+            }else if (gender == 2){
+                userSexStr = "女";
+            }
         }
+//        if ((TextUtils.isEmpty(userSexStr))){
+//            userSexStr = (String) SPUtils.get(UserInfoActivity.this,Constant.KEY_SEX,"");
+//        }
 
         try {
-            userNick.setText(User.getInstance().getUserNick());
+            birthday = UserManager.getInstance().getUser().getData().getBirthday() + "";
+            nickName = (String) UserManager.getInstance().getUser().getData().getNickname();
+            String phone = (String) UserManager.getInstance().getUser().getData().getMobile();
+            userNick.setText(TextUtils.isEmpty(nickName) ? phone : nickName);
             userSex.setText(userSexStr);
-            userBirthday.setText(User.getInstance().getUserBirthday());
+            String userIconUrl = (String) UserManager.getInstance().getUser().getData().getAvatar();
+            if (!TextUtils.isEmpty(userIconUrl)){
+                Glide.with(this).load(userIconUrl).placeholder(R.mipmap.user_default_icon).into(userIcon);
+            }
+            userBirthday.setText(birthday);
         }catch (Exception e){
         }
     }
@@ -424,7 +483,8 @@ public class UserInfoActivity extends BaseActivity {
 
     private void handleResult(){
         if (isSexLayoutPressed){
-            gender = "" + selectedPosition + 1;
+            gender = "";
+            gender = "" + (selectedPosition + 1);
             userSex.setText(sexArray[selectedPosition]);
             SPUtils.put(UserInfoActivity.this,Constant.KEY_SEX,sexArray[selectedPosition]);
         }else {
@@ -471,7 +531,9 @@ public class UserInfoActivity extends BaseActivity {
                         //4.4以下系统使用这个方法处理图片
                         bitmap = ImgUtil.handleImageBeforeKitKat(this, data);
                     }
-                    userIcon.setImageBitmap(bitmap);
+
+//                    Glide.with(UserInfoActivity.this).load
+//                    userIcon.setImageBitmap(bitmap);
 
                     Uri selectedImage = data.getData();
                     String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -485,6 +547,7 @@ public class UserInfoActivity extends BaseActivity {
                     Log.d("PickPicture", mPicturePath);
                     cursor.close();
 
+                    Glide.with(UserInfoActivity.this).load(Uri.fromFile(new File(mPicturePath))).into(userIcon);
                     uploadUserIconViaOSS();
                 }
                 break;

@@ -44,7 +44,6 @@ import com.djs.one.manager.UserManager;
 import com.djs.one.util.DensityUtil;
 import com.djs.one.util.SysUtils;
 import com.djs.one.util.ToastUtils;
-import com.djs.one.util.WXPayUtils;
 import com.djs.one.view.AmountView;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
@@ -66,21 +65,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-//import com.djs.one.util.WXPayUtils;
-//import com.tencent.mm.opensdk.constants.ConstantsAPI;
-//import com.tencent.mm.opensdk.modelbase.BaseReq;
-//import com.tencent.mm.opensdk.modelbase.BaseResp;
-//import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
-//import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
-//import com.tencent.mm.opensdk.modelmsg.WXTextObject;
-//import com.tencent.mm.opensdk.openapi.IWXAPI;
-//import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
-//import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-
-
 public class ShoppingFragment extends BaseFragment implements View.OnClickListener,
         ShoppingCartAdapter.onCheckboxClickListener,
-        ShoppingCartAdapter.onAmountValueChangeListener {//,IWXAPIEventHandler
+        ShoppingCartAdapter.onAmountValueChangeListener {
 
 
     public LinearLayout check_LL;
@@ -105,39 +92,9 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
     private LinearLayout moneyLayout;
 
     /**
-     * 用于支付宝支付业务的入参 app_id。
-     */
-    public static final String APPID = "2016092500589630";
-
-    /**
-     * 用于支付宝账户登录授权业务的入参 pid。
-     */
-    public static final String PID = "";
-
-    /**
-     * 用于支付宝账户登录授权业务的入参 target_id。
-     */
-    public static final String TARGET_ID = "";
-
-    /**
      * 获取权限使用的 RequestCode
      */
     private static final int PERMISSIONS_REQUEST_CODE = 1002;
-
-    /**
-     *  pkcs8 格式的商户私钥。
-     *
-     * 	如下私钥，RSA2_PRIVATE 或者 RSA_PRIVATE 只需要填入一个，如果两个都设置了，本 Demo 将优先
-     * 	使用 RSA2_PRIVATE。RSA2_PRIVATE 可以保证商户交易在更加安全的环境下进行，建议商户使用
-     * 	RSA2_PRIVATE。
-     *
-     * 	建议使用支付宝提供的公私钥生成工具生成和获取 RSA2_PRIVATE。
-     * 	工具地址：https://doc.open.alipay.com/docs/doc.htm?treeId=291&articleId=106097&docType=1
-     */
-    public static final String RSA2_PRIVATE = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDvFtLcbemEvETuaPL/58u4wJXBXXPzm7msVhmSrOj0KKVD8x+1ADRwVAxYwcC/wI3/W13/IDEHsU3IvD9JGtlhF1TYKwxEzzv8GE5FpiMa0UyXtdPfZV1iK6tWqLFW3IpOiqIl5geEYa7jqhaSVSJyrBcmohjR0iNiOfXocLbljXwAszwru+SZAKobTo4o6R/XqARy+cu4PQuGJ5xVLeIoExZw+zDcFtR9ax3mwIxDgbXdBbinmcW8gtISes2o6ZUVmP+nuJQCltirvYX7Q3CCg6V+Muwb+ABmYGqmlGsqw5OOywWOFzVKMbgoECdEMCZMgoqQOieXdlRhEG+BY+VdAgMBAAECggEAQ0HkZ2Xz/wcHTRnw4dRPFtX2SsMDT1BLVxORdhV2ItkcRJUsIjrAhajfIEjA9DAywdbuBksD/+n8u69ZDjOjWxC5KWZSuTii4zPjMOyfi3e9WCAqTfmx31/xfxtNZ+X6ckXFf2vKSY9BJ4I9f0S7wA5xJMkMulmm4obzikPK75/mPqpA8PVzOHqL4JSnuLuULagYAjTUQK51M2/0wlTr0+IFboNlQtadwYranbvQS+88xiwWQQBoAj0axIrTYvg0aIGh10Y7NhAvf4jf0tMJFuObp02tdB1c4B5gA3TRSE+mKF5RvVpjJNnaspqBuNxX1PU9xH2nprP2EIlppGoqAQKBgQD8EO9VrJjV85IaY2iCnJ/pBYonLLFMhGCACkO8/1Qp746cWriabGTsIKWP0srQzT74uStIgFjz6mlsLf1coccl5K1789ixT+2KinYbuaZ6iSjMg5uN1u0N9e/czgXzKJxyWLhcAxfF+QHxteFdvKBXKgoQmKfKnQO4j+BM/yZJfQKBgQDy0grj89suciQEXzAxBUT67X7uZ9HgmttoaODQlaWIxoQ8iY6TBGL420qUWKIqqd35G4KBvtmbEtj0HdglIWmJ5cv9G68x5hpevcueFSN9B3QHbaiv8wV9cawKEkEykDheligSosTGJGeaSFd+/7qt2JU1yoiyV/0DLTsaJt/RYQKBgQDiW77h/CYf9CSfJ+hBaq+7zaq79Umewj36nb0o603EfwldZabjnjWfSs4C8zQJAFftejPhXskC+d4ENOSSnAFACTS13EwbJwDVafQYf8Z9wdBuoD0/yeOFpvbpHeZ/71dW5E9i6bAeq7fQPRoOWIbQ38K8FqqPrCMcSbAO1Q6n7QKBgQDA169ueiyIJn4UOsS7KcQuxI8aJ7m290VpFmH1RePBTGeY7GYevE0d9oq0Ze/kkiOHwyFSiY+oaL+EoG8YjgCTU709ts7cgjJPK8yaL4+PrGupup1Nn2OszKolFXpR/dfGxtnscvhzpFXjYbCbW92WU3uszLzjZp25+CIIEveOAQKBgAjNqJYl4dqCpq4oK2RIAdU/vN8SOtOQ155VeulZQPMOLm2LpbNZtuUNwmqRn4zIDFSIzFiZb2JFrG0ozTyJiLjTxmYbVbLk4rAHXSiW/HFE/Bq+vhh33hVvw3QfqLZK065StMQlcqgv/l/SOlYA2ac08r5+IyyBtpjIX/vh+5wE";
-    public static final String RSA_PRIVATE = "";
-
-    private static final int SDK_PAY_FLAG = 1;
 
     private int page = 1;
     private int pageSize = 20;
@@ -283,6 +240,9 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
                             datas.addAll(productBean.getData().getList());
                             layout_empty_shopcart.setVisibility(View.GONE);
                             mLlCart.setVisibility(View.VISIBLE);
+                        }else {
+                            mClearShoppingCart.setVisibility(View.GONE);
+                            layout_empty_shopcart.setVisibility(View.VISIBLE);
                         }
                         mShoppingCartAdapter.notifyDataSetChanged();
 
@@ -731,30 +691,6 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
-    private void onWeixinPaySignOnNet(){
-        //假装请求了服务器 获取到了所有的数据,注意参数不能少
-        WXPayUtils.WXPayBuilder builder = new WXPayUtils.WXPayBuilder();
-        builder.setAppId("123")
-                .setPartnerId("56465")
-                .setPrepayId("41515")
-                .setPackageValue("5153")
-                .setNonceStr("5645")
-                .setTimeStamp("56512")
-                .setSign("54615")
-                .build().toWXPayNotSign(getActivity());
-    }
-
-    private void onWeixinPaySignOnLocal(){
-        //假装请求了服务器 获取到了所有的数据,注意参数不能少
-        //假装请求了服务端信息，并获取了appid、partnerId、prepayId，注意参数不能少
-        WXPayUtils.WXPayBuilder builder = new WXPayUtils.WXPayBuilder();
-        builder.setAppId("123")
-                .setPartnerId("213")
-                .setPrepayId("3213")
-                .setPackageValue("Sign=WXPay")
-                .build()
-                .toWXPayAndSign(getActivity(),"123","key");
-    }
 
     private void sendToWeixin(){
         IWXAPI api = WXAPIFactory.createWXAPI(getActivity(),Constant.APP_ID);
@@ -887,24 +823,5 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
         });
     }
 
-//    @Override
-//    public void onReq(BaseReq baseReq) {
-//        Log.e("onReq", "onReq, errCode = " + baseReq.toString());
-//    }
-//
-//    @Override
-//    public void onResp(BaseResp baseResp) {
-//        Log.e("onReq", "onPayFinish, errCode = " + baseResp.errCode);
-//
-//        if (baseResp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
-//            int errCord = baseResp.errCode;
-//            if (errCord == 0) {
-//                Toast.makeText(getActivity(), "支付成功", Toast.LENGTH_SHORT).show();
-//            } else {
-//                Toast.makeText(getActivity(), "支付失败", Toast.LENGTH_SHORT).show();
-//            }
-//            //这里接收到了返回的状态码可以进行相应的操作，如果不想在这个页面操作可以把状态码存在本地然后finish掉这个页面，这样就回到了你调起支付的那个页面
-//            //获取到你刚刚存到本地的状态码进行相应的操作就可以了
-//        }
-//    }
+
 }

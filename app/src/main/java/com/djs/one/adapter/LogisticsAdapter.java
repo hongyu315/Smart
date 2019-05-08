@@ -27,7 +27,7 @@ public class LogisticsAdapter extends RecyclerView.Adapter<LogisticsAdapter.Logi
 
     @Override
     public int getItemCount() {
-        return bean.getData().getList().size();
+        return bean.getData().getLogistics().size();
     }
 
     @Override
@@ -39,18 +39,18 @@ public class LogisticsAdapter extends RecyclerView.Adapter<LogisticsAdapter.Logi
     public void onBindViewHolder(LogisticsAdapter.LogisticsAdapterHolder holder, int position) {
 
         try {
-            holder.tv_status.setText(bean.getData().getList().get(position).getContext());//订单状态
-            holder.tv_time.setText(bean.getData().getList().get(position).getTime());//时间
+            holder.tv_status.setText(bean.getData().getLogistics().get(position).getContext());//订单状态
+            holder.tv_time.setText(bean.getData().getLogistics().get(position).getTime());//时间
 
             if (position == 0) {
                 //红色的圆点
-                holder.iv_status.setImageResource(R.mipmap.close);
+                holder.iv_status.setImageResource(R.mipmap.receive);
                 RelativeLayout.LayoutParams pointParams = new RelativeLayout.LayoutParams(DensityUtil.dp2px(context, 20), DensityUtil.dp2px(context, 20));
                 pointParams.addRule(RelativeLayout.CENTER_IN_PARENT);
                 holder.iv_status.setLayoutParams(pointParams);
 
-                holder.tv_time.setTextColor(context.getResources().getColor(R.color.red));
-                holder.tv_status.setTextColor(context.getResources().getColor(R.color.red));
+                holder.tv_time.setTextColor(context.getResources().getColor(R.color.home_glod_text_unselect));
+                holder.tv_status.setTextColor(context.getResources().getColor(R.color.home_glod_text_unselect));
 
                 //灰色的竖线
                 RelativeLayout.LayoutParams lineParams = new RelativeLayout.LayoutParams(DensityUtil.dp2px(context, 1), ViewGroup.LayoutParams.MATCH_PARENT);
@@ -59,15 +59,51 @@ public class LogisticsAdapter extends RecyclerView.Adapter<LogisticsAdapter.Logi
                 holder.iv_line.setLayoutParams(lineParams);
 
             } else {
+                //物流状态：0在途中、1已揽收、2疑难、3已签收、4退签、5派送中、6退回、7转单
 //                holder.iv_status.setBackgroundResource(R.mipmap.ic_logistics_bottom);
-                holder.iv_status.setImageResource(R.mipmap.close);
-                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(DensityUtil.dp2px(context, 10), DensityUtil.dp2px(context, 10));
+                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(DensityUtil.dp2px(context, 20), DensityUtil.dp2px(context, 20));
+
+                switch (bean.getData().getLogistics().get(position).getStatus()){
+                    case 0:
+                        holder.iv_status.setImageResource(R.mipmap.default_l);
+                        lp = new RelativeLayout.LayoutParams(DensityUtil.dp2px(context, 10), DensityUtil.dp2px(context, 10));
+                        break;
+                    case 1:
+                        holder.iv_status.setImageResource(R.mipmap.go_l);
+                        break;
+                    case 2:
+
+                        break;
+                    case 3:
+                        holder.iv_status.setImageResource(R.mipmap.qianshou);
+                        break;
+                    case 4:
+
+                        break;
+                    case 5:
+                        holder.iv_status.setImageResource(R.mipmap.send_l);
+                        break;
+                    case 6:
+
+                        break;
+                    case 7:
+
+                        break;
+                    case 8:
+//                        holder.iv_status.setImageResource(R.mipmap.receive);
+                        break;
+                    default:
+                        holder.iv_status.setImageResource(R.mipmap.default_l);
+                        lp = new RelativeLayout.LayoutParams(DensityUtil.dp2px(context, 10), DensityUtil.dp2px(context, 10));
+                        break;
+                }
+
                 lp.addRule(RelativeLayout.CENTER_IN_PARENT);
 
                 holder.iv_status.setLayoutParams(lp);
 
-                holder.tv_time.setTextColor(context.getResources().getColor(R.color.gray));
-                holder.tv_status.setTextColor(context.getResources().getColor(R.color.gray));
+                holder.tv_time.setTextColor(context.getResources().getColor(R.color.order_item_time));
+                holder.tv_status.setTextColor(context.getResources().getColor(R.color.order_item_time));
 
                 //灰色的竖线
                 RelativeLayout.LayoutParams lineParams = new RelativeLayout.LayoutParams(DensityUtil.dp2px(context, 1), ViewGroup.LayoutParams.MATCH_PARENT);

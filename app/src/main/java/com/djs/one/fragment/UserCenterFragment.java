@@ -132,6 +132,10 @@ public class UserCenterFragment extends BaseFragment implements View.OnClickList
             loginRigtsTextView.setVisibility(View.GONE);
             loginRightNowTextView.setText(TextUtils.isEmpty(nickName) ?
                     UserManager.getInstance().getUser().getData().getMobile() : nickName);
+        }else {
+            loginRightNowTextView.setText("立刻登录");
+            loginRigtsTextView.setVisibility(View.VISIBLE);
+            Glide.with(mActivity).load(R.mipmap.user_default_icon).into(userIcon);
         }
     }
 

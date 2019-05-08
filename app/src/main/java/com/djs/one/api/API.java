@@ -4,7 +4,9 @@ import com.djs.one.bean.AddToShoppingCarBean;
 import com.djs.one.bean.Address;
 import com.djs.one.bean.CreateOrderBean;
 import com.djs.one.bean.ImageVerifyCode;
+import com.djs.one.bean.KeywordsBean;
 import com.djs.one.bean.LoginToken;
+import com.djs.one.bean.LogisticsJson;
 import com.djs.one.bean.MyOrdersBean;
 import com.djs.one.bean.OSSBean;
 import com.djs.one.bean.OrderDetailBean;
@@ -18,6 +20,7 @@ import com.djs.one.bean.ShoppingCarItems;
 import com.djs.one.bean.SuccessfulMode;
 import com.djs.one.bean.SuccessfulModeBean;
 import com.djs.one.bean.UserProfile;
+import com.djs.one.bean.WXCallback;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -58,7 +61,7 @@ public interface API {
     Call<UserProfile> getUser(@Header("Authorization") String authorization);
 
     //登录
-    @POST("api/auth/updateProfile?")
+    @POST("api/user/updateProfile?")
     Call<SuccessfulMode> updateProfile(@Header("Authorization") String authorization,
                                        @Query("nickname")String nickname,
                                        @Query("avatar")String avatar,
@@ -103,7 +106,8 @@ public interface API {
     Call<ProductBean> getProductList(@Query("pageSize") String pageSize,
                                      @Query("page") String page,
                                      @Query("saleTimeSortType") String saleTimeSortType,//按上架时间排序，1 倒序 2 升序，默认 1
-                                     @Query("priceSortType") String priceSortType);//按商品价格排序，1 倒序 2 升序，默认 2
+                                     @Query("priceSortType") String priceSortType,
+                                     @Query("keywords") String keywords);//按商品价格排序，1 倒序 2 升序，默认 2
 
     //商品详情页 Banner
     @GET("api/item/banners?")
@@ -166,7 +170,7 @@ public interface API {
     Call<CreateOrderBean> createOrder(@Header("Authorization") String authorization,
                                       @Query("skus")String skus);
 
-    //获取订单详情
+    //获取订单详情 订单状态（-1 无效  0 待确认, 1已确认/待支付, 2已支付/待发货, 3已发货/待收货, 4已完成, 5已取消, 6已关闭）
     @GET("api/trade/info?")
     Call<OrderDetailBean> orderInfo(@Header("Authorization") String authorization,
                                     @Query("trade_no")String trade_no);
@@ -178,10 +182,36 @@ public interface API {
                               @Query("trade_no")String trade_no,
                               @Query("payType")String payType);
 
+    @POST("api/trade/pay?")
+    Call<WXCallback> wxpay(@Header("Authorization") String authorization,
+                           @Query("addressId")String addressId,
+                           @Query("trade_no")String trade_no,
+                           @Query("payType")String payType);
+
     //我的订单列表 订单状态type： 1 待支付, 2 已支付/待发货, 3 已发货/待收货, 4 已完成， 默认4
     @GET("api/my/orders?")
     Call<MyOrdersBean> myOrders(@Header("Authorization") String authorization,
                                  @Query("type")String type,
+                                @Query("keywords")String keywords,
                                 @Query("pageSize")String pageSize,
                                 @Query("page")String page);
+
+    //取消订单
+    @POST("api/order/cancel?")
+    Call<SuccessfulMode> cancelOrder(@Header("Authorization") String authorization,
+                                      @Query("trade_no")String trade_no);
+
+    //物流信息
+    @GET("api/order/logistics?")
+    Call<LogisticsJson> logistics(@Header("Authorization") String authorization,
+                                  @Query("trade_no")String trade_no);
+
+    //确认收货
+    @POST("api/order/collect?")
+    Call<SuccessfulMode> receive(@Header("Authorization") String authorization,
+                                     @Query("trade_no")String trade_no);
+
+    //获取搜索关键字
+    @GET("api/item/keywords?")
+    Call<KeywordsBean> keywords();
 }

@@ -2,7 +2,6 @@ package com.djs.one.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -13,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-
 import com.djs.one.R;
 import com.djs.one.api.API;
 import com.djs.one.api.URL;
@@ -26,6 +24,7 @@ import com.djs.one.manager.TokenManager;
 import com.djs.one.manager.UserManager;
 import com.djs.one.util.SysUtils;
 import com.djs.one.util.ToastUtils;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -84,8 +83,8 @@ public class LoginActivity extends BaseActivity {
         imageVerifyCodeImg = findViewById(R.id.image_verifier);
         licenceCheckBox = findViewById(R.id.licence_checkbox);
 
-        phoneEditText.setText("13721042453");
-        imageCodeEditText.setText("test");
+//        phoneEditText.setText("13721042453");
+//        imageCodeEditText.setText("test");
 
         imageVerifyCodeImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +131,7 @@ public class LoginActivity extends BaseActivity {
                 .build();
         API api = retrofit.create(API.class);
 //        Call<PhoneCheckCode> products = api.sendPhoneCheckCode(phone,imageCode,mImageVerifyCode.getKey());
-        Call<PhoneCheckCode> products = api.sendPhoneCheckCode("13721042453","hppc","$2y$10$4kNHwZViLp5cl3pl2UT5O.eDmeueGSvS9aKhi7ApvtBenSWdBJvmm");
+        Call<PhoneCheckCode> products = api.sendPhoneCheckCode(phone,imageCode,mImageVerifyCode.getKey());
         products.enqueue(new Callback<PhoneCheckCode>() {
             @Override
             public void onResponse(Call<PhoneCheckCode> call, Response<PhoneCheckCode> response) {
@@ -177,6 +176,11 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void onLoginBtnClick(View view) {
+        if (!licenceCheckBox.isChecked()){
+            ToastUtils.showToast(LoginActivity.this, "请阅读并同意条款");
+            return;
+        }
+
         String phoneStr = phoneEditText.getText().toString();
         String imageCodeStr = imageCodeEditText.getText().toString();
         String msgCodeStr = msgCodeEditText.getText().toString();
@@ -211,7 +215,7 @@ public class LoginActivity extends BaseActivity {
                 .baseUrl(URL.BASE_URL)
                 .build();
         API api = retrofit.create(API.class);
-        Call<LoginToken> products = api.login(mobile,checkCode,"1","1", Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        Call<LoginToken> products = api.login(mobile,checkCode,"1","1", Constant.DeviceToken);
         products.enqueue(new Callback<LoginToken>() {
             @Override
             public void onResponse(Call<LoginToken> call, Response<LoginToken> response) {

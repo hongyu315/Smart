@@ -4,19 +4,32 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
-import com.google.gson.Gson;
-import com.hjq.bar.OnTitleBarListener;
-import com.hjq.bar.TitleBar;
+import android.widget.TextView;
 
 import com.djs.one.R;
 import com.djs.one.adapter.LogisticsAdapter;
+import com.djs.one.api.API;
+import com.djs.one.api.URL;
 import com.djs.one.bean.LogisticsJson;
+import com.djs.one.constant.Constant;
+import com.djs.one.manager.TokenManager;
+import com.hjq.bar.OnTitleBarListener;
+import com.hjq.bar.TitleBar;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LogisticsActivity extends BaseActivity {
 
     private TitleBar topTitleBarView;
     private RecyclerView recyclerView;
+    private TextView logisticsText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +44,7 @@ public class LogisticsActivity extends BaseActivity {
     protected void findViews() {
         super.findViews();
 
+        logisticsText = findViewById(R.id.logistics_txt);
         topTitleBarView = findViewById(R.id.logistics_topTitleBarView);
         topTitleBarView.setOnTitleBarListener(new OnTitleBarListener() {
             @Override
@@ -47,6 +61,8 @@ public class LogisticsActivity extends BaseActivity {
             }
         });
         recyclerView = findViewById(R.id.logistics_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setNestedScrollingEnabled(false);
 
     }
 
@@ -54,83 +70,52 @@ public class LogisticsActivity extends BaseActivity {
     protected void initData() {
         super.initData();
 
-        String json = "{\n" +
-                "\t\"code\": 1,\n" +
-                "\t\"message\": \"Success\",\n" +
-                "\t\"data\": {\n" +
-                "\t\t\"id\": \"1\",\n" +
-                "\t\t\"state\": \"3\",\n" +
-                "\t\t\"num\": \"71265042088396\",\n" +
-                "\t\t\"time\": \"2018-03-11 12:55:09\",\n" +
-                "\t\t\"com_name\": \"汇通\",\n" +
-                "\t\t\"list\": [{\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}, {\n" +
-                "\t\t\t\t\"time\": \"2018-03-02 08:46:40\",\n" +
-                "\t\t\t\t\"context\": \"秦皇岛市|秦皇岛市【秦皇岛市区五部】，八栋西霞超市 已签收\"\n" +
-                "\t\t\t}\n" +
-                "\n" +
-                "\t\t]\n" +
-                "\t}\n" +
-                "}";
-        LogisticsJson logisticsJson = new Gson().fromJson(json, LogisticsJson.class);
-        LogisticsAdapter logisticsAdapter = new LogisticsAdapter(LogisticsActivity.this, logisticsJson);
+        getAddress();
+    }
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setAdapter(logisticsAdapter);
+    private void getAddress(){
+        final String tradeNo = getIntent().getStringExtra("trade_no");
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<LogisticsJson> products = api.logistics(TokenManager.getInstance().getLoginToken().getData().getToken(), tradeNo);
+        products.enqueue(new Callback<LogisticsJson>() {
+            @Override
+            public void onResponse(Call<LogisticsJson> call, Response<LogisticsJson> response) {
+
+                try {
+                    LogisticsJson productBean = response.body();
+                    List<LogisticsJson.DataBean.LogisticsBean> logistics = new ArrayList<>();
+
+                    LogisticsJson.DataBean.LogisticsBean  lB = new LogisticsJson.DataBean.LogisticsBean();
+                    lB.setId(18);
+                    lB.setContext("[收货地址]" + productBean.getData().getArea() + productBean.getData().getAddress() + productBean.getData().getName());
+                    logistics.add(lB);
+                    logistics.addAll(productBean.getData().getLogistics());
+                    productBean.getData().setLogistics(logistics);
+
+                    if (Constant.SUCCESSFUL == productBean.getCode()) {
+                        logisticsText.setText(productBean.getData().getLogistic_com() + " " + productBean.getData().getWaybill_no());
+                        LogisticsAdapter logisticsAdapter = new LogisticsAdapter(LogisticsActivity.this, productBean);
+
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(LogisticsActivity.this);
+                        recyclerView.setLayoutManager(layoutManager);
+                        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                        recyclerView.setAdapter(logisticsAdapter);
+                    } else {
+//                        ToastUtils.showToast(getActivity(),response.body().getMessage());
+                    }
+                } catch (Exception e) {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LogisticsJson> call, Throwable t) {
+//                ToastUtils.showToast(getActivity(), t.getLocalizedMessage());
+            }
+        });
     }
 }

@@ -2,8 +2,9 @@ package com.djs.one.fragment;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,6 @@ import com.djs.one.api.URL;
 import com.djs.one.bean.MyOrdersBean;
 import com.djs.one.constant.Constant;
 import com.djs.one.manager.TokenManager;
-import com.djs.one.util.SysUtils;
 import com.djs.one.util.ToastUtils;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class CompletedOrderFragment extends BaseFragment implements OrderAdapter
     private SwipeToLoadLayout swipeToLoadLayout;
     private ListView listView;
     private List<MyOrdersBean.DataBean.ListBean> orders = new ArrayList<>();
-    private OrderAdapter adapter;
+    private OrderAdapter adapter = new OrderAdapter(getActivity(),orders);
     private int page = 1;
 
 
@@ -96,7 +96,11 @@ public class CompletedOrderFragment extends BaseFragment implements OrderAdapter
                 .baseUrl(URL.BASE_URL)
                 .build();
         API api = retrofit.create(API.class);
-        Call<MyOrdersBean> products = api.myOrders(TokenManager.getInstance().getLoginToken().getData().getToken(),"" + Constant.COMPLETED,"20","" + page);
+        Call<MyOrdersBean> products = api.myOrders(TokenManager.getInstance().getLoginToken().getData().getToken(),
+                "" + Constant.COMPLETED,
+                "",
+                "20",
+                "" + page);
         products.enqueue(new Callback<MyOrdersBean>() {
             @Override
             public void onResponse(Call<MyOrdersBean> call, Response<MyOrdersBean> response) {
@@ -132,21 +136,27 @@ public class CompletedOrderFragment extends BaseFragment implements OrderAdapter
 
     @Override
     public void onItemLayoutClick(View v) {
-        int position = (Integer)v.getTag();
-        Log.e(TAG, "xxxxxxxx onItemClick: " + position );
-        SysUtils.startActivity(getActivity(),OrderDetailActivity.class);
+        try {
+            int position = (Integer)v.getTag();
+            String tradeNo = orders.get(position).getTrade_no();
+            if (!TextUtils.isEmpty(tradeNo)){
+                Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+                intent.putExtra("trade_no",tradeNo);
+                getActivity().startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+            }
+        }catch (Exception e){
+        }
     }
 
     @Override
     public void onLeftBtnClick(View v) {
         int position = (Integer)v.getTag();
-        Log.e(TAG, "onLeftBtnClick: left" + position );
     }
 
     @Override
     public void onRightBtnClick(View v) {
         int position = (Integer)v.getTag();
-        Log.e(TAG, "onLeftBtnClick: right" + position );
     }
 
     @Override

@@ -6,7 +6,14 @@
     
     <TextView
         android:id="@+id/search_item_content"
-        android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/dimen_5_dp"
+        android:padding="@dimen/dimen_5_dp"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:textColor="@color/home_glod_text_unselect"
+        android:background="@drawable/bg_search_layout"
+        android:text="M 睡衣175/92A 睡裤175/80A"
+        android:layout_width="@dimen/dp_60"
         android:layout_height="wrap_content"/>
 
 </LinearLayout>

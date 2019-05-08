@@ -7,17 +7,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.List;
-
 import com.djs.one.R;
-import com.djs.one.bean.SearchContent;
+
+import java.util.List;
 
 public class SearchAdapter extends BaseAdapter {
 
-    private List<SearchContent> contentList;
+    private List<String> contentList;
     private LayoutInflater layoutInflater;
 
-    public SearchAdapter(Context context, List<SearchContent> list){
+    public SearchAdapter(Context context, List<String> list){
         this.contentList = list;
         layoutInflater = LayoutInflater.from(context);
     }
@@ -49,9 +48,9 @@ public class SearchAdapter extends BaseAdapter {
             holder = (ViewHolder)convertView.getTag();
         }
 
-        SearchContent content = contentList.get(position);
+        String content = contentList.get(position);
         if (content != null){
-            holder.textView.setText(content.getsContent());
+            holder.textView.setText(content);
         }
         return convertView;
     }

@@ -97,7 +97,9 @@ public class ShoppingCartAdapter
             viewHolder.checkBox.setChecked(goodsInfo.isChoosed());
 
             viewHolder.amountView.setGoods_storage(Integer.MAX_VALUE);
-            viewHolder.amountView.etAmount.setText(goodsInfo.getQuantity() + "");
+            int quantity = goodsInfo.getQuantity();
+            if (quantity < 1) quantity = 1;
+            viewHolder.amountView.etAmount.setText(quantity + "");
             viewHolder.amountView.setTag(position);
             viewHolder.amountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
                 @Override

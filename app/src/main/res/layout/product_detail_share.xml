@@ -10,43 +10,48 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/share_img"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_200_dp"
             android:scaleType="fitXY"
             android:src="@mipmap/art_user"/>
 
         <TextView
+            android:id="@+id/share_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_14_dp"
             android:gravity="center"
-            android:textSize="14sp"
+            android:text="上架时间:2019-2-10"
             android:textColor="@color/home_glod_text_unselect"
-            android:text="上架时间:2019-2-10"/>
+            android:textSize="14sp"/>
 
         <TextView
+            android:id="@+id/share_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="10sp"
             android:layout_marginTop="@dimen/dimen_2_dp"
+            android:gravity="center"
+            android:text="上架时间:2019-2-10"
             android:textColor="#7a7a7b"
-            android:text="上架时间:2019-2-10"/>
+            android:textSize="10sp"/>
 
         <TextView
+            android:id="@+id/share_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dimen_5_dp"
-            android:textSize="14sp"
-            android:textColor="@color/home_glod_text_select"
             android:gravity="center"
-            android:text="上架时间:2019-2-10"/>
+            android:text="上架时间:2019-2-10"
+            android:textColor="@color/home_glod_text_select"
+            android:textSize="14sp"/>
 
         <ImageView
             android:layout_width="@dimen/dimen_50_dp"
             android:layout_height="@dimen/dimen_50_dp"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dimen_10_dp"
+            android:visibility="gone"
             android:layout_marginBottom="@dimen/dimen_10_dp"
             android:scaleType="fitXY"
             android:src="@mipmap/art_user"/>
@@ -79,8 +84,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dimen_3_dp"
-                        android:textSize="12sp"
-                        android:text="@string/wechat"/>
+                        android:text="@string/wechat"
+                        android:textSize="12sp"/>
                 </LinearLayout>
             </RelativeLayout>
 
@@ -106,8 +111,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dimen_3_dp"
-                        android:textSize="12sp"
-                        android:text="@string/friend_group"/>
+                        android:text="@string/friend_group"
+                        android:textSize="12sp"/>
                 </LinearLayout>
             </RelativeLayout>
 

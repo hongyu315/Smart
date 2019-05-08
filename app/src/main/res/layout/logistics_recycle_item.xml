@@ -7,33 +7,32 @@
     <!--左边 时间-->
     <TextView
         android:id="@+id/tv_time"
-        android:layout_width="85dp"
+        android:layout_width="@dimen/dimen_50_dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="14dp"
+        android:layout_marginLeft="5dp"
         android:gravity="center"
         android:lines="2"
         android:text="2016-10-12 08:02:18"
         android:textColor="@color/gray"
-        android:textSize="16sp" />
+        android:textSize="12sp" />
     <!--中间 时间轴-->
     <RelativeLayout
         android:id="@+id/rl_left"
         android:layout_width="35dp"
-        android:layout_height="86dp">
+        android:layout_height="80dp">
+
+        <ImageView
+            android:id="@+id/iv_line"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:src="#dddddd" />
 
         <ImageView
             android:id="@+id/iv_status"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_centerInParent="true" />
-
-        <ImageView
-            android:id="@+id/iv_line"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_below="@id/iv_status"
-            android:layout_centerInParent="true"
-            android:src="#dddddd" />
     </RelativeLayout>
 
     <!--右边 信息-->
@@ -43,9 +42,10 @@
         android:layout_height="50dp"
         android:layout_gravity="center_vertical"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="13dp"
         android:layout_toRightOf="@id/rl_left"
         android:autoLink="email|phone|web"
+        android:textColorLink="@color/home_glod_text_select"
         android:text="正在派送途中,请您准备签收(派件人:张小建,电话:18513394441)"
         android:textColor="@color/gray" />
 

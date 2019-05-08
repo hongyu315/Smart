@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tl="http://schemas.android.com/apk/res-auto"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="@color/ghostwhite"
+              android:clipToPadding="true"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dimen_20_dp"
+        android:background="@color/white"
+        android:paddingBottom="@dimen/dimen_20_dp"
+        android:paddingRight="@dimen/dimen_20_dp"
+        android:paddingLeft="@dimen/dimen_10_dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/back_icon"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="@dimen/dimen_5_dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/back"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dimen_20_dp"
+            android:layout_toLeftOf="@+id/search_cancal"
+            android:layout_toRightOf="@+id/back_icon"
+            android:background="@color/grey_200"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/search_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/dimen_5_dp"
+                android:src="@mipmap/search"/>
+
+            <EditText
+                android:id="@+id/search_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/search_icon"
+                android:background="@null"
+                android:textSize="12sp"
+                android:singleLine="true"
+                android:hint="输入关键词进行搜索"
+                android:textCursorDrawable="@null"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:background="#FAFAFA"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_45_dp"
+        android:orientation="vertical">
+
+        <include layout="@layout/gray_line_view"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_46_dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <RelativeLayout
+                android:id="@+id/home_on_store_text_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/home_on_store_time_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textSize="@dimen/dimen_13_dp"
+                    android:tag="true"
+                    android:textColor="@color/home_glod_text_select"
+                    android:text="上架时间"/>
+                <ImageView
+                    android:id="@+id/home_on_store_time_arrow_up"
+                    android:layout_toRightOf="@+id/home_on_store_time_text"
+                    android:src="@mipmap/home_arrow_unselect_up"
+                    android:layout_alignTop="@+id/home_on_store_time_text"
+                    android:layout_marginTop="@dimen/dimen_5_dp"
+                    android:layout_marginLeft="@dimen/dimen_5_dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:id="@+id/home_on_store_time_arrow_down"
+                    android:layout_toRightOf="@+id/home_on_store_time_text"
+                    android:src="@mipmap/home_arrow_selected_down"
+                    android:layout_alignBottom="@+id/home_on_store_time_text"
+                    android:layout_marginBottom="@dimen/dimen_5_dp"
+                    android:layout_marginLeft="@dimen/dimen_5_dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_marginTop="@dimen/dimen_10_dp"
+                android:layout_marginBottom="@dimen/dimen_10_dp"
+                android:background="@color/line"
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"/>
+
+            <RelativeLayout
+                android:id="@+id/home_on_store_price_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/home_on_store_price_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textSize="@dimen/dimen_13_dp"
+                    android:tag="false"
+                    android:text="产品价格"/>
+
+                <ImageView
+                    android:id="@+id/home_on_store_price_arrow_up"
+                    android:layout_toRightOf="@+id/home_on_store_price_text"
+                    android:src="@mipmap/home_arrow_unselect_up"
+                    android:layout_alignTop="@+id/home_on_store_price_text"
+                    android:layout_marginTop="@dimen/dimen_5_dp"
+                    android:layout_marginLeft="@dimen/dimen_5_dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:id="@+id/home_on_store_price_arrow_down"
+                    android:layout_toRightOf="@+id/home_on_store_price_text"
+                    android:src="@mipmap/home_arrow_unselect_down"
+                    android:layout_alignBottom="@+id/home_on_store_price_text"
+                    android:layout_marginBottom="@dimen/dimen_5_dp"
+                    android:layout_marginLeft="@dimen/dimen_5_dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <include layout="@layout/gray_line_view"/>
+    </LinearLayout>
+
+    <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+        android:id="@+id/swipeToLoadLayout"
+        android:background="@color/grey_200"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <include
+            android:id="@id/swipe_refresh_header"
+            layout="@layout/layout_weibo_header"/>
+
+        <GridView
+            android:id="@id/swipe_target"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:horizontalSpacing="@dimen/dimen_10_dp"
+            android:numColumns="2"
+            android:padding="@dimen/dimen_10_dp"
+            android:orientation="vertical"
+            android:scrollbars="none"/>
+
+        <include
+            android:id="@id/swipe_load_more_footer"
+            layout="@layout/layout_weibo_header"/>
+    </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
+
+
+</LinearLayout>

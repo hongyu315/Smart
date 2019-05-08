@@ -4,6 +4,7 @@ package com.djs.one.fragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,10 +22,10 @@ import com.djs.one.adapter.OrderAdapter;
 import com.djs.one.api.API;
 import com.djs.one.api.URL;
 import com.djs.one.bean.MyOrdersBean;
+import com.djs.one.bean.SuccessfulMode;
 import com.djs.one.constant.Constant;
 import com.djs.one.manager.TokenManager;
 import com.djs.one.util.SysUtils;
-import com.djs.one.util.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class Wait4TakeDeliveryFragment extends BaseFragment implements OrderAdap
     private SwipeToLoadLayout swipeToLoadLayout;
     private ListView listView;
     private List<MyOrdersBean.DataBean.ListBean> orders = new ArrayList<>();
-    private OrderAdapter adapter;
+    private OrderAdapter adapter = new OrderAdapter(getActivity(),orders);
     private int page = 1;
 
 
@@ -50,7 +51,7 @@ public class Wait4TakeDeliveryFragment extends BaseFragment implements OrderAdap
         // Required empty public constructor
     }
 
-    public static Wait4TakeDeliveryFragment getInstance(){
+    public static Wait4TakeDeliveryFragment getInstance() {
         return new Wait4TakeDeliveryFragment();
     }
 
@@ -77,7 +78,7 @@ public class Wait4TakeDeliveryFragment extends BaseFragment implements OrderAdap
         swipeToLoadLayout = paramView.findViewById(R.id.swipeToLoadLayout);
         listView = paramView.findViewById(R.id.swipe_target);
 
-        adapter = new OrderAdapter(getActivity(),orders);
+        adapter = new OrderAdapter(getActivity(), orders);
         adapter.setOnOrderItemBtnClickListener(this);
         swipeToLoadLayout.setOnRefreshListener(this);
         swipeToLoadLayout.setOnLoadMoreListener(this);
@@ -90,13 +91,17 @@ public class Wait4TakeDeliveryFragment extends BaseFragment implements OrderAdap
         getOrders();
     }
 
-    private void getOrders(){
+    private void getOrders() {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(URL.BASE_URL)
                 .build();
         API api = retrofit.create(API.class);
-        Call<MyOrdersBean> products = api.myOrders(TokenManager.getInstance().getLoginToken().getData().getToken(),"" + Constant.WAIT4TAKEDELIVER,"20","" + page);
+        Call<MyOrdersBean> products = api.myOrders(TokenManager.getInstance().getLoginToken().getData().getToken(),
+                "" + Constant.WAIT4TAKEDELIVER,
+                "",
+                "20",
+                "" + page);
         products.enqueue(new Callback<MyOrdersBean>() {
             @Override
             public void onResponse(Call<MyOrdersBean> call, Response<MyOrdersBean> response) {
@@ -106,16 +111,16 @@ public class Wait4TakeDeliveryFragment extends BaseFragment implements OrderAdap
                     if (swipeToLoadLayout.isLoadingMore()) swipeToLoadLayout.setLoadingMore(false);
 
                     MyOrdersBean productBean = response.body();
-                    if (Constant.SUCCESSFUL == productBean.getCode()){
+                    if (Constant.SUCCESSFUL == productBean.getCode()) {
                         if (productBean.getData() == null) return;
                         if (productBean.getData().getList() == null) return;
-                        if (productBean.getData().getList().size() > 0){
+                        if (productBean.getData().getList().size() > 0) {
                             orders.clear();
                             orders.addAll(productBean.getData().getList());
                             adapter.notifyDataSetChanged();
                         }
-                    }else {
-                        ToastUtils.showToast(getActivity(),response.body().getMessage());
+                    } else {
+//                        ToastUtils.showToast(getActivity(),response.body().getMessage());
                     }
                 } catch (Exception e) {
                 }
@@ -125,39 +130,80 @@ public class Wait4TakeDeliveryFragment extends BaseFragment implements OrderAdap
             public void onFailure(Call<MyOrdersBean> call, Throwable t) {
                 if (swipeToLoadLayout.isRefreshing()) swipeToLoadLayout.setRefreshing(false);
                 if (swipeToLoadLayout.isLoadingMore()) swipeToLoadLayout.setLoadingMore(false);
-                ToastUtils.showToast(getActivity(), t.getLocalizedMessage());
+//                ToastUtils.showToast(getActivity(), t.getLocalizedMessage());
             }
         });
     }
 
     @Override
     public void onItemLayoutClick(View v) {
-        int position = (Integer)v.getTag();
-        Log.e(TAG, "xxxxxxxx onItemClick: " + position );
-        SysUtils.startActivity(getActivity(),OrderDetailActivity.class);
+        try {
+            int position = (Integer) v.getTag();
+            Log.e(TAG, "xxxxxxxx onItemClick: " + position);
+            String tradeNo = orders.get(position).getTrade_no();
+            if (!TextUtils.isEmpty(tradeNo)) {
+                Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
+                intent.putExtra("trade_no", tradeNo);
+                getActivity().startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+            }
+        } catch (Exception e) {
+        }
     }
 
     @Override
     public void onLeftBtnClick(View v) {
-        int position = (Integer)v.getTag();
-        Log.e(TAG, "onLeftBtnClick: left" + position );
-
-        Intent intent = new Intent(getActivity(),LogisticsActivity.class);
-//        intent.putExtra()
-        getActivity().startActivity(intent);
+        int position = (Integer) v.getTag();
+        try {
+            Log.e(TAG, "onLeftBtnClick: left" + position);
+            String tradeNo = orders.get(position).getTrade_no();
+            if (!TextUtils.isEmpty(tradeNo)) {
+                Intent intent = new Intent(getActivity(), LogisticsActivity.class);
+                intent.putExtra("trade_no", tradeNo);
+                getActivity().startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+            }
+        } catch (Exception e) {
+        }
     }
 
     @Override
     public void onRightBtnClick(View v) {
-        int position = (Integer)v.getTag();
-        SysUtils.startActivity(getActivity(),OrderDetailActivity.class);
-        Log.e(TAG, "onLeftBtnClick: right" + position );
+        final int position = (Integer) v.getTag();
+        String tradeNo = orders.get(position).getTrade_no();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<SuccessfulMode> products = api.receive(TokenManager.getInstance().getLoginToken().getData().getToken(), tradeNo);
+        products.enqueue(new Callback<SuccessfulMode>() {
+            @Override
+            public void onResponse(Call<SuccessfulMode> call, Response<SuccessfulMode> response) {
+
+                try {
+                    SuccessfulMode productBean = response.body();
+                    if (Constant.SUCCESSFUL == productBean.getCode()) {
+                        orders.remove(position);
+                        adapter.notifyDataSetChanged();
+                    } else {
+//                        ToastUtils.showToast(getActivity(),response.body().getMessage());
+                    }
+                } catch (Exception e) {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SuccessfulMode> call, Throwable t) {
+            }
+        });
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.e(TAG, "onItemClick: " + position );
-        SysUtils.startActivity(getActivity(),OrderDetailActivity.class);
+        Log.e(TAG, "onItemClick: " + position);
+        SysUtils.startActivity(getActivity(), OrderDetailActivity.class);
     }
 
     @Override

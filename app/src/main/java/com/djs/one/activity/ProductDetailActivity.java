@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.danikula.videocache.HttpProxyCacheServer;
@@ -39,6 +40,16 @@ import com.djs.one.util.ToastUtils;
 import com.djs.one.view.AmountView;
 import com.djs.one.view.Banner;
 import com.jaeger.library.StatusBarUtil;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXTextObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.umeng.commonsdk.UMConfigure;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +78,9 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     TextView titleTV, priceTV,brandStoryTV,detailCompositionTV;
     WebView contentWV;
 
+    private IWXAPI api;
+    private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
+
 
     /**
      * @param savedInstanceState
@@ -76,6 +90,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
         StatusBarUtil.setTranslucent(ProductDetailActivity.this,100);
+
+        api = WXAPIFactory.createWXAPI(this, Constant.APP_ID, false);//
 
         findViews();
         initData();
@@ -228,17 +244,25 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         }
     }
 
+    /**
+     * 分享按钮点击
+     * @param view
+     */
     public void onShareBtnClick(View view){
 
         Dialog dialog = new Dialog(ProductDetailActivity.this,R.style.MyDialog);
         Window dialogWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         lp.width = (int) (SysUtils.getScreenWidth(this) * 0.7);
-        lp.height = (int) (SysUtils.getScreenHeight(this) * 0.63);
+        lp.height = (int) (SysUtils.getScreenHeight(this) * 0.55);//0.63);
         dialogWindow.setAttributes(lp);
         dialog.setContentView(R.layout.product_detail_share);
         dialogWindow.findViewById(R.id.wechat_layout).setOnClickListener(this);
         dialogWindow.findViewById(R.id.friend_group_layout).setOnClickListener(this);
+        Glide.with(ProductDetailActivity.this).load(mProductDetail.getThumb_url()).into((ImageView)dialogWindow.findViewById(R.id.share_img));
+        ((TextView)dialogWindow.findViewById(R.id.share_name)).setText(mProductDetail.getTitle() + "");
+        ((TextView)dialogWindow.findViewById(R.id.share_time)).setText("上架时间" + SysUtils.stampToDate(mProductDetail.getOn_sale_time()+""));
+        ((TextView)dialogWindow.findViewById(R.id.share_price)).setText("￥" + mProductDetail.getMarket_price());
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
 
@@ -475,18 +499,85 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
             @Override
             public void onFailure(Call<AddToShoppingCarBean> call, Throwable t) {
-                ToastUtils.showToast(ProductDetailActivity.this, t.getLocalizedMessage());
+//                ToastUtils.showToast(ProductDetailActivity.this, "加入购物车失败");
             }
         });
     }
 
     public void onWechatBtnClick(){
+
         Log.e("xxxxxxx","onWechatBtnClick click");
+        WXTextObject textObj = new WXTextObject();
+        textObj.text = "text";
+
+        //用 WXTextObject 对象初始化一个 WXMediaMessage 对象
+        WXMediaMessage msg = new WXMediaMessage();
+        msg.mediaObject = textObj;
+        msg.description = "text";
+
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = buildTransaction("text");
+        req.message = msg;
+        req.scene = mTargetScene;
+//调用api接口，发送数据到微信
+        api.sendReq(req);
+    }
+
+    private String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
 
     public void onFriendGroupBtnClick(){
         Log.e("xxxxxxx","onFriendGroupBtnClick click");
+        UMConfigure.init(ProductDetailActivity.this,"5c8ef97261f564f490000a1c"
+                ,"umeng",UMConfigure.DEVICE_TYPE_PHONE,"70d6885b210ad186c508eee7fa687019");
+        PlatformConfig.setWeixin(Constant.APP_ID, "3baf1193c85774b3fd9d18447d76cab0");
+        new ShareAction(ProductDetailActivity.this)
+                .setPlatform(SHARE_MEDIA.WEIXIN)//传入平台
+                .withText("hello")//分享内容
+                .setCallback(shareListener)//回调监听器
+                .share();
     }
+
+    private UMShareListener shareListener = new UMShareListener() {
+        /**
+         * @descrption 分享开始的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+            Toast.makeText(ProductDetailActivity.this,"onStart",Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享成功的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            Toast.makeText(ProductDetailActivity.this,"成功了",Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享失败的回调
+         * @param platform 平台类型
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(ProductDetailActivity.this,"失 败"+t.getMessage(),Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享取消的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(ProductDetailActivity.this,"取消 了",Toast.LENGTH_LONG).show();
+
+        }
+    };
 
     @Override
     protected void onDestroy() {

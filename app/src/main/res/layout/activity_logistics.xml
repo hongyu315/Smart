@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/grey_200"
     tools:context=".activity.LogisticsActivity">
 
     <com.hjq.bar.TitleBar
@@ -18,10 +19,15 @@
     <LinearLayout
         android:background="@color/home_glod_text_select"
         android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/dimen_15_dp"
+        android:layout_marginTop="@dimen/dimen_10_dp"
+        android:layout_marginRight="@dimen/dimen_15_dp"
+        android:layout_marginBottom="@dimen/dimen_10_dp"
         android:gravity="center_vertical"
         android:layout_height="@dimen/dimen_45_dp">
 
         <TextView
+            android:id="@+id/logistics_txt"
             android:text="顺丰快递 88888382388283828382838"
             android:layout_marginLeft="@dimen/dimen_40_dp"
             android:layout_width="match_parent"
@@ -29,9 +35,31 @@
             android:layout_height="wrap_content"/>
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/logistics_recycler_view"
+    <ScrollView
+        android:layout_marginLeft="@dimen/dimen_15_dp"
+        android:layout_marginRight="@dimen/dimen_15_dp"
+        android:scrollbars="none"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:background="@color/white"
+                android:id="@+id/logistics_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/dimen_20_dp"
+                android:src="@mipmap/end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

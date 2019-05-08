@@ -10,10 +10,11 @@ import java.util.List;
  * <p>版本号：1<p>
  */
 public class MyOrdersBean {
+
     /**
      * code : 1000
      * message : success
-     * data : {"list":[{"trade_no":"201904141831525854","created_at":{"date":"2019-04-14 18:31:52.000000","timezone_type":3,"timezone":"Asia/Shanghai"},"status":0,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":6,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547455601528614.jpg","sku_id":45,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}}],"pagination":{"current_page":1,"last_page":1,"per_page":20,"total":1}}
+     * data : {"list":[{"trade_no":"201904180939167011","created_at":"2019-04-18 09:39:16","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":9,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702272215.jpg","sku_id":69,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904180935403112","created_at":"2019-04-18 09:35:40","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":9,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702272215.jpg","sku_id":69,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904180932504830","created_at":"2019-04-18 09:32:50","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":9,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702272215.jpg","sku_id":69,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904180931510061","created_at":"2019-04-18 09:31:51","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":9,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702272215.jpg","sku_id":69,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904180923110233","created_at":"2019-04-18 09:23:11","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":6,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547455601528614.jpg","sku_id":45,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904180920341331","created_at":"2019-04-18 09:20:34","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":6,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547455601528614.jpg","sku_id":45,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904180916520890","created_at":"2019-04-18 09:16:52","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":8,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702814719.jpg","sku_id":61,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904180900380295","created_at":"2019-04-18 09:00:38","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":8,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702814719.jpg","sku_id":61,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904172315357657","created_at":"2019-04-17 23:15:35","status":0,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":8,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702814719.jpg","sku_id":61,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904172300026200","created_at":"2019-04-17 23:00:02","status":0,"pay_amount":1920,"total_item":1,"expire_time":0,"item_info":{"item_id":8,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702814719.jpg","sku_id":61,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904172258010164","created_at":"2019-04-17 22:58:01","status":0,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":9,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702272215.jpg","sku_id":69,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904172251370556","created_at":"2019-04-17 22:51:37","status":0,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":9,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702272215.jpg","sku_id":69,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904172245131373","created_at":"2019-04-17 22:45:13","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":7,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547455240700820.jpg","sku_id":53,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904172209314343","created_at":"2019-04-17 22:09:31","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":2,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702272215.jpg","sku_id":13,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904141831525854","created_at":"2019-04-14 18:31:52","status":0,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":6,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547455601528614.jpg","sku_id":45,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}}],"pagination":{"current_page":1,"last_page":1,"per_page":"20","total":15}}
      */
 
     private int code;
@@ -46,8 +47,8 @@ public class MyOrdersBean {
 
     public static class DataBean {
         /**
-         * list : [{"trade_no":"201904141831525854","created_at":{"date":"2019-04-14 18:31:52.000000","timezone_type":3,"timezone":"Asia/Shanghai"},"status":0,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":6,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547455601528614.jpg","sku_id":45,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}}]
-         * pagination : {"current_page":1,"last_page":1,"per_page":20,"total":1}
+         * list : [{"trade_no":"201904180939167011","created_at":"2019-04-18 09:39:16","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":9,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702272215.jpg","sku_id":69,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904180935403112","created_at":"2019-04-18 09:35:40","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":9,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702272215.jpg","sku_id":69,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904180932504830","created_at":"2019-04-18 09:32:50","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":9,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702272215.jpg","sku_id":69,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904180931510061","created_at":"2019-04-18 09:31:51","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":9,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702272215.jpg","sku_id":69,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904180923110233","created_at":"2019-04-18 09:23:11","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":6,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547455601528614.jpg","sku_id":45,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904180920341331","created_at":"2019-04-18 09:20:34","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":6,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547455601528614.jpg","sku_id":45,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904180916520890","created_at":"2019-04-18 09:16:52","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":8,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702814719.jpg","sku_id":61,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904180900380295","created_at":"2019-04-18 09:00:38","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":8,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702814719.jpg","sku_id":61,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904172315357657","created_at":"2019-04-17 23:15:35","status":0,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":8,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702814719.jpg","sku_id":61,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904172300026200","created_at":"2019-04-17 23:00:02","status":0,"pay_amount":1920,"total_item":1,"expire_time":0,"item_info":{"item_id":8,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702814719.jpg","sku_id":61,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904172258010164","created_at":"2019-04-17 22:58:01","status":0,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":9,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702272215.jpg","sku_id":69,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904172251370556","created_at":"2019-04-17 22:51:37","status":0,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":9,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702272215.jpg","sku_id":69,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904172245131373","created_at":"2019-04-17 22:45:13","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":7,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547455240700820.jpg","sku_id":53,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904172209314343","created_at":"2019-04-17 22:09:31","status":1,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":2,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702272215.jpg","sku_id":13,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}},{"trade_no":"201904141831525854","created_at":"2019-04-14 18:31:52","status":0,"pay_amount":960,"total_item":1,"expire_time":0,"item_info":{"item_id":6,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547455601528614.jpg","sku_id":45,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}}]
+         * pagination : {"current_page":1,"last_page":1,"per_page":"20","total":15}
          */
 
         private PaginationBean pagination;
@@ -74,12 +75,12 @@ public class MyOrdersBean {
              * current_page : 1
              * last_page : 1
              * per_page : 20
-             * total : 1
+             * total : 15
              */
 
             private int current_page;
             private int last_page;
-            private int per_page;
+            private String per_page;
             private int total;
 
             public int getCurrent_page() {
@@ -98,11 +99,11 @@ public class MyOrdersBean {
                 this.last_page = last_page;
             }
 
-            public int getPer_page() {
+            public String getPer_page() {
                 return per_page;
             }
 
-            public void setPer_page(int per_page) {
+            public void setPer_page(String per_page) {
                 this.per_page = per_page;
             }
 
@@ -117,17 +118,17 @@ public class MyOrdersBean {
 
         public static class ListBean {
             /**
-             * trade_no : 201904141831525854
-             * created_at : {"date":"2019-04-14 18:31:52.000000","timezone_type":3,"timezone":"Asia/Shanghai"}
-             * status : 0
+             * trade_no : 201904180939167011
+             * created_at : 2019-04-18 09:39:16
+             * status : 1
              * pay_amount : 960
              * total_item : 1
              * expire_time : 0
-             * item_info : {"item_id":6,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547455601528614.jpg","sku_id":45,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}
+             * item_info : {"item_id":9,"item_title":"男士印花里布丝绒睡袍","thumb_url":"https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702272215.jpg","sku_id":69,"sku_title":"L 睡衣180/96A 睡裤180/84A 颜色蓝色","specs":[{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]}
              */
 
             private String trade_no;
-            private CreatedAtBean created_at;
+            private String created_at;
             private int status;
             private int pay_amount;
             private int total_item;
@@ -142,11 +143,11 @@ public class MyOrdersBean {
                 this.trade_no = trade_no;
             }
 
-            public CreatedAtBean getCreated_at() {
+            public String getCreated_at() {
                 return created_at;
             }
 
-            public void setCreated_at(CreatedAtBean created_at) {
+            public void setCreated_at(String created_at) {
                 this.created_at = created_at;
             }
 
@@ -190,48 +191,12 @@ public class MyOrdersBean {
                 this.item_info = item_info;
             }
 
-            public static class CreatedAtBean {
-                /**
-                 * date : 2019-04-14 18:31:52.000000
-                 * timezone_type : 3
-                 * timezone : Asia/Shanghai
-                 */
-
-                private String date;
-                private int timezone_type;
-                private String timezone;
-
-                public String getDate() {
-                    return date;
-                }
-
-                public void setDate(String date) {
-                    this.date = date;
-                }
-
-                public int getTimezone_type() {
-                    return timezone_type;
-                }
-
-                public void setTimezone_type(int timezone_type) {
-                    this.timezone_type = timezone_type;
-                }
-
-                public String getTimezone() {
-                    return timezone;
-                }
-
-                public void setTimezone(String timezone) {
-                    this.timezone = timezone;
-                }
-            }
-
             public static class ItemInfoBean {
                 /**
-                 * item_id : 6
+                 * item_id : 9
                  * item_title : 男士印花里布丝绒睡袍
-                 * thumb_url : https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547455601528614.jpg
-                 * sku_id : 45
+                 * thumb_url : https://img.tianyi41.com/static/upload/images/goods/2019/01/14/1547454702272215.jpg
+                 * sku_id : 69
                  * sku_title : L 睡衣180/96A 睡裤180/84A 颜色蓝色
                  * specs : [{"attr_id":1,"attr_name":"尺寸","weight":1,"value":"L 睡衣180/96A 睡裤180/84A"},{"attr_id":2,"attr_name":"颜色","weight":2,"value":"蓝色"}]
                  */

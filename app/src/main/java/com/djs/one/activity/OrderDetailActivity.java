@@ -2,6 +2,7 @@ package com.djs.one.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,8 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.djs.one.R;
@@ -23,13 +26,20 @@ import com.djs.one.bean.Address;
 import com.djs.one.bean.OrderDetailBean;
 import com.djs.one.bean.PayCallBackBean;
 import com.djs.one.bean.PayResult;
+import com.djs.one.bean.SuccessfulMode;
+import com.djs.one.bean.WXCallback;
 import com.djs.one.constant.Constant;
 import com.djs.one.manager.TokenManager;
 import com.djs.one.util.DensityUtil;
 import com.djs.one.util.SPUtils;
 import com.djs.one.util.ToastUtils;
+import com.djs.one.util.WXPayUtils;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
+import com.tencent.mm.opensdk.constants.ConstantsAPI;
+import com.tencent.mm.opensdk.modelbase.BaseReq;
+import com.tencent.mm.opensdk.modelbase.BaseResp;
+import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 
 import java.util.List;
 import java.util.Map;
@@ -41,7 +51,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class OrderDetailActivity extends BaseActivity implements View.OnClickListener {
+public class OrderDetailActivity extends BaseActivity implements View.OnClickListener, IWXAPIEventHandler {
 
     private TitleBar topTitleBarView;
     TextView payMethodText;
@@ -71,6 +81,13 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
 
     OrderDetailBean productBean;
     private static final int SDK_PAY_FLAG = 1;
+
+    //等待付款layout
+    RelativeLayout wait4PayLayout;
+
+    //取消订单、去支付layout
+    LinearLayout payCancelPayLayout;
+
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
@@ -117,6 +134,8 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
     protected void findViews() {
         super.findViews();
 
+        wait4PayLayout = findViewById(R.id.wait_for_pay_layout);
+        payCancelPayLayout = findViewById(R.id.pay_cancel_pay_layout);
         leftTime = findViewById(R.id.left_time);
         money = findViewById(R.id.order_detail_money);
         orderNum = findViewById(R.id.order_detail_num);
@@ -124,6 +143,8 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         phone = findViewById(R.id.order_detail_phone);
         address = findViewById(R.id.order_detail_address);
         findViewById(R.id.on_pay_method).setOnClickListener(this);
+        findViewById(R.id.cancel_order).setOnClickListener(this);
+        findViewById(R.id.more_address).setOnClickListener(this);
 
         payMethodText = (TextView) findViewById(R.id.order_detail_pay_method_txt);
         findViewById(R.id.order_detail_pay_method).setOnClickListener(this);
@@ -206,10 +227,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                 try {
                     productBean = response.body();
                     if (Constant.SUCCESSFUL == productBean.getCode()){
-                        if (productBean.getData().getStatus() == 0){
-                            getAddressList();//如果没有支付，需要去拉取收货地址列表
-                        }
-                        setDetailData();
+                        handleOrderRequestResult();
                     }else {
                     }
                 } catch (Exception e) {
@@ -223,10 +241,37 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
+    private void handleOrderRequestResult(){
+        //订单状态（-1 无效  0 待确认, 1已确认/待支付, 2已支付/待发货, 3已发货/待收货, 4已完成, 5已取消, 6已关闭）
+        if (productBean.getData().getStatus() == 1 || productBean.getData().getStatus() == 0){
+            getAddressList();//如果没有支付，需要去拉取收货地址列表
+        }
+        setDetailData();
+    }
+
     private void setDetailData(){
         OrderDetailBean.DataBean data = productBean.getData();
-        leftTime.setText("剩余时间:" + data.getExpire_time());
-        money.setText("需付款:" + data.getPay_amount());
+        //订单状态（-1 无效  0 待确认, 1已确认/待支付, 2已支付/待发货, 3已发货/待收货, 4已完成, 5已取消, 6已关闭）
+        switch (data.getStatus()){
+            case -1:
+                break;
+            case 0:
+            case 1:
+                leftTime.setText("剩余时间:" + data.getExpire_time());
+                money.setText("需付款:" + data.getPay_amount());
+                break;
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+                wait4PayLayout.setVisibility(View.GONE);
+                payCancelPayLayout.setVisibility(View.GONE);
+                break;
+            default:
+                break;
+        }
+
         orderNum.setText("订单编号:" + data.getTrade_no());
 
     }
@@ -349,6 +394,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
     private void handleResult(){
         if (selectedPosition == 0){
             payMethodText.setText("微信");
+            onWeixinPayClick();
         }else {
             payMethodText.setText("支付宝");
             onAliPayClick();
@@ -357,7 +403,41 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void onWeixinPayClick(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<WXCallback> products = api.wxpay(TokenManager.getInstance().getLoginToken().getData().getToken(),addressId,trade_no,"2");
+        products.enqueue(new Callback<WXCallback>() {
+            @Override
+            public void onResponse(Call<WXCallback> call, Response<WXCallback> response) {
 
+                try {
+                    WXCallback productBean = response.body();
+                    WXCallback.DataBean.PayBean payBean = productBean.getData().getPay();
+                    if (Constant.SUCCESSFUL == productBean.getCode()){
+                        WXPayUtils.WXPayBuilder builder = new WXPayUtils.WXPayBuilder();
+                        builder.setAppId(payBean.getAppid() + "")
+                                .setPartnerId(payBean.getPartnerid() + "")
+                                .setPrepayId(payBean.getPrepayid() + "")
+                                .setPackageValue(payBean.getPackageX() + "")
+                                .setNonceStr(payBean.getNoncestr() + "")
+                                .setTimeStamp(payBean.getTimestamp() + "")
+                                .setSign(payBean.getSign() + "")
+                                .build().toWXPayNotSign(OrderDetailActivity.this);
+                    }else {
+                        ToastUtils.showToast(OrderDetailActivity.this, "支付失败");
+                    }
+                } catch (Exception e) {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WXCallback> call, Throwable t) {
+                ToastUtils.showToast(OrderDetailActivity.this, "支付失败");
+            }
+        });
     }
 
     private void onAliPayClick(){
@@ -383,7 +463,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onFailure(Call<PayCallBackBean> call, Throwable t) {
-                ToastUtils.showToast(OrderDetailActivity.this, t.getLocalizedMessage());
+                ToastUtils.showToast(OrderDetailActivity.this, "支付失败");
             }
         });
     }
@@ -418,11 +498,73 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         payThread.start();
     }
 
+        @Override
+    public void onReq(BaseReq baseReq) {
+        Log.e("onReq", "onReq, errCode = " + baseReq.toString());
+    }
+
+    @Override
+    public void onResp(BaseResp baseResp) {
+        Log.e("onReq", "onPayFinish, errCode = " + baseResp.errCode);
+
+        if (baseResp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
+            int errCord = baseResp.errCode;
+            if (errCord == 0) {
+                Toast.makeText(OrderDetailActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+                onBackPressed();
+            } else {
+                Toast.makeText(OrderDetailActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
+            }
+            //这里接收到了返回的状态码可以进行相应的操作，如果不想在这个页面操作可以把状态码存在本地然后finish掉这个页面，这样就回到了你调起支付的那个页面
+            //获取到你刚刚存到本地的状态码进行相应的操作就可以了
+        }
+    }
+
+    private void onCancelOrderClick(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<SuccessfulMode> products = api.cancelOrder(TokenManager.getInstance().getLoginToken().getData().getToken(),trade_no);
+        products.enqueue(new Callback<SuccessfulMode>() {
+            @Override
+            public void onResponse(Call<SuccessfulMode> call, Response<SuccessfulMode> response) {
+
+                try {
+                    SuccessfulMode productBean = response.body();
+                    if (Constant.SUCCESSFUL == productBean.getCode()){
+                        ToastUtils.showToast(OrderDetailActivity.this, productBean.getMessage());
+                    }else {
+                    }
+                } catch (Exception e) {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SuccessfulMode> call, Throwable t) {
+                ToastUtils.showToast(OrderDetailActivity.this, t.getLocalizedMessage());
+            }
+        });
+    }
+
+    private void onMoreAddressClick(){
+        Intent intent = new Intent(OrderDetailActivity.this, AddressManagerActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.on_pay_method:
                 onPayMethodClick();
+                break;
+            case R.id.cancel_order:
+                onCancelOrderClick();
+                break;
+            case R.id.more_address:
+                onMoreAddressClick();
                 break;
             default:
                 break;

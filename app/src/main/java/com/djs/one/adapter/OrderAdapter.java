@@ -15,17 +15,19 @@ import com.djs.one.R;
 import com.djs.one.bean.MyOrdersBean;
 import com.djs.one.constant.Constant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderAdapter extends BaseAdapter implements View.OnClickListener {
 
     private LayoutInflater mInflater;
     private Context mContext;
-    private List<MyOrdersBean.DataBean.ListBean> orderList;
-    private MyOrdersBean.DataBean.ListBean order;
+    private List<MyOrdersBean.DataBean.ListBean> orderList = new ArrayList<>();
+    private MyOrdersBean.DataBean.ListBean order = new MyOrdersBean.DataBean.ListBean();
     private onOrderItemBtnClickListener mListener;
 
     public OrderAdapter(Context context, List<MyOrdersBean.DataBean.ListBean> orders){
+        if (context == null) return;
         mInflater = LayoutInflater.from(context);
         mContext = context;
         orderList = orders;
@@ -43,7 +45,7 @@ public class OrderAdapter extends BaseAdapter implements View.OnClickListener {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
@@ -76,10 +78,12 @@ public class OrderAdapter extends BaseAdapter implements View.OnClickListener {
         }
 
         order = orderList.get(position);
-        viewHolder.orderTime.setText(order.getCreated_at().getDate());
+        viewHolder.orderTime.setText(order.getCreated_at());
         viewHolder.orderStatus.setText(getStatusString(order.getStatus()));
 
-        if (order.getStatus() == Constant.WAIT4PAY) viewHolder.orderStatus.setTextColor(mContext.getResources().getColor(R.color.red));
+        if (order.getStatus() == Constant.WAIT4PAY || order.getStatus() == 0){
+            viewHolder.orderStatus.setTextColor(mContext.getResources().getColor(R.color.red));
+        }
 
         Glide.with(mContext).load(order.getItem_info().getThumb_url()).into(viewHolder.productIcon);
         viewHolder.productName.setText(order.getItem_info().getItem_title());
@@ -95,6 +99,7 @@ public class OrderAdapter extends BaseAdapter implements View.OnClickListener {
                 viewHolder.leftBtn.setVisibility(View.GONE);
                 viewHolder.rightBtn.setText("查看详情");
                 break;
+            case 0:
             case Constant.WAIT4PAY:
                 viewHolder.leftBtn.setVisibility(View.GONE);
                 viewHolder.rightBtn.setText("去支付");
@@ -104,6 +109,7 @@ public class OrderAdapter extends BaseAdapter implements View.OnClickListener {
                 viewHolder.rightBtn.setText("查看详情");
                 break;
             case Constant.WAIT4TAKEDELIVER:
+                viewHolder.leftBtn.setVisibility(View.VISIBLE);
                 viewHolder.leftBtn.setText("查看物流");
                 viewHolder.rightBtn.setText("确认收货");
                 break;

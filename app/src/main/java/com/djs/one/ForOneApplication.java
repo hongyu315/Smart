@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.danikula.videocache.HttpProxyCacheServer;
+import com.djs.one.constant.Constant;
 import com.djs.one.util.MyFileNameGenerator;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
@@ -44,12 +45,14 @@ public class ForOneApplication extends Application {
 
 //获取消息推送代理示例
         PushAgent mPushAgent = PushAgent.getInstance(this);
+        UMConfigure.setLogEnabled(true);
 //注册推送服务，每次调用register方法都会回调该接口
         mPushAgent.register(new IUmengRegisterCallback() {
 
             @Override
             public void onSuccess(String deviceToken) {
                 //注册成功会返回deviceToken deviceToken是推送消息的唯一标志
+                Constant.DeviceToken = deviceToken;
                 Log.i("xxx","注册成功：deviceToken：-------->  " + deviceToken);
             }
 
@@ -118,12 +121,18 @@ public class ForOneApplication extends Application {
 //                                .setAutoCancel(true);
 //
 //                        return builder.getNotification();
-                        Intent intent = new Intent();
+//                        Intent intent = new Intent();//context.getPackageManager().getLaunchIntentForPackage("com.djs.one.MainActivity");
+
+                        Intent intent = new Intent(Intent.ACTION_MAIN);
+                        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                        intent.setClassName("com.djs.one", "com.djs.one.MainActivity");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+
                         int id = (int)System.currentTimeMillis() / 10000;
 
                         PendingIntent clickIntent = PendingIntent.getBroadcast(context, id,intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                        createNotification(msg.title,msg.text,context,clickIntent,id);
+//                        createNotification(msg.title,msg.text,context,clickIntent,id);
                     default:
                         //默认为0，若填写的builder_id并不存在，也使用默认。
                         return super.getNotification(context, msg);

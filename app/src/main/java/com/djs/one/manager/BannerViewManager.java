@@ -12,11 +12,10 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
-
-import java.io.IOException;
-
 import com.djs.one.R;
 import com.djs.one.view.MVideoView;
+
+import java.io.IOException;
 
 /**
  * <p>文件描述：<p>
@@ -47,7 +46,7 @@ public class BannerViewManager {
         viewPoint.setBackgroundResource(getDotDrawableRescource());
         // value.complexToDimensionPixelOffset(data, metrics)
         // 把像素转换为点
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(10, 10);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(20, 10);
         params.leftMargin = 10;
         viewPoint.setLayoutParams(params);
         return viewPoint;
@@ -82,13 +81,16 @@ public class BannerViewManager {
     }
 
     public View createPlayIcon(Context context){
-        TextView icon = new TextView(context);
-        icon.setText("icon");
+        ImageView icon = new ImageView(context);
+        icon.setImageResource(R.mipmap.play_icon);
+//        icon.setText("");
         return icon;
     }
 
     public View createDurationText(Context context, String videoUrl){
         TextView duration = new TextView(context);
+        duration.setTextSize(7);
+        duration.setTextColor(context.getResources().getColor(R.color.white));
         MediaPlayer mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setDataSource(videoUrl);
@@ -99,12 +101,14 @@ public class BannerViewManager {
         int md = mediaPlayer.getDuration() / 1000;
         String mediaD = String.format("%d'%02d''",md/60, md % 60);
         duration.setText(mediaD);
+//        duration.setCompoundDrawablesWithIntrinsicBounds(null,context.getDrawable(R.mipmap.play_icon),null,null);
+//        duration.setCompoundDrawablePadding(30);
         return duration;
     }
 
     public View createVideLayout(Context context, String videoUrl){
-        LinearLayout videoLayout = new LinearLayout(context);
-        videoLayout.setOrientation(LinearLayout.VERTICAL);
+        RelativeLayout videoLayout = new RelativeLayout(context);
+//        videoLayout.setOrientation(LinearLayout.VERTICAL);
         RelativeLayout.LayoutParams videoParams = new RelativeLayout.LayoutParams(120, 120);
         videoParams.rightMargin = 100;
         videoParams.bottomMargin = 50;
@@ -113,7 +117,15 @@ public class BannerViewManager {
         videoLayout.setLayoutParams(videoParams);
 
         videoLayout.addView(createPlayIcon(context));
-        videoLayout.addView(createDurationText(context,videoUrl));
+
+        View durView = createDurationText(context,videoUrl);
+
+        RelativeLayout.LayoutParams videoParams1 = new RelativeLayout.LayoutParams(80, 48);
+        videoParams1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        videoParams1.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        durView.setLayoutParams(videoParams1);
+
+        videoLayout.addView(durView);
         return videoLayout;
     }
 }

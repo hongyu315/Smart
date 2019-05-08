@@ -16,10 +16,6 @@ import android.widget.TextView;
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.djs.one.R;
 import com.djs.one.activity.ProductDetailActivity;
 import com.djs.one.activity.SearchActivity;
@@ -29,13 +25,17 @@ import com.djs.one.api.URL;
 import com.djs.one.bean.Product;
 import com.djs.one.bean.ProductBean;
 import com.djs.one.constant.Constant;
-import com.djs.one.util.SysUtils;
-import com.djs.one.util.ToastUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.djs.one.constant.Constant.From_Product;
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener, OnRefreshListener, OnLoadMoreListener, AdapterView.OnItemClickListener {
 
@@ -126,7 +126,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
      * 搜索按钮点击
      */
     public void onSearchLayoutClick(){
-        SysUtils.startActivity(getActivity(),SearchActivity.class);
+        Intent intent = new Intent(getActivity(), SearchActivity.class);
+        intent.putExtra("index",From_Product);
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
     }
 
     /**
@@ -178,7 +181,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 .build();
         API api = retrofit.create(API.class);
         Call<ProductBean> products = api.getProductList(Constant.PRODUCT_SIZE,
-                page + "",saleTimeSortType,priceSortType);
+                page + "",
+                saleTimeSortType,
+                priceSortType,
+                "");
         products.enqueue(new Callback<ProductBean>() {
             @Override
             public void onResponse(Call<ProductBean> call, Response<ProductBean> response) {
@@ -189,11 +195,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     ProductBean productBean = response.body();
 
                     if (Constant.SUCCESSFUL == productBean.getCode()){
-//                        if (productList != null && productList.size() > 0) productList.clear();
-                        productList.addAll(productBean.getData().getList());
-                        adapter.notifyDataSetChanged();
+                        if (productBean.getData() != null && productBean.getData().getList() != null && productBean.getData().getList().size() > 0){
+                            if (productList != null && productList.size() > 0){
+                                productList.clear();
+                            }
+                            productList.addAll(productBean.getData().getList());
+                            adapter.notifyDataSetChanged();
+                        }
                     }else {
-                        ToastUtils.showToast(getActivity(),response.body().getMessage());
+//                        ToastUtils.showToast(getActivity(),response.body().getMessage());
                     }
                 } catch (Exception e) {
                 }
@@ -204,7 +214,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             public void onFailure(Call<ProductBean> call, Throwable t) {
                 if (swipeToLoadLayout.isRefreshing()) swipeToLoadLayout.setRefreshing(false);
                 if (swipeToLoadLayout.isLoadingMore()) swipeToLoadLayout.setLoadingMore(false);
-                ToastUtils.showToast(getActivity(), t.getLocalizedMessage());
+//                ToastUtils.showToast(getActivity(), t.getLocalizedMessage());
             }
         });
     }

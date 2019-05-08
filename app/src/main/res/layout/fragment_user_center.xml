@@ -157,7 +157,7 @@
                     android:id="@+id/user_center_icon"
                     android:layout_width="@dimen/dimen_70_dp"
                     android:layout_height="@dimen/dimen_70_dp"
-                    android:src="@mipmap/user_default_icon"/>
+/>
                 <TextView
                     android:id="@+id/login_right_now"
                     android:layout_width="wrap_content"
