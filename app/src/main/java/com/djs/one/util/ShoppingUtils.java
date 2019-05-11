@@ -75,5 +75,14 @@ public class ShoppingUtils{
     }
 
 
+    public static API getApi() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        return retrofit.create(API.class);
+    }
+
+
 
 }

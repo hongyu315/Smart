@@ -7,6 +7,8 @@ import com.djs.one.bean.ImageVerifyCode;
 import com.djs.one.bean.KeywordsBean;
 import com.djs.one.bean.LoginToken;
 import com.djs.one.bean.LogisticsJson;
+import com.djs.one.bean.Message;
+import com.djs.one.bean.MessageBean;
 import com.djs.one.bean.MyOrdersBean;
 import com.djs.one.bean.OSSBean;
 import com.djs.one.bean.OrderDetailBean;
@@ -214,4 +216,11 @@ public interface API {
     //获取搜索关键字
     @GET("api/item/keywords?")
     Call<KeywordsBean> keywords();
+
+
+    //获取消息列表
+    @GET("/api/user/messages?")
+    Call<MessageBean> getMessegeList(@Header("Authorization") String authorization,
+                                     @Query("pageSize")String pageSize,
+                                     @Query("page")String page);
 }

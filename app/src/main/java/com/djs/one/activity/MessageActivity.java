@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
+import com.djs.one.bean.MessageBean;
+import com.djs.one.manager.TokenManager;
+import com.djs.one.util.ShoppingUtils;
+import com.djs.one.util.ToastUtils;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 
@@ -14,6 +18,10 @@ import com.djs.one.R;
 import com.djs.one.adapter.MessageAdapter;
 import com.djs.one.bean.Message;
 import com.djs.one.constant.Constant;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MessageActivity extends BaseActivity implements View.OnClickListener {
 
@@ -61,23 +69,20 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void initData() {
         super.initData();
+        Call<MessageBean> messageCall =  ShoppingUtils.getApi().getMessegeList(TokenManager.getInstance().getLoginToken().getData().getToken(),
+                "200","1");
+        messageCall.enqueue(new Callback<MessageBean>() {
+            @Override
+            public void onResponse(Call<MessageBean> call, Response<MessageBean> response) {
+                MessageBean  messageBean = response.body();
+                messages = messageBean.getData().getData();
+            }
 
-        for (int i = 0; i < 5; i++) {
-            String url = "http://pic.downcc.com/upload/2018-3/2018316144426875970.jpg";
-            String status = "已签收";
-            String name = "商品名字" + i;
-            String time = "2019-01-07";
-            String num = "10099939909999999";
-            Message msg = new Message();
-            msg.iconUrl = url;
-            msg.orderStatus = status;
-            msg.orderName = name;
-            msg.orderTime = time;
-            msg.orderNum = num;
-            msg.setType(Constant.MESSAGE);
-            messages.add(msg);
-        }
-
+            @Override
+            public void onFailure(Call<MessageBean> call, Throwable t) {
+                ToastUtils.showToast(MessageActivity.this, t.getLocalizedMessage());
+            }
+        });
         adapter.notifyDataSetChanged();
     }
 
