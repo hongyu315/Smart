@@ -163,6 +163,7 @@
                     <include layout="@layout/default_line_view"/>
 
                     <LinearLayout
+                        android:id="@+id/deliver_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dimen_10_dp"
@@ -181,6 +182,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/deliver_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="顺丰快递"
@@ -188,6 +190,7 @@
                                 android:textSize="14sp"/>
 
                             <TextView
+                                android:id="@+id/deliver_arrive_time"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/dimen_10_dp"
@@ -211,7 +214,7 @@
                                     />
 
                                 <TextView
-                                    android:id="@+id/deliver_info"
+                                    android:id="@+id/deliver_last_info"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="快递已到达上海虹桥，扫描员马云"
@@ -219,9 +222,10 @@
                                     android:textSize="12sp"/>
 
                                 <TextView
+                                    android:id="@+id/deliver_last_update_time"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_below="@+id/deliver_info"
+                                    android:layout_below="@+id/deliver_last_info"
                                     android:layout_marginTop="@dimen/dimen_15_dp"
                                     android:text="2018-2-2"
                                     android:textColor="@color/edit_text_hint_color"

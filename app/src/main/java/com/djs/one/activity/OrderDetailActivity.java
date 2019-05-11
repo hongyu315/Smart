@@ -23,6 +23,7 @@ import com.djs.one.R;
 import com.djs.one.api.API;
 import com.djs.one.api.URL;
 import com.djs.one.bean.Address;
+import com.djs.one.bean.LogisticsJson;
 import com.djs.one.bean.OrderDetailBean;
 import com.djs.one.bean.PayCallBackBean;
 import com.djs.one.bean.PayResult;
@@ -87,6 +88,8 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
 
     //取消订单、去支付layout
     LinearLayout payCancelPayLayout;
+    //物流信息layout
+    View deliverLayout;
 
 
     @SuppressLint("HandlerLeak")
@@ -142,6 +145,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         userName = findViewById(R.id.customer_name);
         phone = findViewById(R.id.order_detail_phone);
         address = findViewById(R.id.order_detail_address);
+        deliverLayout = findViewById(R.id.deliver_layout);
         findViewById(R.id.on_pay_method).setOnClickListener(this);
         findViewById(R.id.cancel_order).setOnClickListener(this);
         findViewById(R.id.more_address).setOnClickListener(this);
@@ -162,6 +166,53 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onRightClick(View v) {
+
+            }
+        });
+    }
+
+    private void initAddresseeInfo(Address.DataBean.AddressBean bean) {
+        if (bean != null) {
+            userName.setText(bean.getName());
+            phone.setText(bean.getMobile());
+            address.setText(bean.getAddress());
+        }
+    }
+
+    private void initDeliverInfo() {
+        deliverLayout.setVisibility(View.VISIBLE);
+        final TextView deliver_name = findViewById(R.id.deliver_name);
+        final TextView deliver_arrive_time = findViewById(R.id.deliver_arrive_time);
+        final  TextView deliver_last_info = findViewById(R.id.deliver_last_info);
+        final TextView deliver_last_update_time = findViewById(R.id.deliver_last_update_time);
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(URL.BASE_URL)
+                .build();
+        API api = retrofit.create(API.class);
+        Call<LogisticsJson> deliverInfo =  api.logistics(TokenManager.getInstance().getLoginToken().getData().getToken(), "1000");
+        deliverInfo.enqueue(new Callback<LogisticsJson>() {
+            @Override
+            public void onResponse(Call<LogisticsJson> call, Response<LogisticsJson> response) {
+                try{
+                    LogisticsJson logisticsJson = response.body();
+                    if (Constant.SUCCESSFUL == logisticsJson.getCode()){
+                        deliver_name.setText(logisticsJson.getData().getLogistic_com());
+                        if (logisticsJson.getData().getLogistics() != null && logisticsJson.getData().getLogistics().size() > 0) {
+//                            deliver_arrive_time.setText(logisticsJson.getData().get);
+                            deliver_last_info.setText(logisticsJson.getData().getLogistics().get(0).getContext());
+                            deliver_last_update_time.setText(logisticsJson.getData().getLogistics().get(0).getTime());
+                        }
+                    }else {
+                        ToastUtils.showToast(OrderDetailActivity.this,response.body().getMessage());
+                    }
+                }catch (Exception e) {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LogisticsJson> call, Throwable t) {
 
             }
         });
@@ -189,12 +240,11 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
 
                 try {
                     Address userProfile = response.body();
-
                     if (Constant.SUCCESSFUL == userProfile.getCode()){
                         List<Address.DataBean.AddressBean> addressBeans = userProfile.getData().getList();
                         for (Address.DataBean.AddressBean bean : addressBeans){
                             if (bean.getDefaultX() == 1){
-                                addressId = bean.getId() + "";
+                                initAddresseeInfo(bean);
                             }
                         }
                     }else {
@@ -243,8 +293,17 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
 
     private void handleOrderRequestResult(){
         //订单状态（-1 无效  0 待确认, 1已确认/待支付, 2已支付/待发货, 3已发货/待收货, 4已完成, 5已取消, 6已关闭）
-        if (productBean.getData().getStatus() == 1 || productBean.getData().getStatus() == 0){
+        //隐藏物流信息模块
+        deliverLayout.setVisibility(View.GONE);
+        int status = productBean.getData().getStatus();
+        if (status == 1 || status == 0){
             getAddressList();//如果没有支付，需要去拉取收货地址列表
+        } else if (status == 3 || status == 4) {
+            initDeliverInfo();
+        } else if (status == 5) {
+
+        } else if (status == 6) {
+
         }
         setDetailData();
     }

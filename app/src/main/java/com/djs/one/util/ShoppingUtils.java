@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.djs.one.R;
+import com.djs.one.activity.LogisticsActivity;
 import com.djs.one.activity.OrderDetailActivity;
 import com.djs.one.api.API;
 import com.djs.one.api.URL;
@@ -63,4 +64,16 @@ public class ShoppingUtils{
     public static String getSkus(String itemId, String skuId, String quantity) {
         return itemId + ":" + skuId +":" + quantity +";";
     }
+
+    public static void gotoLogisticsActivity(Activity activity, String tradeNo) {
+        if (!TextUtils.isEmpty(tradeNo)) {
+            Intent intent = new Intent(activity, LogisticsActivity.class);
+            intent.putExtra("trade_no", tradeNo);
+            activity.startActivity(intent);
+            activity.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+        }
+    }
+
+
+
 }

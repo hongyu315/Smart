@@ -25,6 +25,7 @@ import com.djs.one.bean.MyOrdersBean;
 import com.djs.one.bean.SuccessfulMode;
 import com.djs.one.constant.Constant;
 import com.djs.one.manager.TokenManager;
+import com.djs.one.util.ShoppingUtils;
 import com.djs.one.util.SysUtils;
 
 import java.util.ArrayList;
@@ -157,12 +158,7 @@ public class Wait4TakeDeliveryFragment extends BaseFragment implements OrderAdap
         try {
             Log.e(TAG, "onLeftBtnClick: left" + position);
             String tradeNo = orders.get(position).getTrade_no();
-            if (!TextUtils.isEmpty(tradeNo)) {
-                Intent intent = new Intent(getActivity(), LogisticsActivity.class);
-                intent.putExtra("trade_no", tradeNo);
-                getActivity().startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
-            }
+            ShoppingUtils.gotoLogisticsActivity(getActivity(), tradeNo);
         } catch (Exception e) {
         }
     }
