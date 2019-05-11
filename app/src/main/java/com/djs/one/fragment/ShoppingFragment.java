@@ -3,7 +3,6 @@ package com.djs.one.fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -30,12 +29,10 @@ import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.djs.one.R;
 import com.djs.one.activity.LoginActivity;
-import com.djs.one.activity.OrderDetailActivity;
 import com.djs.one.adapter.DialogSizeItemAdapter;
 import com.djs.one.adapter.ShoppingCartAdapter;
 import com.djs.one.api.API;
 import com.djs.one.api.URL;
-import com.djs.one.bean.CreateOrderBean;
 import com.djs.one.bean.ShoppingCarItems;
 import com.djs.one.bean.SuccessfulMode;
 import com.djs.one.constant.Constant;
@@ -236,8 +233,8 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
 
                     ShoppingCarItems productBean = response.body();
                     if (Constant.SUCCESSFUL == productBean.getCode()){
-                        datas.clear();
                         if (productBean.getData().getList().size() > 0){
+                            datas.clear();
                             datas.addAll(productBean.getData().getList());
                             layout_empty_shopcart.setVisibility(View.GONE);
                             mLlCart.setVisibility(View.VISIBLE);

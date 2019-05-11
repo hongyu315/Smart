@@ -42,7 +42,9 @@
 
     <string name="male">男</string>
     <string name="female">女</string>
+    <string name="true_tag">true</string>
     <string name="false_tag">false</string>
+
 
     <!--<string name="app_name">Smart2</string>-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

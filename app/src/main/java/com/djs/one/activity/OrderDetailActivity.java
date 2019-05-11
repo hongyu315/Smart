@@ -108,12 +108,12 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-                        ToastUtils.showToast(OrderDetailActivity.this,"支付成功" + payResult);
+                        ToastUtils.showToast(OrderDetailActivity.this,"支付成功" );// + payResult);
                         onBackPressed();
 //                        showAlert(PayDemoActivity.this, getString(R.string.pay_success) + payResult);
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                        ToastUtils.showToast(OrderDetailActivity.this,"支付失败" + payResult);
+                        ToastUtils.showToast(OrderDetailActivity.this,"支付失败" );//+ payResult);
 //                        showAlert(PayDemoActivity.this, getString(R.string.pay_failed) + payResult);
                     }
                     break;
@@ -244,7 +244,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                         List<Address.DataBean.AddressBean> addressBeans = userProfile.getData().getList();
                         for (Address.DataBean.AddressBean bean : addressBeans){
                             if (bean.getDefaultX() == 1){
-                                initAddresseeInfo(bean);
+                                addressId = bean.getId() + "";
                             }
                         }
                     }else {
@@ -345,7 +345,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         //2、设置布局
         View view = View.inflate(OrderDetailActivity.this,R.layout.dialog_custom_layout,null);
 
-        Integer position  = (Integer) SPUtils.get(OrderDetailActivity.this, Constant.PAY_METHOD,Integer.valueOf(2));
+//        Integer position  = (Integer) SPUtils.get(OrderDetailActivity.this, Constant.PAY_METHOD,Integer.valueOf(2));
 
         final RelativeLayout topLayout = view.findViewById(R.id.top_layout);
         final RelativeLayout bottomLayout = view.findViewById(R.id.bottom_layout);
@@ -356,65 +356,66 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         final String tag = (String) topLayout.getTag();
         final String bottomTag = (String) bottomLayout.getTag();
 
-        if (position == 0){
+//        if (position == 0){
             bottomLayout.setBackground(getResources().getDrawable(R.color.white));
             bottomTV.setTextColor(getResources().getColor(R.color.gray));
 
             topLayout.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
             topTextView.setTextColor(getResources().getColor(R.color.white));
-        }else if (position == 1){
-            bottomTV.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
-            bottomTV.setTextColor(getResources().getColor(R.color.white));
-
-            topLayout.setBackground(getResources().getDrawable(R.color.white));
-            topTextView.setTextColor(getResources().getColor(R.color.gray));
-        }
+//        }else if (position == 1){
+//            bottomTV.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
+//            bottomTV.setTextColor(getResources().getColor(R.color.white));
+//
+//            topLayout.setBackground(getResources().getDrawable(R.color.white));
+//            topTextView.setTextColor(getResources().getColor(R.color.gray));
+//        }
 
         topLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(tag) && tag.equalsIgnoreCase(getString(R.string.false_tag))){
-                    v.setTag("true");
+//                if (!TextUtils.isEmpty(tag) && tag.equalsIgnoreCase(getString(R.string.false_tag))){
+                    topLayout.setTag("true");
                     bottomLayout.setTag("false");
 
-                    v.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
+                    topLayout.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
                     topTextView.setTextColor(getResources().getColor(R.color.white));
 
                     bottomLayout.setBackground(getResources().getDrawable(R.color.white));
                     bottomTV.setTextColor(getResources().getColor(R.color.gray));
-                }else{
-                    v.setTag("false");
-                    bottomLayout.setTag("true");
-
-                    v.setBackground(getResources().getDrawable(R.color.white));
-                    topTextView.setTextColor(getResources().getColor(R.color.gray));
-
-                    bottomLayout.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
-                    bottomTV.setTextColor(getResources().getColor(R.color.white));
-                }
+//                }else{
+//                    v.setTag("false");
+//                    bottomLayout.setTag("true");
+//
+//                    v.setBackground(getResources().getDrawable(R.color.white));
+//                    topTextView.setTextColor(getResources().getColor(R.color.gray));
+//
+//                    bottomLayout.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
+//                    bottomTV.setTextColor(getResources().getColor(R.color.white));
+//                }
             }
         });
 
         bottomLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(bottomTag) && bottomTag.equalsIgnoreCase(getString(R.string.false_tag))){
-                    v.setTag("false");
-                    topLayout.setTag("true");
-                    v.setBackground(getResources().getDrawable(R.color.white));
-                    bottomTV.setTextColor(getResources().getColor(R.color.gray));
+//                if (!TextUtils.isEmpty(bottomTag) && bottomTag.equalsIgnoreCase(getString(R.string.false_tag))){
+                topLayout.setTag("false");
+                bottomLayout.setTag("true");
 
-                    topLayout.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
-                    topTextView.setTextColor(getResources().getColor(R.color.white));
-                }else{
-                    topLayout.setTag("false");
-                    v.setTag("true");
-                    v.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
-                    bottomTV.setTextColor(getResources().getColor(R.color.white));
+                topLayout.setBackground(getResources().getDrawable(R.color.white));
+                topTextView.setTextColor(getResources().getColor(R.color.gray));
 
-                    topLayout.setBackground(getResources().getDrawable(R.color.white));
-                    topTextView.setTextColor(getResources().getColor(R.color.gray));
-                }
+                bottomLayout.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
+                bottomTV.setTextColor(getResources().getColor(R.color.white));
+//                }else{
+//                    topLayout.setTag("false");
+//                    v.setTag("true");
+//                    v.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
+//                    bottomTV.setTextColor(getResources().getColor(R.color.white));
+//
+//                    topLayout.setBackground(getResources().getDrawable(R.color.white));
+//                    topTextView.setTextColor(getResources().getColor(R.color.gray));
+//                }
             }
         });
 

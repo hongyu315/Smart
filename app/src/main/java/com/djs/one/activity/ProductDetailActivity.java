@@ -517,20 +517,19 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
     public void onWechatBtnClick() {
 
-        Log.e("xxxxxxx", "onWechatBtnClick click");
         WXTextObject textObj = new WXTextObject();
-        textObj.text = "text";
+        textObj.text = mProductDetail.getTitle();
 
         //用 WXTextObject 对象初始化一个 WXMediaMessage 对象
         WXMediaMessage msg = new WXMediaMessage();
         msg.mediaObject = textObj;
-        msg.description = "text";
+        msg.description = mProductDetail.getTitle();
 
         SendMessageToWX.Req req = new SendMessageToWX.Req();
-        req.transaction = buildTransaction("text");
+        req.transaction = buildTransaction(mProductDetail.getTitle());
         req.message = msg;
         req.scene = mTargetScene;
-//调用api接口，发送数据到微信
+        //调用api接口，发送数据到微信
         api.sendReq(req);
     }
 
@@ -539,13 +538,12 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     }
 
     public void onFriendGroupBtnClick() {
-        Log.e("xxxxxxx", "onFriendGroupBtnClick click");
         UMConfigure.init(ProductDetailActivity.this, "5c8ef97261f564f490000a1c"
                 , "umeng", UMConfigure.DEVICE_TYPE_PHONE, "70d6885b210ad186c508eee7fa687019");
         PlatformConfig.setWeixin(Constant.APP_ID, "3baf1193c85774b3fd9d18447d76cab0");
         new ShareAction(ProductDetailActivity.this)
-                .setPlatform(SHARE_MEDIA.WEIXIN)//传入平台
-                .withText("hello")//分享内容
+                .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)//传入平台
+                .withText(mProductDetail.getTitle())//分享内容
                 .setCallback(shareListener)//回调监听器
                 .share();
     }
@@ -557,7 +555,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
          */
         @Override
         public void onStart(SHARE_MEDIA platform) {
-            Toast.makeText(ProductDetailActivity.this, "onStart", Toast.LENGTH_LONG).show();
+//            Toast.makeText(ProductDetailActivity.this, "onStart", Toast.LENGTH_LONG).show();
         }
 
         /**
@@ -566,7 +564,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
          */
         @Override
         public void onResult(SHARE_MEDIA platform) {
-            Toast.makeText(ProductDetailActivity.this, "成功了", Toast.LENGTH_LONG).show();
+            Toast.makeText(ProductDetailActivity.this, "分享成功", Toast.LENGTH_LONG).show();
         }
 
         /**
@@ -576,7 +574,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
          */
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
-            Toast.makeText(ProductDetailActivity.this, "失 败" + t.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(ProductDetailActivity.this, "分享失败" + t.getMessage(), Toast.LENGTH_LONG).show();
         }
 
         /**
