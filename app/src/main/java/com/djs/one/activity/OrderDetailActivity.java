@@ -31,6 +31,7 @@ import com.djs.one.bean.SuccessfulMode;
 import com.djs.one.bean.WXCallback;
 import com.djs.one.constant.Constant;
 import com.djs.one.manager.TokenManager;
+import com.djs.one.manager.UserManager;
 import com.djs.one.util.DensityUtil;
 import com.djs.one.util.SPUtils;
 import com.djs.one.util.ToastUtils;
@@ -222,9 +223,17 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
     protected void initData() {
         super.initData();
 
-        trade_no = getIntent().getStringExtra("trade_no");
+        try{
+            trade_no = getIntent().getStringExtra("trade_no");
 
-        requestOrderDetailFromTradeNo();
+            if (!UserManager.getInstance().isLogin()) return;
+
+            if (TextUtils.isEmpty(TokenManager.getInstance().getLoginToken().getData().getToken())) return;
+
+            requestOrderDetailFromTradeNo();
+        }catch (Exception e){
+
+        }
     }
 
     private void getAddressList(){
