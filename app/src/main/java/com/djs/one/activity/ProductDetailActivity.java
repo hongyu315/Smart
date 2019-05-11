@@ -35,6 +35,7 @@ import com.djs.one.constant.Constant;
 import com.djs.one.manager.TokenManager;
 import com.djs.one.manager.UserManager;
 import com.djs.one.util.DensityUtil;
+import com.djs.one.util.ShoppingUtils;
 import com.djs.one.util.SysUtils;
 import com.djs.one.util.ToastUtils;
 import com.djs.one.view.AmountView;
@@ -65,7 +66,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
     private Banner banner;
     private List<String> bannerUrlList = new ArrayList<>();
-    private LinearLayout wechatLayout,friendGroupLayout;
+    private LinearLayout wechatLayout, friendGroupLayout;
 
     //商品id
     private String itemId;
@@ -75,7 +76,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     /**
      * 详情页子view
      */
-    TextView titleTV, priceTV,brandStoryTV,detailCompositionTV;
+    TextView titleTV, priceTV, brandStoryTV, detailCompositionTV;
     WebView contentWV;
 
     private IWXAPI api;
@@ -89,7 +90,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
-        StatusBarUtil.setTranslucent(ProductDetailActivity.this,100);
+        StatusBarUtil.setTranslucent(ProductDetailActivity.this, 100);
 
         api = WXAPIFactory.createWXAPI(this, Constant.APP_ID, false);//
 
@@ -111,6 +112,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         brandStoryTV = findViewById(R.id.brand_story);
         contentWV = findViewById(R.id.detail_content);
         findViewById(R.id.detail_favorite).setOnClickListener(this);
+        findViewById(R.id.buy_now_btn).setOnClickListener(this);
 
     }
 
@@ -122,32 +124,32 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             Intent intent = getIntent();
             itemId = intent.getStringExtra("itemId");
 
-            if (!TextUtils.isEmpty(itemId)){
+            if (!TextUtils.isEmpty(itemId)) {
                 getProductDetailBanner();
                 getProductDetail();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
         }
     }
 
-    private void initBanner(List<ProductDetailBannerBean.ProductBanner> bannerList){
-        try{
+    private void initBanner(List<ProductDetailBannerBean.ProductBanner> bannerList) {
+        try {
             HttpProxyCacheServer proxy = ForOneApplication.getProxy(getApplicationContext());
-            for (ProductDetailBannerBean.ProductBanner banner : bannerList){
-                if (banner.getMedia_type() == 1){
+            for (ProductDetailBannerBean.ProductBanner banner : bannerList) {
+                if (banner.getMedia_type() == 1) {
                     bannerUrlList.add(banner.getMedia_url());
-                }else if (banner.getMedia_type() == 2){
-                    bannerUrlList.add(proxy.getProxyUrl(banner.getMedia_url(),true));
+                } else if (banner.getMedia_type() == 2) {
+                    bannerUrlList.add(proxy.getProxyUrl(banner.getMedia_url(), true));
                 }
             }
 
             banner.setDataList(ProductDetailActivity.this, bannerUrlList);
 //            banner.startBanner();
-        }catch (Exception e){
+        } catch (Exception e) {
         }
     }
 
-    private void getProductDetailBanner(){
+    private void getProductDetailBanner() {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(URL.BASE_URL)
@@ -160,10 +162,10 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
                 try {
                     ProductDetailBannerBean productBean = response.body();
-                    if (Constant.SUCCESSFUL == productBean.getCode()){
+                    if (Constant.SUCCESSFUL == productBean.getCode()) {
                         initBanner(productBean.getData());
-                    }else {
-                        ToastUtils.showToast(ProductDetailActivity.this,response.body().getMessage());
+                    } else {
+                        ToastUtils.showToast(ProductDetailActivity.this, response.body().getMessage());
                     }
                 } catch (Exception e) {
                 }
@@ -177,7 +179,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         });
     }
 
-    private void getProductDetail(){
+    private void getProductDetail() {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(URL.BASE_URL)
@@ -190,11 +192,11 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
                 try {
                     ProductDetailBean productBean = response.body();
-                    if (Constant.SUCCESSFUL == productBean.getCode()){
+                    if (Constant.SUCCESSFUL == productBean.getCode()) {
                         mProductDetail = productBean.getData();
                         setData();
-                    }else {
-                        ToastUtils.showToast(ProductDetailActivity.this,response.body().getMessage());
+                    } else {
+                        ToastUtils.showToast(ProductDetailActivity.this, response.body().getMessage());
                     }
                 } catch (Exception e) {
                 }
@@ -208,9 +210,9 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         });
     }
 
-    private void setData(){
-        try{
-            if (mProductDetail != null){
+    private void setData() {
+        try {
+            if (mProductDetail != null) {
                 titleTV.setText(mProductDetail.getTitle());
                 priceTV.setText("￥" + mProductDetail.getMarket_price());
                 detailCompositionTV.setText(mProductDetail.getComposition());
@@ -237,20 +239,21 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 //                        "    </script>\n" +
 //                        "\n" +
 //                        "</html>\n";
-                contentWV.loadDataWithBaseURL(null,html,"text/html","utf-8",null);
+                contentWV.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
 //                contentWV.loadUrl("https://www.m.iqiyi.com");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
         }
     }
 
     /**
      * 分享按钮点击
+     *
      * @param view
      */
-    public void onShareBtnClick(View view){
+    public void onShareBtnClick(View view) {
 
-        Dialog dialog = new Dialog(ProductDetailActivity.this,R.style.MyDialog);
+        Dialog dialog = new Dialog(ProductDetailActivity.this, R.style.MyDialog);
         Window dialogWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         lp.width = (int) (SysUtils.getScreenWidth(this) * 0.7);
@@ -259,32 +262,32 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         dialog.setContentView(R.layout.product_detail_share);
         dialogWindow.findViewById(R.id.wechat_layout).setOnClickListener(this);
         dialogWindow.findViewById(R.id.friend_group_layout).setOnClickListener(this);
-        Glide.with(ProductDetailActivity.this).load(mProductDetail.getThumb_url()).into((ImageView)dialogWindow.findViewById(R.id.share_img));
-        ((TextView)dialogWindow.findViewById(R.id.share_name)).setText(mProductDetail.getTitle() + "");
-        ((TextView)dialogWindow.findViewById(R.id.share_time)).setText("上架时间" + SysUtils.stampToDate(mProductDetail.getOn_sale_time()+""));
-        ((TextView)dialogWindow.findViewById(R.id.share_price)).setText("￥" + mProductDetail.getMarket_price());
+        Glide.with(ProductDetailActivity.this).load(mProductDetail.getThumb_url()).into((ImageView) dialogWindow.findViewById(R.id.share_img));
+        ((TextView) dialogWindow.findViewById(R.id.share_name)).setText(mProductDetail.getTitle() + "");
+        ((TextView) dialogWindow.findViewById(R.id.share_time)).setText("上架时间" + SysUtils.stampToDate(mProductDetail.getOn_sale_time() + ""));
+        ((TextView) dialogWindow.findViewById(R.id.share_price)).setText("￥" + mProductDetail.getMarket_price());
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
 
     }
 
-    private void onFavoriteBtnClick(){
+    private void onFavoriteBtnClick() {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(URL.BASE_URL)
                 .build();
         API api = retrofit.create(API.class);
-        Call<SuccessfulModeBean> products = api.collect(TokenManager.getInstance().getLoginToken().getData().getToken(),itemId);
+        Call<SuccessfulModeBean> products = api.collect(TokenManager.getInstance().getLoginToken().getData().getToken(), itemId);
         products.enqueue(new Callback<SuccessfulModeBean>() {
             @Override
             public void onResponse(Call<SuccessfulModeBean> call, Response<SuccessfulModeBean> response) {
 
                 try {
                     SuccessfulModeBean productBean = response.body();
-                    if (Constant.SUCCESSFUL == productBean.getCode()){
-                        ToastUtils.showToast(ProductDetailActivity.this,productBean.getData());
-                    }else {
-                        ToastUtils.showToast(ProductDetailActivity.this,response.body().getMessage());
+                    if (Constant.SUCCESSFUL == productBean.getCode()) {
+                        ToastUtils.showToast(ProductDetailActivity.this, productBean.getData());
+                    } else {
+                        ToastUtils.showToast(ProductDetailActivity.this, response.body().getMessage());
                     }
                 } catch (Exception e) {
                 }
@@ -300,6 +303,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
     /**
      * 加入购物车 按钮点击
+     *
      * @param v
      */
     int sizeListSelectedPosition = 0;
@@ -307,14 +311,15 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     int amountInDialog = 1;
     List<ProductDetailBean.ProductDetail.AttributesBean.ValuesBean> colorValues = new ArrayList<>();
     List<ProductDetailBean.ProductDetail.AttributesBean.ValuesBean> sizeValues = new ArrayList<>();
-    public void onAddToShoppingCarBtnClick(View v){
-        if (UserManager.getInstance().isLogin()){
-            showShoppingCarDialog();
-        }else {
-            Intent intent3 = new Intent(ProductDetailActivity.this,LoginActivity.class);
-            intent3.putExtra(Constant.PAGE,ProductDetailActivity.class.getName());
+
+    public void onAddToShoppingCarBtnClick(View v) {
+        if (UserManager.getInstance().isLogin()) {
+            showShoppingCarDialog(2);
+        } else {
+            Intent intent3 = new Intent(ProductDetailActivity.this, LoginActivity.class);
+            intent3.putExtra(Constant.PAGE, ProductDetailActivity.class.getName());
 //            startActivity(intent3);
-            startActivityForResult(intent3,1000);
+            startActivityForResult(intent3, 1000);
             overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
         }
     }
@@ -322,19 +327,21 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 2){
-            if (requestCode == 1000){
-                showShoppingCarDialog();
+        if (resultCode == 2) {
+            if (requestCode == 1000) {
+                showShoppingCarDialog(2);
+            } else if (requestCode == 2000) {
+                showShoppingCarDialog(1);
             }
         }
     }
 
-    private void showShoppingCarDialog(){
+    private void showShoppingCarDialog(final int type) {
         //1、使用Dialog、设置style
-        final Dialog dialog = new Dialog(ProductDetailActivity.this,R.style.DialogTheme);
+        final Dialog dialog = new Dialog(ProductDetailActivity.this, R.style.DialogTheme);
 
         //2、设置布局
-        View view = View.inflate(ProductDetailActivity.this,R.layout.dialog_bottom_layout,null);
+        View view = View.inflate(ProductDetailActivity.this, R.layout.dialog_bottom_layout, null);
         TextView titleTV = view.findViewById(R.id.product_prompt_dialog_title);
         TextView priceTV = view.findViewById(R.id.product_prompt_dialog_price);
         ImageView thumbnail = view.findViewById(R.id.product_prompt_dialog_thumbnail);
@@ -343,21 +350,21 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         priceTV.setText(mProductDetail.getMarket_price() + "");
         Glide.with(ProductDetailActivity.this).load(mProductDetail.getThumb_url()).into(thumbnail);
         ListView sizeListView = view.findViewById(R.id.dialog_size_list);
-        List<ProductDetailBean.ProductDetail.AttributesBean>  attributesBeanList = mProductDetail.getAttributes();
+        List<ProductDetailBean.ProductDetail.AttributesBean> attributesBeanList = mProductDetail.getAttributes();
 
-        for(ProductDetailBean.ProductDetail.AttributesBean attributesBean : attributesBeanList){
-            if (attributesBean.getAttr_name().equalsIgnoreCase("颜色")){
+        for (ProductDetailBean.ProductDetail.AttributesBean attributesBean : attributesBeanList) {
+            if (attributesBean.getAttr_name().equalsIgnoreCase("颜色")) {
                 colorValues = attributesBean.getValues();
-            }else if (attributesBean.getAttr_name().equalsIgnoreCase("尺寸")){
+            } else if (attributesBean.getAttr_name().equalsIgnoreCase("尺寸")) {
                 sizeValues = attributesBean.getValues();
             }
         }
 
         List<String> items = new ArrayList<>();
-        for(ProductDetailBean.ProductDetail.AttributesBean.ValuesBean valuesBean : sizeValues){
+        for (ProductDetailBean.ProductDetail.AttributesBean.ValuesBean valuesBean : sizeValues) {
             items.add(valuesBean.getValue());
         }
-        final DialogSizeItemAdapter adapter = new DialogSizeItemAdapter(ProductDetailActivity.this,items);
+        final DialogSizeItemAdapter adapter = new DialogSizeItemAdapter(ProductDetailActivity.this, items);
         sizeListView.setAdapter(adapter);
 
         sizeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -380,24 +387,24 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
         LinearLayout colorGridLayout = view.findViewById(R.id.dialog_color_list);
         List<String> colors = new ArrayList<>();
-        for(ProductDetailBean.ProductDetail.AttributesBean.ValuesBean valuesBean : colorValues){
+        for (ProductDetailBean.ProductDetail.AttributesBean.ValuesBean valuesBean : colorValues) {
             colors.add(valuesBean.getValue());
         }
 
         final List<TextView> colorTextViews = new ArrayList<>(colors.size());
 
-        for (int i = 0; i < colors.size(); i++){
+        for (int i = 0; i < colors.size(); i++) {
             final TextView colorView = new TextView(ProductDetailActivity.this);
             colorView.setTextSize(12);
             colorView.setTextColor(getResources().getColor(R.color.home_glod_text_unselect));
             colorView.setBackground(getResources().getDrawable(R.drawable.bg_amount_layout));
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(0,0, DensityUtil.dp2px(ProductDetailActivity.this,10),0);
-            colorView.setPadding(DensityUtil.dp2px(ProductDetailActivity.this,9),
-                    DensityUtil.dp2px(ProductDetailActivity.this,6),
-                    DensityUtil.dp2px(ProductDetailActivity.this,9),
-                    DensityUtil.dp2px(ProductDetailActivity.this,6));
+            lp.setMargins(0, 0, DensityUtil.dp2px(ProductDetailActivity.this, 10), 0);
+            colorView.setPadding(DensityUtil.dp2px(ProductDetailActivity.this, 9),
+                    DensityUtil.dp2px(ProductDetailActivity.this, 6),
+                    DensityUtil.dp2px(ProductDetailActivity.this, 9),
+                    DensityUtil.dp2px(ProductDetailActivity.this, 6));
             colorView.setLayoutParams(lp);
             colorView.setText(colors.get(i));
             colorView.setTag(i);
@@ -406,14 +413,14 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 @Override
                 public void onClick(View v) {
                     //change other text status
-                    for(TextView textView : colorTextViews){
+                    for (TextView textView : colorTextViews) {
 //                        textView.setBackgroundColor(ProductDetailActivity.this.getResources().getColor(R.color.white));
                         textView.setTextColor(ProductDetailActivity.this.getResources().getColor(R.color.home_glod_text_unselect));
                         textView.setBackground(getResources().getDrawable(R.drawable.bg_amount_layout));
-                        textView.setPadding(DensityUtil.dp2px(ProductDetailActivity.this,9),
-                                DensityUtil.dp2px(ProductDetailActivity.this,6),
-                                DensityUtil.dp2px(ProductDetailActivity.this,9),
-                                DensityUtil.dp2px(ProductDetailActivity.this,6));
+                        textView.setPadding(DensityUtil.dp2px(ProductDetailActivity.this, 9),
+                                DensityUtil.dp2px(ProductDetailActivity.this, 6),
+                                DensityUtil.dp2px(ProductDetailActivity.this, 9),
+                                DensityUtil.dp2px(ProductDetailActivity.this, 6));
                     }
                     colorListSelectedPosition = (int) v.getTag();
                     colorView.setBackgroundColor(ProductDetailActivity.this.getResources().getColor(R.color.home_glod_text_unselect));
@@ -422,7 +429,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 }
             });
 
-            if (i == 0){//默认第一个选中
+            if (i == 0) {//默认第一个选中
                 colorView.performClick();
             }
             colorTextViews.add(colorView);
@@ -436,7 +443,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         amountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
             @Override
             public void onAmountChange(View view, int amount) {
-                Log.e("Smart", "onAmountChange: mount = "  + amount );
+                Log.e("Smart", "onAmountChange: mount = " + amount);
                 amountInDialog = amount;
             }
         });
@@ -445,7 +452,11 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onAddToShoppingCarBtnPressed();
+                if(type == 1) {
+                    ShoppingUtils.createOrder(getSkus(), ProductDetailActivity.this);
+                } else if (type == 2) {
+                    onAddToShoppingCarBtnPressed();
+                }
                 dialog.dismiss();
             }
         });
@@ -467,7 +478,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     /**
      * 加入购物车按钮点击
      */
-    public void onAddToShoppingCarBtnPressed(){
+    public void onAddToShoppingCarBtnPressed() {
         String colorId = colorValues.get(colorListSelectedPosition).getId() + "";
         String sizeId = sizeValues.get(sizeListSelectedPosition).getId() + "";
 
@@ -481,16 +492,16 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                 .baseUrl(URL.BASE_URL)
                 .build();
         API api = retrofit.create(API.class);
-        Call<AddToShoppingCarBean> products = api.addItem(TokenManager.getInstance().getLoginToken().getData().getToken(),itemId,skuId,quantity);
+        Call<AddToShoppingCarBean> products = api.addItem(TokenManager.getInstance().getLoginToken().getData().getToken(), itemId, skuId, quantity);
         products.enqueue(new Callback<AddToShoppingCarBean>() {
             @Override
             public void onResponse(Call<AddToShoppingCarBean> call, Response<AddToShoppingCarBean> response) {
 
                 try {
                     AddToShoppingCarBean productBean = response.body();
-                    if (Constant.SUCCESSFUL == productBean.getCode()){
-                        ToastUtils.showToast(ProductDetailActivity.this,"加入购物车成功");
-                    }else {
+                    if (Constant.SUCCESSFUL == productBean.getCode()) {
+                        ToastUtils.showToast(ProductDetailActivity.this, "加入购物车成功");
+                    } else {
 //                        ToastUtils.showToast(ProductDetailActivity.this,response.body().getMessage());
                     }
                 } catch (Exception e) {
@@ -504,9 +515,9 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         });
     }
 
-    public void onWechatBtnClick(){
+    public void onWechatBtnClick() {
 
-        Log.e("xxxxxxx","onWechatBtnClick click");
+        Log.e("xxxxxxx", "onWechatBtnClick click");
         WXTextObject textObj = new WXTextObject();
         textObj.text = "text";
 
@@ -527,10 +538,10 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
 
-    public void onFriendGroupBtnClick(){
-        Log.e("xxxxxxx","onFriendGroupBtnClick click");
-        UMConfigure.init(ProductDetailActivity.this,"5c8ef97261f564f490000a1c"
-                ,"umeng",UMConfigure.DEVICE_TYPE_PHONE,"70d6885b210ad186c508eee7fa687019");
+    public void onFriendGroupBtnClick() {
+        Log.e("xxxxxxx", "onFriendGroupBtnClick click");
+        UMConfigure.init(ProductDetailActivity.this, "5c8ef97261f564f490000a1c"
+                , "umeng", UMConfigure.DEVICE_TYPE_PHONE, "70d6885b210ad186c508eee7fa687019");
         PlatformConfig.setWeixin(Constant.APP_ID, "3baf1193c85774b3fd9d18447d76cab0");
         new ShareAction(ProductDetailActivity.this)
                 .setPlatform(SHARE_MEDIA.WEIXIN)//传入平台
@@ -546,7 +557,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
          */
         @Override
         public void onStart(SHARE_MEDIA platform) {
-            Toast.makeText(ProductDetailActivity.this,"onStart",Toast.LENGTH_LONG).show();
+            Toast.makeText(ProductDetailActivity.this, "onStart", Toast.LENGTH_LONG).show();
         }
 
         /**
@@ -555,7 +566,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
          */
         @Override
         public void onResult(SHARE_MEDIA platform) {
-            Toast.makeText(ProductDetailActivity.this,"成功了",Toast.LENGTH_LONG).show();
+            Toast.makeText(ProductDetailActivity.this, "成功了", Toast.LENGTH_LONG).show();
         }
 
         /**
@@ -565,7 +576,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
          */
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
-            Toast.makeText(ProductDetailActivity.this,"失 败"+t.getMessage(),Toast.LENGTH_LONG).show();
+            Toast.makeText(ProductDetailActivity.this, "失 败" + t.getMessage(), Toast.LENGTH_LONG).show();
         }
 
         /**
@@ -574,7 +585,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
          */
         @Override
         public void onCancel(SHARE_MEDIA platform) {
-            Toast.makeText(ProductDetailActivity.this,"取消 了",Toast.LENGTH_LONG).show();
+            Toast.makeText(ProductDetailActivity.this, "取消 了", Toast.LENGTH_LONG).show();
 
         }
     };
@@ -587,7 +598,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.product_detail_back_layout:
                 mFinish();
                 break;
@@ -600,6 +611,30 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             case R.id.detail_favorite:
                 onFavoriteBtnClick();
                 break;
+            case R.id.buy_now_btn:
+                buyNow();
+                break;
         }
+    }
+
+    private void buyNow() {
+        if (UserManager.getInstance().isLogin()) {
+            showShoppingCarDialog(1);
+        } else {
+            Intent intent3 = new Intent(ProductDetailActivity.this, LoginActivity.class);
+            intent3.putExtra(Constant.PAGE, ProductDetailActivity.class.getName());
+//            startActivity(intent3);
+            startActivityForResult(intent3, 2000);
+            overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+        }
+    }
+
+    private String getSkus() {
+        String colorId = colorValues.get(colorListSelectedPosition).getId() + "";
+        String sizeId = sizeValues.get(sizeListSelectedPosition).getId() + "";
+        Map<String, ProductDetailBean.ProductDetail.SkusBean> skuList = mProductDetail.getSku();
+        String skuId = skuList.get(sizeId + "-" + colorId).getId() + "";
+        String quantity = amountInDialog + "";
+        return ShoppingUtils.getSkus(itemId, skuId, quantity);
     }
 }

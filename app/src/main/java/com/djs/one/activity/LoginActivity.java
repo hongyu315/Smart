@@ -83,7 +83,7 @@ public class LoginActivity extends BaseActivity {
         imageVerifyCodeImg = findViewById(R.id.image_verifier);
         licenceCheckBox = findViewById(R.id.licence_checkbox);
 
-//        phoneEditText.setText("13721042453");
+        phoneEditText.setText("13721042453");
 //        imageCodeEditText.setText("test");
 
         imageVerifyCodeImg.setOnClickListener(new View.OnClickListener() {

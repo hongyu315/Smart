@@ -42,6 +42,7 @@ import com.djs.one.constant.Constant;
 import com.djs.one.manager.TokenManager;
 import com.djs.one.manager.UserManager;
 import com.djs.one.util.DensityUtil;
+import com.djs.one.util.ShoppingUtils;
 import com.djs.one.util.SysUtils;
 import com.djs.one.util.ToastUtils;
 import com.djs.one.view.AmountView;
@@ -598,47 +599,10 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
             delGoods();
         }else {//创单 ；商品SKU,格式：itemId:skuId:quantity[;itemId:skuId:quantity]
             if (TextUtils.isEmpty(getSelectedSKUs())) return;
-            createOrder(getSelectedSKUs());
+            ShoppingUtils.createOrder(getSelectedSKUs(), getActivity());
         }
     }
 
-    private void createOrder(String skus){
-        Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(URL.BASE_URL)
-                .build();
-        API api = retrofit.create(API.class);
-        Call<CreateOrderBean> products = api.createOrder(TokenManager.getInstance().getLoginToken().getData().getToken(),skus);
-        products.enqueue(new Callback<CreateOrderBean>() {
-            @Override
-            public void onResponse(Call<CreateOrderBean> call, Response<CreateOrderBean> response) {
-
-                try {
-                    CreateOrderBean productBean = response.body();
-                    if (Constant.SUCCESSFUL == productBean.getCode()){
-                        if (productBean.getData() != null){
-                            if (!TextUtils.isEmpty(productBean.getData().getTrade_no())){
-                                Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
-                                intent.putExtra("trade_no",productBean.getData().getTrade_no());
-                                getActivity().startActivity(intent);
-                                getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
-                                return;
-                            }
-                        }
-                        ToastUtils.showToast(getActivity(),"创单失败");
-                    }else {
-                        ToastUtils.showToast(getActivity(),response.body().getMessage());
-                    }
-                } catch (Exception e) {
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CreateOrderBean> call, Throwable t) {
-                ToastUtils.showToast(getActivity(), t.getLocalizedMessage());
-            }
-        });
-    }
 
     /**
      * 检查支付宝 SDK 所需的权限，并在必要的时候动态获取。

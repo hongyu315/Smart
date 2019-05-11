@@ -86,6 +86,7 @@
                 android:text="加入购物车"/>
 
             <Button
+                android:id="@+id/buy_now_btn"
                 android:layout_width="@dimen/dimen_100_dp"
                 android:layout_height="@dimen/dimen_25_dp"
                 android:background="#c1a465"
