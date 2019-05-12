@@ -1,8 +1,10 @@
 package com.djs.one.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.djs.one.bean.MessageBean;
 import com.djs.one.manager.TokenManager;
@@ -17,7 +19,6 @@ import java.util.List;
 import com.djs.one.R;
 import com.djs.one.adapter.MessageAdapter;
 import com.djs.one.bean.Message;
-import com.djs.one.constant.Constant;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,6 +29,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
     private TitleBar titleBarView;
 
     private ListView messageList;
+    private TextView noMessageTipsView;
     private MessageAdapter adapter;
     private List<Message> messages = new ArrayList<>();
 
@@ -44,6 +46,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
     protected void findViews() {
         super.findViews();
         titleBarView = findViewById(R.id.message_list_activity_title_bar);
+        noMessageTipsView = findViewById(R.id.no_msg_tips);
         titleBarView.setOnTitleBarListener(new OnTitleBarListener() {
             @Override
             public void onLeftClick(View v) {
@@ -71,11 +74,17 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         super.initData();
         Call<MessageBean> messageCall =  ShoppingUtils.getApi().getMessegeList(TokenManager.getInstance().getLoginToken().getData().getToken(),
                 "200","1");
+        Log.d("token", "token:" + TokenManager.getInstance().getLoginToken().getData().getToken());
         messageCall.enqueue(new Callback<MessageBean>() {
             @Override
             public void onResponse(Call<MessageBean> call, Response<MessageBean> response) {
                 MessageBean  messageBean = response.body();
-                messages = messageBean.getData().getData();
+                messages = messageBean.getData().getList();
+                if (messages == null || messages.size() == 0) {
+                    noMessageTipsView.setVisibility(View.VISIBLE);
+                } else {
+                    noMessageTipsView.setVisibility(View.GONE);
+                }
             }
 
             @Override

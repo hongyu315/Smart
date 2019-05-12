@@ -13,6 +13,14 @@
         app:title="@string/message"
         app:icon_left="@mipmap/back"/>
 
+    <TextView
+        android:id="@+id/no_msg_tips"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="暂无消息"
+        android:gravity="center"
+        />
+
     <ListView
         android:id="@+id/message_list"
         android:background="@color/grey_200"
