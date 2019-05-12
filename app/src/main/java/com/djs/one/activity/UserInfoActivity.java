@@ -391,6 +391,8 @@ public class UserInfoActivity extends BaseActivity {
         //2、设置布局
         View view = View.inflate(UserInfoActivity.this,R.layout.dialog_custom_layout,null);
 
+//        Integer position  = (Integer) SPUtils.get(OrderDetailActivity.this, Constant.PAY_METHOD,Integer.valueOf(2));
+
         final RelativeLayout topLayout = view.findViewById(R.id.top_layout);
         final RelativeLayout bottomLayout = view.findViewById(R.id.bottom_layout);
         final TextView topTextView = view.findViewById(R.id.dialog_custom_top_tv);
@@ -400,52 +402,66 @@ public class UserInfoActivity extends BaseActivity {
         final String tag = (String) topLayout.getTag();
         final String bottomTag = (String) bottomLayout.getTag();
 
+//        if (position == 0){
+        bottomLayout.setBackground(getResources().getDrawable(R.color.white));
+        bottomTV.setTextColor(getResources().getColor(R.color.gray));
+
+        topLayout.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
+        topTextView.setTextColor(getResources().getColor(R.color.white));
+//        }else if (position == 1){
+//            bottomTV.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
+//            bottomTV.setTextColor(getResources().getColor(R.color.white));
+//
+//            topLayout.setBackground(getResources().getDrawable(R.color.white));
+//            topTextView.setTextColor(getResources().getColor(R.color.gray));
+//        }
 
         topLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(tag) && tag.equalsIgnoreCase(getString(R.string.false_tag))){
-                    v.setTag("true");
-                    bottomLayout.setTag("false");
+//                if (!TextUtils.isEmpty(tag) && tag.equalsIgnoreCase(getString(R.string.false_tag))){
+                topLayout.setTag("true");
+                bottomLayout.setTag("false");
 
-                    v.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
-                    topTextView.setTextColor(getResources().getColor(R.color.white));
+                topLayout.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
+                topTextView.setTextColor(getResources().getColor(R.color.white));
 
-                    bottomLayout.setBackground(getResources().getDrawable(R.color.white));
-                    bottomTV.setTextColor(getResources().getColor(R.color.gray));
-                }else{
-                    v.setTag("false");
-                    bottomLayout.setTag("true");
-
-                    v.setBackground(getResources().getDrawable(R.color.white));
-                    topTextView.setTextColor(getResources().getColor(R.color.gray));
-
-                    bottomLayout.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
-                    bottomTV.setTextColor(getResources().getColor(R.color.white));
-                }
+                bottomLayout.setBackground(getResources().getDrawable(R.color.white));
+                bottomTV.setTextColor(getResources().getColor(R.color.gray));
+//                }else{
+//                    v.setTag("false");
+//                    bottomLayout.setTag("true");
+//
+//                    v.setBackground(getResources().getDrawable(R.color.white));
+//                    topTextView.setTextColor(getResources().getColor(R.color.gray));
+//
+//                    bottomLayout.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
+//                    bottomTV.setTextColor(getResources().getColor(R.color.white));
+//                }
             }
         });
 
         bottomLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(bottomTag) && bottomTag.equalsIgnoreCase(getString(R.string.false_tag))){
-                    v.setTag("false");
-                    topLayout.setTag("true");
-                    v.setBackground(getResources().getDrawable(R.color.white));
-                    bottomTV.setTextColor(getResources().getColor(R.color.gray));
+//                if (!TextUtils.isEmpty(bottomTag) && bottomTag.equalsIgnoreCase(getString(R.string.false_tag))){
+                topLayout.setTag("false");
+                bottomLayout.setTag("true");
 
-                    topLayout.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
-                    topTextView.setTextColor(getResources().getColor(R.color.white));
-                }else{
-                    topLayout.setTag("false");
-                    v.setTag("true");
-                    v.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
-                    bottomTV.setTextColor(getResources().getColor(R.color.white));
+                topLayout.setBackground(getResources().getDrawable(R.color.white));
+                topTextView.setTextColor(getResources().getColor(R.color.gray));
 
-                    topLayout.setBackground(getResources().getDrawable(R.color.white));
-                    topTextView.setTextColor(getResources().getColor(R.color.gray));
-                }
+                bottomLayout.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
+                bottomTV.setTextColor(getResources().getColor(R.color.white));
+//                }else{
+//                    topLayout.setTag("false");
+//                    v.setTag("true");
+//                    v.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
+//                    bottomTV.setTextColor(getResources().getColor(R.color.white));
+//
+//                    topLayout.setBackground(getResources().getDrawable(R.color.white));
+//                    topTextView.setTextColor(getResources().getColor(R.color.gray));
+//                }
             }
         });
 

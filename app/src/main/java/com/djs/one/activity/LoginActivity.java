@@ -147,7 +147,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<PhoneCheckCode> call, Throwable t) {
-                ToastUtils.showToast(LoginActivity.this, "请检查网络连接");
+                ToastUtils.showToast(LoginActivity.this, "获取短信验证码失败，请检查网络连接");
             }
         });
     }
@@ -227,7 +227,7 @@ public class LoginActivity extends BaseActivity {
                         TokenManager.getInstance().setLoginToken(loginToken);
                         getUser();
                     }else {
-                        ToastUtils.showToast(LoginActivity.this,loginToken.getMessage());
+                        ToastUtils.showToast(LoginActivity.this,"登录失败，请检查网络连接");
                     }
                 } catch (Exception e) {
                 }
@@ -236,7 +236,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<LoginToken> call, Throwable t) {
-                ToastUtils.showToast(LoginActivity.this, t.getLocalizedMessage());
+                ToastUtils.showToast(LoginActivity.this, "登录失败，请检查网络连接");
             }
         });
     }
