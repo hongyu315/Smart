@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -32,6 +33,7 @@ import com.djs.one.bean.WXCallback;
 import com.djs.one.constant.Constant;
 import com.djs.one.manager.TokenManager;
 import com.djs.one.manager.UserManager;
+import com.djs.one.util.DateUtils;
 import com.djs.one.util.DensityUtil;
 import com.djs.one.util.SPUtils;
 import com.djs.one.util.ToastUtils;
@@ -74,9 +76,9 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
     private TextView phone;
 
     //用户地址
-    private  TextView address;
+    private TextView address;
 
-    String payArray[] = {"微信","支付宝"};
+    String payArray[] = {"微信", "支付宝"};
     int selectedPosition = 0;
     String trade_no = "";//订单号
     String addressId = "";
@@ -91,6 +93,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
     LinearLayout payCancelPayLayout;
     //物流信息layout
     View deliverLayout;
+    private CountDownTimer countDownTimer;
 
 
     @SuppressLint("HandlerLeak")
@@ -109,12 +112,12 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-                        ToastUtils.showToast(OrderDetailActivity.this,"支付成功" );// + payResult);
+                        ToastUtils.showToast(OrderDetailActivity.this, "支付成功");// + payResult);
                         onBackPressed();
 //                        showAlert(PayDemoActivity.this, getString(R.string.pay_success) + payResult);
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                        ToastUtils.showToast(OrderDetailActivity.this,"支付失败" );//+ payResult);
+                        ToastUtils.showToast(OrderDetailActivity.this, "支付失败");//+ payResult);
 //                        showAlert(PayDemoActivity.this, getString(R.string.pay_failed) + payResult);
                     }
                     break;
@@ -122,7 +125,9 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                 default:
                     break;
             }
-        };
+        }
+
+        ;
     };
 
     @Override
@@ -184,30 +189,30 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         deliverLayout.setVisibility(View.VISIBLE);
         final TextView deliver_name = findViewById(R.id.deliver_name);
         final TextView deliver_arrive_time = findViewById(R.id.deliver_arrive_time);
-        final  TextView deliver_last_info = findViewById(R.id.deliver_last_info);
+        final TextView deliver_last_info = findViewById(R.id.deliver_last_info);
         final TextView deliver_last_update_time = findViewById(R.id.deliver_last_update_time);
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(URL.BASE_URL)
                 .build();
         API api = retrofit.create(API.class);
-        Call<LogisticsJson> deliverInfo =  api.logistics(TokenManager.getInstance().getLoginToken().getData().getToken(), "1000");
+        Call<LogisticsJson> deliverInfo = api.logistics(TokenManager.getInstance().getLoginToken().getData().getToken(), "1000");
         deliverInfo.enqueue(new Callback<LogisticsJson>() {
             @Override
             public void onResponse(Call<LogisticsJson> call, Response<LogisticsJson> response) {
-                try{
+                try {
                     LogisticsJson logisticsJson = response.body();
-                    if (Constant.SUCCESSFUL == logisticsJson.getCode()){
+                    if (Constant.SUCCESSFUL == logisticsJson.getCode()) {
                         deliver_name.setText(logisticsJson.getData().getLogistic_com());
                         if (logisticsJson.getData().getLogistics() != null && logisticsJson.getData().getLogistics().size() > 0) {
 //                            deliver_arrive_time.setText(logisticsJson.getData().get);
                             deliver_last_info.setText(logisticsJson.getData().getLogistics().get(0).getContext());
                             deliver_last_update_time.setText(logisticsJson.getData().getLogistics().get(0).getTime());
                         }
-                    }else {
-                        ToastUtils.showToast(OrderDetailActivity.this,response.body().getMessage());
+                    } else {
+                        ToastUtils.showToast(OrderDetailActivity.this, response.body().getMessage());
                     }
-                }catch (Exception e) {
+                } catch (Exception e) {
 
                 }
             }
@@ -223,41 +228,42 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
     protected void initData() {
         super.initData();
 
-        try{
+        try {
             trade_no = getIntent().getStringExtra("trade_no");
 
             if (!UserManager.getInstance().isLogin()) return;
 
-            if (TextUtils.isEmpty(TokenManager.getInstance().getLoginToken().getData().getToken())) return;
+            if (TextUtils.isEmpty(TokenManager.getInstance().getLoginToken().getData().getToken()))
+                return;
 
             requestOrderDetailFromTradeNo();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
 
-    private void getAddressList(){
+    private void getAddressList() {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(URL.BASE_URL)
                 .build();
         API api = retrofit.create(API.class);
-        Call<Address> products = api.getMyAddresses(TokenManager.getInstance().getLoginToken().getData().getToken(),"1000");
+        Call<Address> products = api.getMyAddresses(TokenManager.getInstance().getLoginToken().getData().getToken(), "1000");
         products.enqueue(new Callback<Address>() {
             @Override
             public void onResponse(Call<Address> call, Response<Address> response) {
 
                 try {
                     Address userProfile = response.body();
-                    if (Constant.SUCCESSFUL == userProfile.getCode()){
+                    if (Constant.SUCCESSFUL == userProfile.getCode()) {
                         List<Address.DataBean.AddressBean> addressBeans = userProfile.getData().getList();
-                        for (Address.DataBean.AddressBean bean : addressBeans){
-                            if (bean.getDefaultX() == 1){
+                        for (Address.DataBean.AddressBean bean : addressBeans) {
+                            if (bean.getDefaultX() == 1) {
                                 addressId = bean.getId() + "";
                             }
                         }
-                    }else {
-                        ToastUtils.showToast(OrderDetailActivity.this,response.body().getMessage());
+                    } else {
+                        ToastUtils.showToast(OrderDetailActivity.this, response.body().getMessage());
                     }
                 } catch (Exception e) {
                 }
@@ -272,22 +278,22 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
 
     }
 
-    private void requestOrderDetailFromTradeNo(){
+    private void requestOrderDetailFromTradeNo() {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(URL.BASE_URL)
                 .build();
         API api = retrofit.create(API.class);
-        Call<OrderDetailBean> products = api.orderInfo(TokenManager.getInstance().getLoginToken().getData().getToken(),trade_no);
+        Call<OrderDetailBean> products = api.orderInfo(TokenManager.getInstance().getLoginToken().getData().getToken(), trade_no);
         products.enqueue(new Callback<OrderDetailBean>() {
             @Override
             public void onResponse(Call<OrderDetailBean> call, Response<OrderDetailBean> response) {
 
                 try {
                     productBean = response.body();
-                    if (Constant.SUCCESSFUL == productBean.getCode()){
+                    if (Constant.SUCCESSFUL == productBean.getCode()) {
                         handleOrderRequestResult();
-                    }else {
+                    } else {
                     }
                 } catch (Exception e) {
                 }
@@ -300,12 +306,12 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
-    private void handleOrderRequestResult(){
+    private void handleOrderRequestResult() {
         //订单状态（-1 无效  0 待确认, 1已确认/待支付, 2已支付/待发货, 3已发货/待收货, 4已完成, 5已取消, 6已关闭）
         //隐藏物流信息模块
         deliverLayout.setVisibility(View.GONE);
         int status = productBean.getData().getStatus();
-        if (status == 1 || status == 0){
+        if (status == 1 || status == 0) {
             getAddressList();//如果没有支付，需要去拉取收货地址列表
         } else if (status == 3 || status == 4) {
             initDeliverInfo();
@@ -317,16 +323,16 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         setDetailData();
     }
 
-    private void setDetailData(){
+    private void setDetailData() {
         OrderDetailBean.DataBean data = productBean.getData();
         //订单状态（-1 无效  0 待确认, 1已确认/待支付, 2已支付/待发货, 3已发货/待收货, 4已完成, 5已取消, 6已关闭）
-        switch (data.getStatus()){
+        switch (data.getStatus()) {
             case -1:
                 break;
             case 0:
             case 1:
-                leftTime.setText("剩余时间:" + data.getExpire_time());
                 money.setText("需付款:" + data.getPay_amount());
+                startCountDownTime(data.getExpire_time());
                 break;
             case 2:
             case 3:
@@ -344,15 +350,15 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
 
     }
 
-    private void onPayMethodClick(){
+    private void onPayMethodClick() {
         showDialog(payArray);
     }
 
-    public void showDialog(String[] arr){
+    public void showDialog(String[] arr) {
         //1、使用Dialog、设置style
-        final Dialog dialog = new Dialog(OrderDetailActivity.this,R.style.DialogTheme);
+        final Dialog dialog = new Dialog(OrderDetailActivity.this, R.style.DialogTheme);
         //2、设置布局
-        View view = View.inflate(OrderDetailActivity.this,R.layout.dialog_custom_layout,null);
+        View view = View.inflate(OrderDetailActivity.this, R.layout.dialog_custom_layout, null);
 
 //        Integer position  = (Integer) SPUtils.get(OrderDetailActivity.this, Constant.PAY_METHOD,Integer.valueOf(2));
 
@@ -366,11 +372,11 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         final String bottomTag = (String) bottomLayout.getTag();
 
 //        if (position == 0){
-            bottomLayout.setBackground(getResources().getDrawable(R.color.white));
-            bottomTV.setTextColor(getResources().getColor(R.color.gray));
+        bottomLayout.setBackground(getResources().getDrawable(R.color.white));
+        bottomTV.setTextColor(getResources().getColor(R.color.gray));
 
-            topLayout.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
-            topTextView.setTextColor(getResources().getColor(R.color.white));
+        topLayout.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
+        topTextView.setTextColor(getResources().getColor(R.color.white));
 //        }else if (position == 1){
 //            bottomTV.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
 //            bottomTV.setTextColor(getResources().getColor(R.color.white));
@@ -383,14 +389,14 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onClick(View v) {
 //                if (!TextUtils.isEmpty(tag) && tag.equalsIgnoreCase(getString(R.string.false_tag))){
-                    topLayout.setTag("true");
-                    bottomLayout.setTag("false");
+                topLayout.setTag("true");
+                bottomLayout.setTag("false");
 
-                    topLayout.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
-                    topTextView.setTextColor(getResources().getColor(R.color.white));
+                topLayout.setBackground(getResources().getDrawable(R.color.home_glod_text_select));
+                topTextView.setTextColor(getResources().getColor(R.color.white));
 
-                    bottomLayout.setBackground(getResources().getDrawable(R.color.white));
-                    bottomTV.setTextColor(getResources().getColor(R.color.gray));
+                bottomLayout.setBackground(getResources().getDrawable(R.color.white));
+                bottomTV.setTextColor(getResources().getColor(R.color.gray));
 //                }else{
 //                    v.setTag("false");
 //                    bottomLayout.setTag("true");
@@ -435,11 +441,11 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                 String topTag = (String) topLayout.getTag();
                 String bottomTag = (String) bottomLayout.getTag();
 
-                if (!TextUtils.isEmpty(topTag) && !topTag.equalsIgnoreCase(getString(R.string.false_tag))){
+                if (!TextUtils.isEmpty(topTag) && !topTag.equalsIgnoreCase(getString(R.string.false_tag))) {
                     selectedPosition = 0;
-                }else if (!TextUtils.isEmpty(bottomTag) && !bottomTag.equalsIgnoreCase(getString(R.string.false_tag)) ){
+                } else if (!TextUtils.isEmpty(bottomTag) && !bottomTag.equalsIgnoreCase(getString(R.string.false_tag))) {
                     selectedPosition = 1;
-                }else {
+                } else {
                     selectedPosition = 1;
                 }
 
@@ -460,24 +466,24 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         dialog.show();
     }
 
-    private void handleResult(){
-        if (selectedPosition == 0){
+    private void handleResult() {
+        if (selectedPosition == 0) {
             payMethodText.setText("微信");
             onWeixinPayClick();
-        }else {
+        } else {
             payMethodText.setText("支付宝");
             onAliPayClick();
         }
-        SPUtils.put(OrderDetailActivity.this, Constant.PAY_METHOD,Integer.valueOf(selectedPosition));
+        SPUtils.put(OrderDetailActivity.this, Constant.PAY_METHOD, Integer.valueOf(selectedPosition));
     }
 
-    private void onWeixinPayClick(){
+    private void onWeixinPayClick() {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(URL.BASE_URL)
                 .build();
         API api = retrofit.create(API.class);
-        Call<WXCallback> products = api.wxpay(TokenManager.getInstance().getLoginToken().getData().getToken(),addressId,trade_no,"2");
+        Call<WXCallback> products = api.wxpay(TokenManager.getInstance().getLoginToken().getData().getToken(), addressId, trade_no, "2");
         products.enqueue(new Callback<WXCallback>() {
             @Override
             public void onResponse(Call<WXCallback> call, Response<WXCallback> response) {
@@ -485,7 +491,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                 try {
                     WXCallback productBean = response.body();
                     WXCallback.DataBean.PayBean payBean = productBean.getData().getPay();
-                    if (Constant.SUCCESSFUL == productBean.getCode()){
+                    if (Constant.SUCCESSFUL == productBean.getCode()) {
                         WXPayUtils.WXPayBuilder builder = new WXPayUtils.WXPayBuilder();
                         builder.setAppId(payBean.getAppid() + "")
                                 .setPartnerId(payBean.getPartnerid() + "")
@@ -495,7 +501,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                                 .setTimeStamp(payBean.getTimestamp() + "")
                                 .setSign(payBean.getSign() + "")
                                 .build().toWXPayNotSign(OrderDetailActivity.this);
-                    }else {
+                    } else {
                         ToastUtils.showToast(OrderDetailActivity.this, "支付失败");
                     }
                 } catch (Exception e) {
@@ -509,22 +515,22 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
-    private void onAliPayClick(){
+    private void onAliPayClick() {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(URL.BASE_URL)
                 .build();
         API api = retrofit.create(API.class);
-        Call<PayCallBackBean> products = api.pay(TokenManager.getInstance().getLoginToken().getData().getToken(),addressId,trade_no,"1");
+        Call<PayCallBackBean> products = api.pay(TokenManager.getInstance().getLoginToken().getData().getToken(), addressId, trade_no, "1");
         products.enqueue(new Callback<PayCallBackBean>() {
             @Override
             public void onResponse(Call<PayCallBackBean> call, Response<PayCallBackBean> response) {
 
                 try {
                     PayCallBackBean productBean = response.body();
-                    if (Constant.SUCCESSFUL == productBean.getCode()){
+                    if (Constant.SUCCESSFUL == productBean.getCode()) {
                         payV2(productBean.getData().getPay());
-                    }else {
+                    } else {
                     }
                 } catch (Exception e) {
                 }
@@ -567,7 +573,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         payThread.start();
     }
 
-        @Override
+    @Override
     public void onReq(BaseReq baseReq) {
         Log.e("onReq", "onReq, errCode = " + baseReq.toString());
     }
@@ -589,22 +595,22 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void onCancelOrderClick(){
+    private void onCancelOrderClick() {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(URL.BASE_URL)
                 .build();
         API api = retrofit.create(API.class);
-        Call<SuccessfulMode> products = api.cancelOrder(TokenManager.getInstance().getLoginToken().getData().getToken(),trade_no);
+        Call<SuccessfulMode> products = api.cancelOrder(TokenManager.getInstance().getLoginToken().getData().getToken(), trade_no);
         products.enqueue(new Callback<SuccessfulMode>() {
             @Override
             public void onResponse(Call<SuccessfulMode> call, Response<SuccessfulMode> response) {
 
                 try {
                     SuccessfulMode productBean = response.body();
-                    if (Constant.SUCCESSFUL == productBean.getCode()){
+                    if (Constant.SUCCESSFUL == productBean.getCode()) {
                         ToastUtils.showToast(OrderDetailActivity.this, productBean.getMessage());
-                    }else {
+                    } else {
                     }
                 } catch (Exception e) {
                 }
@@ -617,7 +623,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
-    private void onMoreAddressClick(){
+    private void onMoreAddressClick() {
         Intent intent = new Intent(OrderDetailActivity.this, AddressManagerActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
@@ -625,7 +631,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.on_pay_method:
                 onPayMethodClick();
                 break;
@@ -637,6 +643,85 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                 break;
             default:
                 break;
+        }
+    }
+
+    private void startCountDownTime(String leftTimeStrValue) {
+        if (TextUtils.isEmpty(leftTimeStrValue)) {
+            leftTime.setText("剩余时间:" + "00:00:00");
+            return;
+        }
+        long leftTimeMillis = 0;
+        String[] times = leftTimeStrValue.split(":");
+        if (times != null && times.length == 3) {
+            long h = strToInteger(times[0]) * 60 * 60 * 1000;
+            long m = strToInteger(times[1]) * 60 * 1000;
+            long s = strToInteger(times[2]) * 1000;
+            leftTimeMillis = h + m + s;
+        }
+        if (leftTimeMillis <= 0) {
+            leftTime.setText("剩余时间:" + "00:00:00");
+            return;
+        }
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+        countDownTimer = new CountDownTimer(leftTimeMillis, 1000) {
+            @Override
+            public void onTick(long l) {
+                leftTime.setText("剩余时间:" + longMillsToStr(l));
+                Log.d("startCountDownTime", "l : " + l);
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        };
+        countDownTimer.start();
+    }
+
+    private int strToInteger(String str) {
+        try {
+            return Integer.parseInt(str);
+        } catch (Exception e) {
+            Log.d("OrderDetail", "strToInteger error:" + e.getMessage());
+        }
+        return 0;
+    }
+
+    private String longMillsToStr(long l) {
+        long hours = (l % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+        long minutes = (l % (1000 * 60 * 60)) / (1000 * 60);
+        long seconds = (l % (1000 * 60)) / 1000;
+        String strHours = hours + "";
+        if (hours < 10 && hours > 0) {
+            strHours = "0" + hours;
+        } else if (hours <= 0) {
+            strHours = "00";
+        }
+
+        String strMinutes = minutes + "";
+        if (minutes < 10 && minutes > 0) {
+            strMinutes = "0" + minutes;
+        } else if (minutes <= 0) {
+            strMinutes = "00";
+        }
+
+        String strSeconds = seconds + "";
+        if (seconds < 10 && seconds > 0) {
+            strSeconds = "0" + seconds;
+        } else if (seconds <= 0) {
+            strSeconds = "00";
+        }
+        return strHours + ":" + strMinutes + ":" + strSeconds;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
         }
     }
 }
