@@ -21,6 +21,7 @@ import com.djs.one.api.URL;
 import com.djs.one.bean.MyOrdersBean;
 import com.djs.one.constant.Constant;
 import com.djs.one.manager.TokenManager;
+import com.djs.one.manager.UserManager;
 import com.djs.one.util.ToastUtils;
 
 import java.util.ArrayList;
@@ -87,7 +88,13 @@ public class CompletedOrderFragment extends BaseFragment implements OrderAdapter
     @Override
     protected void initData() {
         super.initData();
-        getOrders();
+        try{
+            if (!UserManager.getInstance().isLogin()) return;
+            if (TextUtils.isEmpty(TokenManager.getInstance().getLoginToken().getData().getToken())) return;
+            getOrders();
+        }catch (Exception e){
+
+        }
     }
 
     private void getOrders(){

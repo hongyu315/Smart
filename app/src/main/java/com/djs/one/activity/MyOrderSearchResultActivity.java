@@ -20,6 +20,8 @@ import com.djs.one.api.URL;
 import com.djs.one.bean.MyOrdersBean;
 import com.djs.one.constant.Constant;
 import com.djs.one.manager.TokenManager;
+import com.djs.one.manager.UserManager;
+import com.djs.one.util.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,16 +63,25 @@ public class MyOrderSearchResultActivity extends BaseActivity implements View.On
     protected void initData() {
         super.initData();
 
-        index = getIntent().getIntExtra("index",From_Order);
-        keyWords = getIntent().getStringExtra("key");
+        try{
+            if (!UserManager.getInstance().isLogin()) return;
+            if (TextUtils.isEmpty(TokenManager.getInstance().getLoginToken().getData().getToken())) return;
 
-        adapter = new OrderAdapter(MyOrderSearchResultActivity.this,orders);
-        adapter.setOnOrderItemBtnClickListener(this);
-        swipeToLoadLayout.setOnRefreshListener(this);
-        swipeToLoadLayout.setOnLoadMoreListener(this);
-        listView.setAdapter(adapter);
+            index = getIntent().getIntExtra("index",From_Order);
+            keyWords = getIntent().getStringExtra("key");
 
-        getSearchResult();
+            adapter = new OrderAdapter(MyOrderSearchResultActivity.this,orders);
+            adapter.setOnOrderItemBtnClickListener(this);
+            swipeToLoadLayout.setOnRefreshListener(this);
+            swipeToLoadLayout.setOnLoadMoreListener(this);
+            listView.setAdapter(adapter);
+
+            getSearchResult();
+
+        }catch (Exception e){
+
+        }
+
     }
 
     @Override
@@ -126,6 +137,8 @@ public class MyOrderSearchResultActivity extends BaseActivity implements View.On
                             orders.clear();
                             orders.addAll(productBean.getData().getList());
                             adapter.notifyDataSetChanged();
+                        }else {
+                            ToastUtils.showToast(MyOrderSearchResultActivity.this,"暂无相关订单信息");
                         }
                     }else {
 //                        ToastUtils.showToast(getActivity(),response.body().getMessage());

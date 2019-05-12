@@ -16,7 +16,6 @@ import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.djs.one.R;
-import com.djs.one.activity.LogisticsActivity;
 import com.djs.one.activity.OrderDetailActivity;
 import com.djs.one.adapter.OrderAdapter;
 import com.djs.one.api.API;
@@ -25,6 +24,7 @@ import com.djs.one.bean.MyOrdersBean;
 import com.djs.one.bean.SuccessfulMode;
 import com.djs.one.constant.Constant;
 import com.djs.one.manager.TokenManager;
+import com.djs.one.manager.UserManager;
 import com.djs.one.util.ShoppingUtils;
 import com.djs.one.util.SysUtils;
 
@@ -89,7 +89,16 @@ public class Wait4TakeDeliveryFragment extends BaseFragment implements OrderAdap
     @Override
     protected void initData() {
         super.initData();
-        getOrders();
+        try{
+
+            if (!UserManager.getInstance().isLogin()) return;
+            if (TextUtils.isEmpty(TokenManager.getInstance().getLoginToken().getData().getToken())) return;
+
+            getOrders();
+
+        }catch (Exception e){
+
+        }
     }
 
     private void getOrders() {

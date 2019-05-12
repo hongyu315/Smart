@@ -1,5 +1,7 @@
 package com.djs.one.bean;
 
+import android.text.TextUtils;
+
 /**
  * <p>文件描述：<p>
  * <p>作者：rain<p>
@@ -52,6 +54,7 @@ public class LoginToken {
         private int expires_in;
 
         public String getToken() {
+            if (TextUtils.isEmpty(token)) token = "";
             return token;
         }
 
