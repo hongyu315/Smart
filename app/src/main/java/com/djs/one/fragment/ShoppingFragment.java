@@ -2,20 +2,14 @@ package com.djs.one.fragment;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -29,7 +23,6 @@ import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.djs.one.R;
 import com.djs.one.activity.LoginActivity;
-import com.djs.one.adapter.DialogSizeItemAdapter;
 import com.djs.one.adapter.ShoppingCartAdapter;
 import com.djs.one.api.API;
 import com.djs.one.api.URL;
@@ -38,11 +31,9 @@ import com.djs.one.bean.SuccessfulMode;
 import com.djs.one.constant.Constant;
 import com.djs.one.manager.TokenManager;
 import com.djs.one.manager.UserManager;
-import com.djs.one.util.DensityUtil;
 import com.djs.one.util.ShoppingUtils;
 import com.djs.one.util.SysUtils;
 import com.djs.one.util.ToastUtils;
-import com.djs.one.view.AmountView;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXTextObject;
@@ -327,131 +318,9 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
                 onEditClick();
                 return;
             case R.id.go_pay:
-//                defaultView();
-//                test();
-//                sendToWeixin();
                 onGoPlayClick();
-//                showBottomDialog();
                 return;
         }
-    }
-
-    private void defaultView(){
-        if (UserManager.getInstance().isLogin()){
-//            getShoppingCarItems();
-            onGoPlayClick();
-        }else {
-            SysUtils.startActivity(getActivity(), LoginActivity.class);
-        }
-    }
-
-    int sizeListSelectedPosition = 0;
-    int colorListSelectedPosition = 0;
-    int amountInDialog = 1;
-    private void showBottomDialog(){
-
-        //1、使用Dialog、设置style
-        final Dialog dialog = new Dialog(getActivity(),R.style.DialogTheme);
-        //2、设置布局
-        View view = View.inflate(getActivity(),R.layout.dialog_custom_layout,null);
-
-        ListView sizeListView = view.findViewById(R.id.dialog_size_list);
-        List<String> items = new ArrayList<>();
-        items.add("M 四大行订单的等多久的解决");
-        items.add("M 四大行订单的等多久的解决");
-        items.add("M 四大行订单的等多久的解决");
-        items.add("M 四大行订单的等多久的解决");
-        final DialogSizeItemAdapter adapter = new DialogSizeItemAdapter(getActivity(),items);
-        sizeListView.setAdapter(adapter);
-
-        sizeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                adapter.changeSelected(position);
-                sizeListSelectedPosition = position;
-            }
-        });
-        sizeListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                adapter.changeSelected(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        LinearLayout colorGridLayout = view.findViewById(R.id.dialog_color_list);
-        List<String> colors = new ArrayList<>();
-        colors.add("红色");
-        colors.add("红色");
-        colors.add("红色");
-        colors.add("红色");
-        colors.add("红色");
-        colors.add("红色");
-
-        final List<TextView> colorTextViews = new ArrayList<>(colors.size());
-
-        for (int i = 0; i < colors.size(); i++){
-            final TextView colorView = new TextView(getActivity());
-            colorView.setBackground(getResources().getDrawable(R.drawable.bg_amount_layout));
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(0,0,30,0);
-            colorView.setPadding(30,4,30,4);
-            colorView.setLayoutParams(lp);
-            colorView.setText(colors.get(i));
-            colorView.setTag(i);
-            colorView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //change other text status
-                    for(TextView textView : colorTextViews){
-                        textView.setBackgroundColor(getActivity().getResources().getColor(R.color.white));
-                        textView.setTextColor(getActivity().getResources().getColor(R.color.black));
-                    }
-                    colorListSelectedPosition = (int) v.getTag();
-                    colorView.setBackgroundColor(getActivity().getResources().getColor(R.color.black));
-                    colorView.setTextColor(getActivity().getResources().getColor(R.color.white));
-                }
-            });
-
-            colorTextViews.add(colorView);
-            colorGridLayout.addView(colorView);
-        }
-
-
-        AmountView amountView = view.findViewById(R.id.dialog_color_item_amount);
-        amountView.setGoods_storage(Integer.MAX_VALUE);
-        amountView.etAmount.setText("1");
-        amountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
-            @Override
-            public void onAmountChange(View view, int amount) {
-                Log.e("Smart", "onAmountChange: mount = "  + amount );
-                amountInDialog = amount;
-            }
-        });
-
-        Button confirmBtn = view.findViewById(R.id.shopping_dialog_comfirm_btn);
-        confirmBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("xxxx","size = " + sizeListSelectedPosition + "color" + colorListSelectedPosition + "amount" + amountInDialog  + "");
-                dialog.dismiss();
-            }
-        });
-
-        dialog.setContentView(view);
-
-        Window window = dialog.getWindow();
-        //设置弹出位置
-        window.setGravity(Gravity.BOTTOM);
-        //设置弹出动画
-        window.setWindowAnimations(R.style.main_menu_animStyle);
-        //设置对话框大小
-        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,DensityUtil.dp2px(getActivity(), (float) (SysUtils.getScreenHeight(getActivity()) * 0.25)));
-        dialog.show();
-
     }
 
     /**
@@ -771,7 +640,7 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
                     SuccessfulMode productBean = response.body();
                     if (Constant.SUCCESSFUL == productBean.getCode()){
                     }else {
-                        ToastUtils.showToast(getActivity(),response.body().getMessage());
+//                        ToastUtils.showToast(getActivity(),response.body().getMessage());
                     }
                 } catch (Exception e) {
                 }
@@ -779,7 +648,7 @@ public class ShoppingFragment extends BaseFragment implements View.OnClickListen
 
             @Override
             public void onFailure(Call<SuccessfulMode> call, Throwable t) {
-                ToastUtils.showToast(getActivity(), t.getLocalizedMessage());
+//                ToastUtils.showToast(getActivity(), t.getLocalizedMessage());
             }
         });
     }
