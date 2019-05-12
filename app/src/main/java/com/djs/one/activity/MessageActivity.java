@@ -64,7 +64,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
         messageList = findViewById(R.id.message_list);
 
-        adapter = new MessageAdapter(this,messages);
+        adapter = new MessageAdapter(this);
 
         messageList.setAdapter(adapter);
     }
@@ -80,19 +80,20 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
             public void onResponse(Call<MessageBean> call, Response<MessageBean> response) {
                 MessageBean  messageBean = response.body();
                 messages = messageBean.getData().getList();
-                if (messages == null || messages.size() == 0) {
-                    noMessageTipsView.setVisibility(View.VISIBLE);
-                } else {
+                if (messages != null && messages.size() > 0) {
                     noMessageTipsView.setVisibility(View.GONE);
+                    adapter.setData(messages);
+                } else {
+                    noMessageTipsView.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onFailure(Call<MessageBean> call, Throwable t) {
+                noMessageTipsView.setVisibility(View.VISIBLE);
                 ToastUtils.showToast(MessageActivity.this, t.getLocalizedMessage());
             }
         });
-        adapter.notifyDataSetChanged();
     }
 
     @Override

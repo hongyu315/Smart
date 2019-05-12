@@ -7,7 +7,7 @@ public class Constant {
 //    AppSecret: 8c9c933056821f102de8c937e86a6cb2
     public static final String APP_ID = "wx2961ba75dca2dccf";
 
-    public static final int MESSAGE = 1;//消息类型
+    public static final int MESSAGE = 0;//消息类型
     public static final int FAVORITE = 2;//我的收藏
 
     //我的订单状态 订单状态： 1 待支付, 2 已支付/待发货, 3 已发货/待收货, 4 已完成， 默认4

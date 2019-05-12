@@ -25,15 +25,19 @@ public class MessageAdapter extends BaseAdapter implements View.OnClickListener 
     Context mContext;
     InnerItemOnclickListener mListener;
 
-    public MessageAdapter(Context context,List<Message> messages){
+    public MessageAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
-        messageList = messages;
         mContext = context;
+    }
+
+    public void setData(List<Message> messages) {
+        messageList = messages;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return messageList.size();
+        return messageList == null ? 0 : messageList.size();
     }
 
     @Override
@@ -49,12 +53,12 @@ public class MessageAdapter extends BaseAdapter implements View.OnClickListener 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        try{
+        try {
             ViewHolder viewHolder;
-            if (convertView == null){
+            if (convertView == null) {
                 viewHolder = new ViewHolder();
 
-                convertView = mInflater.inflate(R.layout.message_item_layout,null);
+                convertView = mInflater.inflate(R.layout.message_item_layout, null);
 
                 viewHolder.msgIcon = convertView.findViewById(R.id.message_item_icon);
                 viewHolder.msgStatus = convertView.findViewById(R.id.order_status_text);
@@ -67,21 +71,22 @@ public class MessageAdapter extends BaseAdapter implements View.OnClickListener 
                 viewHolder.addShoppingCar = convertView.findViewById(R.id.add_to_shopping_car);
 
                 convertView.setTag(viewHolder);
-            }else {
+            } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
             Message message = messageList.get(position);
-            Glide.with(mContext).load(message.getIconUrl()).into(viewHolder.msgIcon);
-            viewHolder.msgStatus.setText(message.getOrderStatus());
-            viewHolder.msgName.setText(message.getOrderName());
-            switch (message.getType()){
+            Message.BusinessExtra extra = message.getBusiness_extra();
+            Glide.with(mContext).load(extra.getThumb_url()).into(viewHolder.msgIcon);
+            viewHolder.msgStatus.setText(message.getTitle());
+            viewHolder.msgName.setText(extra.getItem_title());
+            switch (message.getType()) {
                 case Constant.MESSAGE:
-                    viewHolder.msgNum.setText("运单编号: " + message.getOrderNum());
+                    viewHolder.msgNum.setText("运单编号: " + extra.getWaybill_no());
                     break;
                 case Constant.FAVORITE:
                     viewHolder.bottomLayout.setVisibility(View.VISIBLE);
-                    viewHolder.msgNum.setText("尺寸: " + message.getOrderNum());
+                    viewHolder.msgNum.setText("运单编号: " + extra.getWaybill_no());
                     viewHolder.deleteBtn.setOnClickListener(this);
                     viewHolder.deleteBtn.setTag(position);
                     viewHolder.addShoppingCar.setTag(position);
@@ -90,20 +95,20 @@ public class MessageAdapter extends BaseAdapter implements View.OnClickListener 
                 default:
                     break;
             }
-            viewHolder.msgTime.setText(message.getOrderTime());
+            viewHolder.msgTime.setText(message.getCreated_at());
 
-        }catch (Exception e){
+        } catch (Exception e) {
         }
 
 
         return convertView;
     }
 
-    public interface InnerItemOnclickListener{
+    public interface InnerItemOnclickListener {
         void itemClick(View v);
     }
 
-    public void setOnInnerItemOnClickListener(InnerItemOnclickListener listener){
+    public void setOnInnerItemOnClickListener(InnerItemOnclickListener listener) {
         this.mListener = listener;
     }
 
@@ -113,7 +118,7 @@ public class MessageAdapter extends BaseAdapter implements View.OnClickListener 
         mListener.itemClick(v);
     }
 
-    class ViewHolder{
+    class ViewHolder {
         ImageView msgIcon;
         TextView msgStatus;
         TextView msgName;
