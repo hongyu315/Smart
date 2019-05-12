@@ -8,6 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+         <style name="CustomCheckBoxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+             <item name="android:button">@drawable/checkbox_style</item>
+         </style>
+
     <style name="DialogTheme" parent="@android:style/Theme.Dialog">
         <!-- 边框 -->
         <item name="android:windowFrame">@null</item>

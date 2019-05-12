@@ -49,8 +49,9 @@
 
                         <CheckBox
                             android:id="@+id/licence_checkbox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            style="@style/CustomCheckBoxTheme"
+                            android:layout_width="@dimen/dimen_15_dp"
+                            android:layout_height="@dimen/dimen_15_dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"

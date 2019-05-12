@@ -190,7 +190,7 @@ public class UserInfoActivity extends BaseActivity {
                 try {
                     SuccessfulMode productBean = response.body();
                     if (Constant.SUCCESSFUL == productBean.getCode()){
-                        ToastUtils.showToast(UserInfoActivity.this, productBean.getMessage());
+//                        ToastUtils.showToast(UserInfoActivity.this, productBean.getMessage());
                         onBackPressed();
                     }else {
                     }
@@ -200,7 +200,7 @@ public class UserInfoActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<SuccessfulMode> call, Throwable t) {
-                ToastUtils.showToast(UserInfoActivity.this, t.getLocalizedMessage());
+//                ToastUtils.showToast(UserInfoActivity.this, "保存用户信息失败");
             }
         });
     }
