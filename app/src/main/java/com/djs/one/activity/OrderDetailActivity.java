@@ -14,12 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
+import com.bumptech.glide.Glide;
 import com.djs.one.R;
 import com.djs.one.api.API;
 import com.djs.one.api.URL;
@@ -33,7 +35,6 @@ import com.djs.one.bean.WXCallback;
 import com.djs.one.constant.Constant;
 import com.djs.one.manager.TokenManager;
 import com.djs.one.manager.UserManager;
-import com.djs.one.util.DateUtils;
 import com.djs.one.util.DensityUtil;
 import com.djs.one.util.SPUtils;
 import com.djs.one.util.ToastUtils;
@@ -95,6 +96,11 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
     View deliverLayout;
     private CountDownTimer countDownTimer;
 
+    TextView productName;
+    TextView productContent;
+    TextView productSize;
+    TextView productPrice;
+    ImageView productIcon;
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
@@ -118,6 +124,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
                         ToastUtils.showToast(OrderDetailActivity.this, "支付失败");//+ payResult);
+//                        requestOrderDetailFromTradeNo();
 //                        showAlert(PayDemoActivity.this, getString(R.string.pay_failed) + payResult);
                     }
                     break;
@@ -155,6 +162,11 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         findViewById(R.id.on_pay_method).setOnClickListener(this);
         findViewById(R.id.cancel_order).setOnClickListener(this);
         findViewById(R.id.more_address).setOnClickListener(this);
+        productName = findViewById(R.id.product_name);
+        productContent = findViewById(R.id.order_name_text);
+        productSize = findViewById(R.id.order_num_text);
+        productIcon = findViewById(R.id.message_item_icon);
+        productPrice = findViewById(R.id.product_price);
 
         payMethodText = (TextView) findViewById(R.id.order_detail_pay_method_txt);
         findViewById(R.id.order_detail_pay_method).setOnClickListener(this);
@@ -320,7 +332,10 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         } else if (status == 6) {
 
         }
-        setDetailData();
+        try{
+            setDetailData();
+        }catch (Exception e){
+        }
     }
 
     private void setDetailData() {
@@ -347,7 +362,11 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         }
 
         orderNum.setText("订单编号:" + data.getTrade_no());
-
+        productName.setText(data.getItems().get(0).getItem_title() + "");
+        productContent.setText("");
+        productSize.setText(data.getItems().get(0).getSku_title());
+        productPrice.setText(data.getItems().get(0).getPrice() + "");
+        Glide.with(OrderDetailActivity.this).load(data.getItems().get(0).getThumb_url()).into(productIcon);
     }
 
     private void onPayMethodClick() {
@@ -467,14 +486,24 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void handleResult() {
-        if (selectedPosition == 0) {
-            payMethodText.setText("微信");
-            onWeixinPayClick();
-        } else {
-            payMethodText.setText("支付宝");
-            onAliPayClick();
+        try{
+            if (!UserManager.getInstance().isLogin()) return;
+
+            if (TextUtils.isEmpty(TokenManager.getInstance().getLoginToken().getData().getToken()))
+                return;
+
+            if (selectedPosition == 0) {
+                payMethodText.setText("微信");
+                onWeixinPayClick();
+            } else {
+                payMethodText.setText("支付宝");
+                onAliPayClick();
+            }
+            SPUtils.put(OrderDetailActivity.this, Constant.PAY_METHOD, Integer.valueOf(selectedPosition));
+        }catch (Exception e){
+
         }
-        SPUtils.put(OrderDetailActivity.this, Constant.PAY_METHOD, Integer.valueOf(selectedPosition));
+
     }
 
     private void onWeixinPayClick() {
@@ -589,6 +618,8 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                 onBackPressed();
             } else {
                 Toast.makeText(OrderDetailActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
+//                requestOrderDetailFromTradeNo();
+//                finish();
             }
             //这里接收到了返回的状态码可以进行相应的操作，如果不想在这个页面操作可以把状态码存在本地然后finish掉这个页面，这样就回到了你调起支付的那个页面
             //获取到你刚刚存到本地的状态码进行相应的操作就可以了
@@ -596,6 +627,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void onCancelOrderClick() {
+
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(URL.BASE_URL)

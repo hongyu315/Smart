@@ -22,6 +22,7 @@ import com.djs.one.bean.UserProfile;
 import com.djs.one.constant.Constant;
 import com.djs.one.manager.TokenManager;
 import com.djs.one.manager.UserManager;
+import com.djs.one.util.SPUtils;
 import com.djs.one.util.SysUtils;
 import com.djs.one.util.ToastUtils;
 
@@ -224,6 +225,7 @@ public class LoginActivity extends BaseActivity {
                     LoginToken loginToken = response.body();
                     if (Constant.SUCCESSFUL == loginToken.getCode()){
                         Log.e("xxx", "onResponse: token = " + loginToken.getData().getToken());
+                        SPUtils.put(LoginActivity.this, Constant.LoginToken, loginToken.getData().getToken());
                         TokenManager.getInstance().setLoginToken(loginToken);
                         getUser();
                     }else {

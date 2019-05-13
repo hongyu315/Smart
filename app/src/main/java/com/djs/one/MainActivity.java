@@ -20,6 +20,7 @@ import java.util.ArrayList;
 //import com.umeng.message.PushAgent;
 
 public class MainActivity extends FragmentActivity {
+    public static MainActivity mainActivity ;
 
     private String[] mTitles = { "首页", "购物车", "我的" };
 
@@ -42,6 +43,8 @@ public class MainActivity extends FragmentActivity {
         findViews();
 
         PushAgent.getInstance(MainActivity.this).onAppStart();
+
+        mainActivity = this;
     }
 
     protected void findViews()

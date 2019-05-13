@@ -78,7 +78,7 @@ public class OrderAdapter extends BaseAdapter implements View.OnClickListener {
         }
 
         order = orderList.get(position);
-        viewHolder.orderTime.setText(order.getCreated_at());
+        viewHolder.orderTime.setText(order.getCreated_at() + "");
         viewHolder.orderStatus.setText(getStatusString(order.getStatus()));
 
         if (order.getStatus() == Constant.WAIT4PAY || order.getStatus() == 0){
@@ -86,8 +86,8 @@ public class OrderAdapter extends BaseAdapter implements View.OnClickListener {
         }
 
         Glide.with(mContext).load(order.getItem_info().getThumb_url()).into(viewHolder.productIcon);
-        viewHolder.productName.setText(order.getItem_info().getItem_title());
-        viewHolder.productType.setText(order.getItem_info().getSku_title());
+        viewHolder.productName.setText(order.getItem_info().getItem_title()+ "");
+        viewHolder.productType.setText(order.getItem_info().getSku_title()+ "");
 //        viewHolder.productSize.setText(order.getProduct_size());
         viewHolder.productPrice.setText("￥" + order.getPay_amount());
         viewHolder.productNum.setText("x" + order.getTotal_item());

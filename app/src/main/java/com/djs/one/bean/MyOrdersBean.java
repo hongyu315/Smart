@@ -132,7 +132,7 @@ public class MyOrdersBean {
             private int status;
             private int pay_amount;
             private int total_item;
-            private int expire_time;
+            private String expire_time;
             private ItemInfoBean item_info;
 
             public String getTrade_no() {
@@ -175,11 +175,11 @@ public class MyOrdersBean {
                 this.total_item = total_item;
             }
 
-            public int getExpire_time() {
+            public String getExpire_time() {
                 return expire_time;
             }
 
-            public void setExpire_time(int expire_time) {
+            public void setExpire_time(String expire_time) {
                 this.expire_time = expire_time;
             }
 

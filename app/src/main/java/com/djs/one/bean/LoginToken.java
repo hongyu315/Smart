@@ -2,6 +2,10 @@ package com.djs.one.bean;
 
 import android.text.TextUtils;
 
+import com.djs.one.MainActivity;
+import com.djs.one.constant.Constant;
+import com.djs.one.util.SPUtils;
+
 /**
  * <p>文件描述：<p>
  * <p>作者：rain<p>
@@ -54,7 +58,7 @@ public class LoginToken {
         private int expires_in;
 
         public String getToken() {
-            if (TextUtils.isEmpty(token)) token = "";
+            if (TextUtils.isEmpty(token)) token = SPUtils.get(MainActivity.mainActivity, Constant.LoginToken,"") + "";
             return token;
         }
 

@@ -259,7 +259,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
-                                android:text="2019-1-7"
                                 android:textColor="@color/home_glod_text_unselect"
                                 android:textSize="14sp"/>
 

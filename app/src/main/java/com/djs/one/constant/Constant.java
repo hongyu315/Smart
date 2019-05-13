@@ -48,4 +48,6 @@ public class Constant {
     public static final int From_Product = 2;
 
     public static String DeviceToken = "";
+
+    public static final String LoginToken = "LoginToken";
 }
