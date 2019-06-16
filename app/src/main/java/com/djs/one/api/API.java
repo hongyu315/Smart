@@ -7,7 +7,6 @@ import com.djs.one.bean.ImageVerifyCode;
 import com.djs.one.bean.KeywordsBean;
 import com.djs.one.bean.LoginToken;
 import com.djs.one.bean.LogisticsJson;
-import com.djs.one.bean.Message;
 import com.djs.one.bean.MessageBean;
 import com.djs.one.bean.MyOrdersBean;
 import com.djs.one.bean.OSSBean;
@@ -53,7 +52,7 @@ public interface API {
     //登录
     @POST("api/auth/login?")
     Call<LoginToken> login(@Query("mobile")String mobile,
-                           @Query("checkcode")String checkcode,
+                           @Query("password")String checkcode,
                            @Query("agreement")String agreement,
                            @Query("deviceType")String deviceType,
                            @Query("deviceToken")String deviceToken);

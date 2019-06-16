@@ -50,6 +50,7 @@
                         <CheckBox
                             android:id="@+id/licence_checkbox"
                             style="@style/CustomCheckBoxTheme"
+                            android:checked="true"
                             android:layout_width="@dimen/dimen_15_dp"
                             android:layout_height="@dimen/dimen_15_dp"/>
 
@@ -63,7 +64,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="10sp"
-                            android:text="条款（可跳转）"/>
+                            android:text="条款"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -95,6 +96,7 @@
 
                         <RelativeLayout
                             android:layout_width="match_parent"
+                            android:visibility="gone"
                             android:layout_height="@dimen/dimen_45_dp">
 
                             <ImageView
@@ -130,6 +132,7 @@
                                 android:textSize="12sp"
                                 android:textColor="@color/gray"
                                 android:layout_height="@dimen/dimen_22_dp"
+                                android:visibility="gone"
                                 android:background="@drawable/get_verify_bt_bg"
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
@@ -145,8 +148,8 @@
                                 android:background="@null"
                                 android:textColor="@color/edit_text_hint_color"
                                 android:textSize="14sp"
-                                android:inputType="phone"
-                                android:hint="短信验证码"
+                                android:inputType="textPassword"
+                                android:hint="密码"
                                 android:textCursorDrawable="@null"/>
 
                         </RelativeLayout>

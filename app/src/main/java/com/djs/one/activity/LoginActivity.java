@@ -84,7 +84,7 @@ public class LoginActivity extends BaseActivity {
         imageVerifyCodeImg = findViewById(R.id.image_verifier);
         licenceCheckBox = findViewById(R.id.licence_checkbox);
 
-        phoneEditText.setText("13721042453");
+//        phoneEditText.setText("13721042453");
 //        imageCodeEditText.setText("test");
 
         imageVerifyCodeImg.setOnClickListener(new View.OnClickListener() {
@@ -196,13 +196,13 @@ public class LoginActivity extends BaseActivity {
             return;
         }
 
-        if (TextUtils.isEmpty(imageCodeStr)) {
-            ToastUtils.showToast(LoginActivity.this, "请输入图形验证码");
-            return;
-        }
+//        if (TextUtils.isEmpty(imageCodeStr)) {
+//            ToastUtils.showToast(LoginActivity.this, "请输入图形验证码");
+//            return;
+//        }
 
         if (TextUtils.isEmpty(msgCodeStr)) {
-            ToastUtils.showToast(LoginActivity.this, "请输入短信验证码");
+            ToastUtils.showToast(LoginActivity.this, "请输入密码");
             return;
         }
 

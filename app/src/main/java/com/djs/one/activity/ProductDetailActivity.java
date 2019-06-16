@@ -2,6 +2,8 @@ package com.djs.one.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -42,16 +44,16 @@ import com.djs.one.view.AmountView;
 import com.djs.one.view.Banner;
 import com.jaeger.library.StatusBarUtil;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXImageObject;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.umeng.commonsdk.UMConfigure;
-import com.umeng.socialize.PlatformConfig;
-import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +63,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+//import com.djs.one.api.URL;
 
 public class ProductDetailActivity extends BaseActivity implements View.OnClickListener {
 
@@ -252,23 +256,26 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
      * @param view
      */
     public void onShareBtnClick(View view) {
-
-        Dialog dialog = new Dialog(ProductDetailActivity.this, R.style.MyDialog);
-        Window dialogWindow = dialog.getWindow();
-        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-        lp.width = (int) (SysUtils.getScreenWidth(this) * 0.7);
-        lp.height = (int) (SysUtils.getScreenHeight(this) * 0.55);//0.63);
-        dialogWindow.setAttributes(lp);
-        dialog.setContentView(R.layout.product_detail_share);
-        dialogWindow.findViewById(R.id.wechat_layout).setOnClickListener(this);
-        dialogWindow.findViewById(R.id.friend_group_layout).setOnClickListener(this);
-        Glide.with(ProductDetailActivity.this).load(mProductDetail.getThumb_url()).into((ImageView) dialogWindow.findViewById(R.id.share_img));
-        ((TextView) dialogWindow.findViewById(R.id.share_name)).setText(mProductDetail.getTitle() + "");
-        ((TextView) dialogWindow.findViewById(R.id.share_time)).setText("上架时间" + SysUtils.stampToDate(mProductDetail.getOn_sale_time() + ""));
-        ((TextView) dialogWindow.findViewById(R.id.share_price)).setText("￥" + mProductDetail.getMarket_price());
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
-
+        try{
+            Dialog dialog = new Dialog(ProductDetailActivity.this, R.style.MyDialog);
+            Window dialogWindow = dialog.getWindow();
+            WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+            lp.width = (int) (SysUtils.getScreenWidth(this) * 0.7);
+            lp.height = (int) (SysUtils.getScreenHeight(this) * 0.55);//0.63);
+            dialogWindow.setAttributes(lp);
+            dialog.setContentView(R.layout.product_detail_share);
+            dialogWindow.findViewById(R.id.wechat_layout).setOnClickListener(this);
+            dialogWindow.findViewById(R.id.friend_group_layout).setOnClickListener(this);
+            if (!TextUtils.isEmpty(mProductDetail.getThumb_url())){
+                Glide.with(ProductDetailActivity.this).load(mProductDetail.getThumb_url()).into((ImageView) dialogWindow.findViewById(R.id.share_img));
+            }
+            ((TextView) dialogWindow.findViewById(R.id.share_name)).setText(mProductDetail.getTitle() + "");
+            ((TextView) dialogWindow.findViewById(R.id.share_time)).setText("上架时间" + SysUtils.stampToDate(mProductDetail.getOn_sale_time() + ""));
+            ((TextView) dialogWindow.findViewById(R.id.share_price)).setText("￥" + mProductDetail.getMarket_price());
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
+        }catch (Exception e){
+        }
     }
 
     private void onFavoriteBtnClick() {
@@ -516,21 +523,64 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     }
 
     public void onWechatBtnClick() {
+        wxShare(false);
+    }
 
-        WXTextObject textObj = new WXTextObject();
-        textObj.text = mProductDetail.getTitle();
+    private void wxShare(final boolean isTimeline){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String url = mProductDetail.getThumb_url();
+                WXImageObject imgObj = new WXImageObject();
+                imgObj.setImagePath(url);
 
-        //用 WXTextObject 对象初始化一个 WXMediaMessage 对象
-        WXMediaMessage msg = new WXMediaMessage();
-        msg.mediaObject = textObj;
-        msg.description = mProductDetail.getTitle();
+//                WXTextObject textObj = new WXTextObject();
+//                textObj.text = mProductDetail.getTitle();w
 
-        SendMessageToWX.Req req = new SendMessageToWX.Req();
-        req.transaction = buildTransaction(mProductDetail.getTitle());
-        req.message = msg;
-        req.scene = mTargetScene;
-        //调用api接口，发送数据到微信
-        api.sendReq(req);
+                //用 WXTextObject 对象初始化一个 WXMediaMessage 对象
+                WXMediaMessage msg = new WXMediaMessage();
+                msg.mediaObject = imgObj;
+                Bitmap bitmap = null;
+                try {
+                    java.net.URL url1 = new java.net.URL(url);
+                    bitmap = BitmapFactory.decodeStream(url1.openStream());
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Bitmap thumBitmap = bitmap.createScaledBitmap(bitmap, 120, 150, true);
+//                    释放资源
+                bitmap.recycle();
+                msg.thumbData = bitmapToByteArray(thumBitmap, true);
+
+                msg.description = mProductDetail.getTitle();
+
+                SendMessageToWX.Req req = new SendMessageToWX.Req();
+                req.transaction = buildTransaction("img");
+                req.message = msg;
+                req.scene = isTimeline ? SendMessageToWX.Req.WXSceneTimeline : SendMessageToWX.Req.WXSceneSession;
+                //调用api接口，发送数据到微信
+                api.sendReq(req);
+            }
+        });
+
+        thread.start();
+    }
+
+    private byte[] bitmapToByteArray(Bitmap bitmap, boolean recycle) {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, output);
+        if (recycle) {
+            bitmap.recycle();
+        }
+        byte[] result = output.toByteArray();
+        try {
+            output.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     private String buildTransaction(final String type) {
@@ -538,14 +588,15 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     }
 
     public void onFriendGroupBtnClick() {
-        UMConfigure.init(ProductDetailActivity.this, "5c8ef97261f564f490000a1c"
-                , "umeng", UMConfigure.DEVICE_TYPE_PHONE, "70d6885b210ad186c508eee7fa687019");
-        PlatformConfig.setWeixin(Constant.APP_ID, "3baf1193c85774b3fd9d18447d76cab0");
-        new ShareAction(ProductDetailActivity.this)
-                .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)//传入平台
-                .withText(mProductDetail.getTitle())//分享内容
-                .setCallback(shareListener)//回调监听器
-                .share();
+        wxShare(true);
+//        UMConfigure.init(ProductDetailActivity.this, "5c8ef97261f564f490000a1c"
+//                , "umeng", UMConfigure.DEVICE_TYPE_PHONE, "70d6885b210ad186c508eee7fa687019");
+//        PlatformConfig.setWeixin(Constant.APP_ID, "3baf1193c85774b3fd9d18447d76cab0");
+//        new ShareAction(ProductDetailActivity.this)
+//                .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)//传入平台
+//                .withText(mProductDetail.getTitle())//分享内容
+//                .setCallback(shareListener)//回调监听器
+//                .share();
     }
 
     private UMShareListener shareListener = new UMShareListener() {
