@@ -15,6 +15,7 @@ import com.djs.one.bean.OrderDetailBean;
 import com.djs.one.bean.PayCallBackBean;
 import com.djs.one.bean.PhoneCheckCode;
 import com.djs.one.bean.ProductBean;
+import com.djs.one.bean.ProductCategoryBean;
 import com.djs.one.bean.ProductDetailBannerBean;
 import com.djs.one.bean.ProductDetailBean;
 import com.djs.one.bean.ProductList;
@@ -110,6 +111,7 @@ public interface API {
     @GET("api/items?")
     Call<ProductBean> getProductList(@Query("pageSize") String pageSize,
                                      @Query("page") String page,
+                                     @Query("category_id") int categoryId,
                                      @Query("saleTimeSortType") String saleTimeSortType,//按上架时间排序，1 倒序 2 升序，默认 1
                                      @Query("priceSortType") String priceSortType,
                                      @Query("keywords") String keywords);//按商品价格排序，1 倒序 2 升序，默认 2
@@ -226,4 +228,8 @@ public interface API {
     Call<MessageBean> getMessegeList(@Header("Authorization") String authorization,
                                      @Query("pageSize")String pageSize,
                                      @Query("page")String page);
+
+    //获取商品分类
+    @GET("api/item/category?")
+    Call<ProductCategoryBean> getCategory();
 }

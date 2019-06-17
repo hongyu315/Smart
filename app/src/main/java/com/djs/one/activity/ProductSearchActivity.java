@@ -177,6 +177,7 @@ public class ProductSearchActivity extends BaseActivity implements View.OnClickL
         API api = retrofit.create(API.class);
         Call<ProductBean> products = api.getProductList(Constant.PRODUCT_SIZE,
                 page + "",
+                893,
                 saleTimeSortType,
                 priceSortType,
                 keywords);
