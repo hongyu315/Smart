@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.djs.one.MainActivity;
 import com.djs.one.R;
 import com.djs.one.api.API;
 import com.djs.one.api.URL;
@@ -84,8 +85,8 @@ public class LoginActivity extends BaseActivity {
         imageVerifyCodeImg = findViewById(R.id.image_verifier);
         licenceCheckBox = findViewById(R.id.licence_checkbox);
 
-//        phoneEditText.setText("13721042453");
-//        imageCodeEditText.setText("test");
+        phoneEditText.setText("13721042453");
+        msgCodeEditText.setText("123456");
 
         imageVerifyCodeImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -260,7 +261,7 @@ public class LoginActivity extends BaseActivity {
                     if (Constant.SUCCESSFUL == userProfile.getCode()){
                         UserManager.getInstance().setUser(userProfile);
                         jumpToWhereShouldGo();
-//                        SysUtils.startActivity(LoginActivity.this, AccountManagerActivity.class);
+                        SysUtils.startActivity(LoginActivity.this, MainActivity.class);
                         finish();
                     }else {
                         ToastUtils.showToast(LoginActivity.this,response.body().getMessage());

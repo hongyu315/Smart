@@ -10,6 +10,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="@dimen/dimen_45_dp">
 
         <ImageView
@@ -35,6 +36,7 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:background="#FAFAFA"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_45_dp"
@@ -129,29 +131,215 @@
         <include layout="@layout/gray_line_view"/>
     </LinearLayout>
 
-    <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
-        android:id="@+id/swipeToLoadLayout"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/dimen_20_dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/search_cancal"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/search_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/dimen_5_dp"
+                android:src="@mipmap/search"/>
+
+            <EditText
+                android:id="@+id/search_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/search_icon"
+                android:background="@null"
+                android:textSize="12sp"
+                android:singleLine="true"
+                android:textCursorDrawable="@null"/>
+
+            <TextView
+                android:layout_below="@+id/search_icon"
+                android:layout_width="match_parent"
+                android:background="@color/black"
+                android:layout_marginTop="@dimen/dimen_3_dp"
+                android:layout_height="@dimen/dimen_1_dp" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@id/swipe_refresh_header"
-            layout="@layout/layout_weibo_header"/>
-
-        <GridView
-            android:id="@id/swipe_target"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:horizontalSpacing="@dimen/dimen_10_dp"
-            android:numColumns="2"
-            android:padding="@dimen/dimen_10_dp"
+        <LinearLayout
             android:orientation="vertical"
-            android:scrollbars="none"/>
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
 
-        <include
-            android:id="@id/swipe_load_more_footer"
-            layout="@layout/layout_weibo_header"/>
-    </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
+            <Button
+                android:id="@+id/spring_btn"
+                android:background="@drawable/spring_layout_selector"
+                android:layout_margin="@dimen/dimen_20_dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/summer_btn"
+                android:background="@drawable/summer_layout_selector"
+                android:layout_margin="@dimen/dimen_20_dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/autumn_btn"
+                android:background="@drawable/autumer_layout_selector"
+                android:layout_margin="@dimen/dimen_20_dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/winter_btn"
+                android:background="@drawable/winter_layout_selector"
+                android:layout_margin="@dimen/dimen_20_dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/spring_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+                android:id="@+id/swipeToLoadLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@id/swipe_refresh_header"
+                    layout="@layout/layout_weibo_header"/>
+
+                <GridView
+                    android:id="@id/swipe_target"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true"
+                    android:horizontalSpacing="@dimen/dimen_10_dp"
+                    android:numColumns="2"
+                    android:padding="@dimen/dimen_10_dp"
+                    android:orientation="vertical"
+                    android:scrollbars="none"/>
+
+                <include
+                    android:id="@id/swipe_load_more_footer"
+                    layout="@layout/layout_weibo_header"/>
+            </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/summer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+                android:id="@+id/summer_swipeToLoadLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@id/swipe_refresh_header"
+                    layout="@layout/layout_weibo_header"/>
+
+                <GridView
+                    android:id="@id/swipe_target"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true"
+                    android:horizontalSpacing="@dimen/dimen_10_dp"
+                    android:numColumns="2"
+                    android:padding="@dimen/dimen_10_dp"
+                    android:orientation="vertical"
+                    android:scrollbars="none"/>
+
+                <include
+                    android:id="@id/swipe_load_more_footer"
+                    layout="@layout/layout_weibo_header"/>
+            </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/autumn_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+                android:id="@+id/autumn_swipeToLoadLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@id/swipe_refresh_header"
+                    layout="@layout/layout_weibo_header"/>
+
+                <GridView
+                    android:id="@id/swipe_target"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true"
+                    android:horizontalSpacing="@dimen/dimen_10_dp"
+                    android:numColumns="2"
+                    android:padding="@dimen/dimen_10_dp"
+                    android:orientation="vertical"
+                    android:scrollbars="none"/>
+
+                <include
+                    android:id="@id/swipe_load_more_footer"
+                    layout="@layout/layout_weibo_header"/>
+            </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/winter_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+                android:id="@+id/winter_swipeToLoadLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@id/swipe_refresh_header"
+                    layout="@layout/layout_weibo_header"/>
+
+                <GridView
+                    android:id="@id/swipe_target"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true"
+                    android:horizontalSpacing="@dimen/dimen_10_dp"
+                    android:numColumns="2"
+                    android:padding="@dimen/dimen_10_dp"
+                    android:orientation="vertical"
+                    android:scrollbars="none"/>
+
+                <include
+                    android:id="@id/swipe_load_more_footer"
+                    layout="@layout/layout_weibo_header"/>
+            </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 
 </LinearLayout>

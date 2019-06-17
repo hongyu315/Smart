@@ -1,14 +1,19 @@
 package com.djs.one;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 
+import com.djs.one.activity.LoginActivity;
+import com.djs.one.activity.SplashActivity;
 import com.djs.one.bean.TabEntity;
 import com.djs.one.fragment.HomeFragment;
+import com.djs.one.fragment.MainFragment;
 import com.djs.one.fragment.ShoppingFragment;
 import com.djs.one.fragment.UserCenterFragment;
+import com.djs.one.manager.UserManager;
 import com.djs.one.util.ToastUtils;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
@@ -22,33 +27,42 @@ import java.util.ArrayList;
 public class MainActivity extends FragmentActivity {
     public static MainActivity mainActivity ;
 
-    private String[] mTitles = { "首页", "购物车", "我的" };
+    private String[] mTitles = { "首页","分类", "购物车", "我的" };
 
     private long exitTime = 0L;
     private ArrayList<Fragment> mFragments = new ArrayList();
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList();
     private static CommonTabLayout mTabLayout;
-    private int[] mIconSelectIds = { R.mipmap.tab_home_select,  R.mipmap.shopping_cat_select, R.mipmap.tab_user_select };
-    private int[] mIconUnselectIds = { R.mipmap.tab_home_unselect, R.mipmap.shopping_cat_unselect, R.mipmap.tab_user_unselect };
+    private int[] mIconSelectIds = { R.mipmap.tab_home_select,  R.mipmap.tab_category_selected,R.mipmap.shopping_cat_select, R.mipmap.tab_user_select };
+    private int[] mIconUnselectIds = { R.mipmap.tab_home_unselect, R.mipmap.tab_category_unselected,R.mipmap.shopping_cat_unselect, R.mipmap.tab_user_unselect };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.content_main);
 
-        StatusBarUtil.setColor(MainActivity.this,getResources().getColor(R.color.white),1);
-//        StatusBarUtil.setTranslucent(MainActivity.this,0);
+        if (UserManager.getInstance().isLogin()){
+            setContentView(R.layout.content_main);
 
-        findViews();
+            StatusBarUtil.setColor(MainActivity.this,getResources().getColor(R.color.white),1);
 
-        PushAgent.getInstance(MainActivity.this).onAppStart();
+            findViews();
 
-        mainActivity = this;
+            PushAgent.getInstance(MainActivity.this).onAppStart();
+
+            mainActivity = this;
+        }else {
+            Intent intent ;
+            intent= new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+        }
     }
 
     protected void findViews()
     {
+
+        this.mFragments.add(MainFragment.getInstance());
         this.mFragments.add(HomeFragment.getInstance());
         this.mFragments.add(ShoppingFragment.getInstance());
         this.mFragments.add(UserCenterFragment.getInstance());

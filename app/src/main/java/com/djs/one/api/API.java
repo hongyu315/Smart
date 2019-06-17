@@ -3,6 +3,7 @@ package com.djs.one.api;
 import com.djs.one.bean.AddToShoppingCarBean;
 import com.djs.one.bean.Address;
 import com.djs.one.bean.CreateOrderBean;
+import com.djs.one.bean.HomeBanners;
 import com.djs.one.bean.ImageVerifyCode;
 import com.djs.one.bean.KeywordsBean;
 import com.djs.one.bean.LoginToken;
@@ -34,6 +35,9 @@ public interface API {
     //https://lvyou.baidu.com/pictravel/photo/view/4cbde9f540b8f5398e39fb49
     @GET("meituApi?")
     Call<ProductList> getProducts(@Query("page")String page);
+
+    @GET("api/banners?")
+    Call<HomeBanners> getHomeBanners();
 
     //获取OSS授权
     @GET("api/kit/ossauth?")

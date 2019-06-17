@@ -36,7 +36,7 @@ public class ProductAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return products.size();
+        return products != null ? products.size() : 0;
     }
 
     @Override

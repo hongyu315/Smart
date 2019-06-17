@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
@@ -42,6 +44,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     protected Activity mActivity;
 
     private List<Product> productList = new ArrayList();
+    private List<Product> summerPL = new ArrayList();
+    private List<Product> autumnPl = new ArrayList();
+    private List<Product> winterPl = new ArrayList();
 
     //上架时间
     private TextView onStoreTextView;
@@ -51,18 +56,29 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     private TextView onStorePriceText;
     private ImageView onStorePriceArrowUp,onStorePriceArrowDown;
 
-    private SwipeToLoadLayout swipeToLoadLayout;
+    private SwipeToLoadLayout swipeToLoadLayout,summerLoadLayout,autumnLoadLayout,winterLoadLayout;
 
-    private GridView gridView;
-    private ProductAdapter adapter;
+    private GridView gridView,summerGridView,autumnGridView,winterGridView;
+    private ProductAdapter adapter,summerAdapter,autumnAdapter,winterAdapter;
 
-    private int page = 1;
+    private int page,summerPage,autumnPage,winterPage = 1;
 
     //按上架时间排序，1 倒序 2 升序，默认 1
     private String saleTimeSortType = Constant.SORT_TYPE_INVERTED;
 
     //按商品价格排序，1 倒序 2 升序，默认 2
     private String priceSortType = Constant.SORT_TYPE_ASCENDING;
+
+    private Button sprintBtn,SummerBtn,AutumnBtn,WinterBtn;
+    private LinearLayout sprintLayout,summerLayout,automnLayout,winterLayout;
+
+    private ArrayList<Button> buttons = new ArrayList<>();
+    private ArrayList<LinearLayout> layouts = new ArrayList<>();
+    private ArrayList<SwipeToLoadLayout> swipeToLoadLayouts = new ArrayList<>();
+    private ArrayList<GridView> gridViews = new ArrayList<>();
+    private ArrayList<List<Product> > productListMap = new ArrayList<>();
+    private ArrayList<ProductAdapter> productAdapters = new ArrayList<>();
+
 
     public HomeFragment() {
     }
@@ -110,16 +126,90 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         onStorePriceArrowUp = paramView.findViewById(R.id.home_on_store_price_arrow_up);
         onStorePriceArrowDown = paramView.findViewById(R.id.home_on_store_price_arrow_down);
 
-        swipeToLoadLayout = paramView.findViewById(R.id.swipeToLoadLayout);
-        gridView = paramView.findViewById(R.id.swipe_target);
-        gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        sprintBtn = paramView.findViewById(R.id.spring_btn);
+        SummerBtn = paramView.findViewById(R.id.summer_btn);
+        AutumnBtn = paramView.findViewById(R.id.autumn_btn);
+        WinterBtn = paramView.findViewById(R.id.winter_btn);
 
-        swipeToLoadLayout.setOnRefreshListener(this);
-        swipeToLoadLayout.setOnLoadMoreListener(this);
-        gridView.setOnItemClickListener(this);
+        buttons.add(sprintBtn);
+        buttons.add(SummerBtn);
+        buttons.add(AutumnBtn);
+        buttons.add(WinterBtn);
+
+        sprintLayout = paramView.findViewById(R.id.spring_layout);
+        summerLayout = paramView.findViewById(R.id.summer_layout);
+        automnLayout = paramView.findViewById(R.id.autumn_layout);
+        winterLayout = paramView.findViewById(R.id.winter_layout);
+
+        layouts.add(sprintLayout);
+        layouts.add(summerLayout);
+        layouts.add(automnLayout);
+        layouts.add(winterLayout);
+
+        sprintBtn.setPressed(true);
+
+        swipeToLoadLayout = paramView.findViewById(R.id.swipeToLoadLayout);
+        summerLoadLayout = paramView.findViewById(R.id.summer_swipeToLoadLayout);
+        autumnLoadLayout = paramView.findViewById(R.id.autumn_swipeToLoadLayout);
+        winterLoadLayout = paramView.findViewById(R.id.winter_swipeToLoadLayout);
+
+        swipeToLoadLayouts.add(swipeToLoadLayout);
+        swipeToLoadLayouts.add(summerLoadLayout);
+        swipeToLoadLayouts.add(autumnLoadLayout);
+        swipeToLoadLayouts.add(winterLoadLayout);
+
+        summerLoadLayout.setVisibility(View.GONE);
+        automnLayout.setVisibility(View.GONE);
+        winterLoadLayout.setVisibility(View.GONE);
+
+        gridView = paramView.findViewById(R.id.swipe_target);
+        summerGridView = summerLoadLayout.findViewById(R.id.swipe_target);
+        autumnGridView = autumnLoadLayout.findViewById(R.id.swipe_target);
+        winterGridView = winterLoadLayout.findViewById(R.id.swipe_target);
+
+        gridViews.add(gridView);
+        gridViews.add(summerGridView);
+        gridViews.add(autumnGridView);
+        gridViews.add(winterGridView);
 
         adapter = new ProductAdapter(getActivity(),productList);
-        gridView.setAdapter(adapter);
+        summerAdapter = new ProductAdapter(getActivity(),summerPL);
+        autumnAdapter = new ProductAdapter(getActivity(),autumnPl);
+        winterAdapter = new ProductAdapter(getActivity(),winterPl);
+
+        productAdapters.add(adapter);
+        productAdapters.add(summerAdapter);
+        productAdapters.add(autumnAdapter);
+        productAdapters.add(winterAdapter);
+
+        for (int i = 0; i < 4; i++){
+            buttons.get(i).setOnClickListener(this);
+            gridViews.get(i).setSelector(new ColorDrawable(Color.TRANSPARENT));
+            gridViews.get(i).setOnItemClickListener(this);
+            swipeToLoadLayouts.get(i).setOnRefreshListener(this);
+            swipeToLoadLayouts.get(i).setOnLoadMoreListener(this);
+
+            gridViews.get(i).setAdapter(productAdapters.get(i));
+        }
+
+    }
+
+    private void onSeasonBtnClick(int index){
+        for (int i = 1; i <= 4; i++){
+            if (i-1 == index){
+                buttons.get(i-1).setFocusableInTouchMode(true);
+                buttons.get(i-1).setPressed(true);
+                buttons.get(i-1).setFocusable(true);
+                buttons.get(i-1).setSelected(true);
+                layouts.get(i-1).setVisibility(View.VISIBLE);
+            }else {
+                buttons.get(i-1).setFocusableInTouchMode(false);
+                buttons.get(i-1).setPressed(false);
+                buttons.get(i-1).setFocusable(false);
+                buttons.get(i-1).setSelected(false);
+                layouts.get(i-1).setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
     /**
@@ -199,8 +289,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                             if (productList != null && productList.size() > 0){
                                 productList.clear();
                             }
+
                             productList.addAll(productBean.getData().getList());
+                            summerPL.addAll(productList);
+                            autumnPl.addAll(productList);
+                            winterPl.addAll(productList);
+
                             adapter.notifyDataSetChanged();
+                            summerAdapter.notifyDataSetChanged();
+                            autumnAdapter.notifyDataSetChanged();
+                            winterAdapter.notifyDataSetChanged();
                         }
                     }else {
 //                        ToastUtils.showToast(getActivity(),response.body().getMessage());
@@ -237,6 +335,18 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 break;
             case R.id.home_on_store_price_layout:
                 onStorePriceViewClick();
+                break;
+            case R.id.spring_btn:
+                onSeasonBtnClick(0);
+                break;
+            case R.id.summer_btn:
+                onSeasonBtnClick(1);
+                break;
+            case R.id.autumn_btn:
+                onSeasonBtnClick(2);
+                break;
+            case R.id.winter_btn:
+                onSeasonBtnClick(3);
                 break;
             default:
                 return;
