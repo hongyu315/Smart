@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -72,6 +75,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     private CatagoryAdapater catagoryAdapater;
     private int selectedCategoryId;
 
+    private EditText searchEditText;
+    String keywords;
+    int categoryId;
+    boolean isApendData;
+
     public HomeFragment() {
     }
 
@@ -129,6 +137,27 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         swipeToLoadLayout.setOnRefreshListener(this);
         swipeToLoadLayout.setOnLoadMoreListener(this);
         gridView.setOnItemClickListener(this);
+
+        searchEditText = paramView.findViewById(R.id.home_fragment_search_edit_text);
+
+        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
+                //当actionId == XX_SEND 或者 XX_DONE时都触发
+                //或者event.getKeyCode == ENTER 且 event.getAction == ACTION_DOWN时也触发
+                //注意，这是一定要判断event != null。因为在某些输入法上会返回null。
+                if (actionId == EditorInfo.IME_ACTION_SEND
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || actionId == EditorInfo.IME_ACTION_NEXT
+                        || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
+                    //处理事件
+                    keywords = searchEditText.getText().toString().trim();
+                    getProductList(categoryId,isApendData);
+                }
+
+                return false;
+            }
+        });
     }
 
 
@@ -190,6 +219,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 if (productCategoryBean != null) {
                     selectedCategoryId = productCategoryBean.getData().get(0).getId();
                     catagoryAdapater.setData(productCategoryBean);
+                    categoryId = selectedCategoryId;
+                    isApendData = false;
                     getProductList(selectedCategoryId, false);
                 }
             }
@@ -212,7 +243,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 categoryId,
                 saleTimeSortType,
                 priceSortType,
-                "");
+                keywords);
         products.enqueue(new Callback<ProductBean>() {
             @Override
             public void onResponse(Call<ProductBean> call, Response<ProductBean> response) {
@@ -341,11 +372,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             }
             int id = getItem(i).getId();
             if (selectedCategoryId == id) {
-                ((TextView) convertView).setTextColor(Color.parseColor("#ff5800"));
+                ((TextView) convertView).setText("[" + getItem(i).getName() + "]");
+
+                ((TextView) convertView).setTextColor(mActivity.getResources().getColor(R.color.home_glod_text_select));
             } else {
+                ((TextView) convertView).setText(getItem(i).getName());
                 ((TextView) convertView).setTextColor(Color.parseColor("#000000"));
             }
-            ((TextView) convertView).setText(getItem(i).getName());
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
