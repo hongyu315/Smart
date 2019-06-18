@@ -122,10 +122,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         sprintLayout = paramView.findViewById(R.id.spring_layout);
         swipeToLoadLayout = paramView.findViewById(R.id.swipeToLoadLayout);
         gridView = paramView.findViewById(R.id.swipe_target);
-        adapter = new ProductAdapter(getActivity(), productList);
+        adapter = new ProductAdapter(getActivity());
         gridView.setAdapter(adapter);
         catagoryAdapater = new CatagoryAdapater();
         mListView.setAdapter(catagoryAdapater);
+        swipeToLoadLayout.setOnRefreshListener(this);
+        swipeToLoadLayout.setOnLoadMoreListener(this);
+        gridView.setOnItemClickListener(this);
     }
 
 
@@ -220,11 +223,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     ProductBean productBean = response.body();
                     if (Constant.SUCCESSFUL == productBean.getCode()) {
                         if (productBean.getData() != null && productBean.getData().getList() != null && productBean.getData().getList().size() > 0) {
-                            if (productList != null && isApendData) {
+                            if (productList != null && !isApendData) {
                                 productList.clear();
                             }
                             productList.addAll(productBean.getData().getList());
+                            adapter.setData(productList);
                             adapter.notifyDataSetChanged();
+                            catagoryAdapater.notifyDataSetChanged();
+                            if (!isApendData) {
+                                gridView.scrollTo(0, 0);
+                            }
                         }
                     } else {
 //                        ToastUtils.showToast(getActivity(),response.body().getMessage());
@@ -302,7 +310,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     private class CatagoryAdapater extends BaseAdapter {
         private List<ProductCategoryBean.DataBean> data;
-        private int selecetedIndex;
 
         public void setData(ProductCategoryBean productCategoryBean) {
             if (productCategoryBean != null) {
@@ -329,8 +336,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         @Override
         public View getView(final int i, View convertView, ViewGroup viewGroup) {
             if (convertView == null) {
-                TextView name = new TextView(mActivity);
-                name.setTextSize(20);
+                TextView name = (TextView) mActivity.getLayoutInflater().inflate(R.layout.category_item_layout, null);
                 convertView = name;
             }
             int id = getItem(i).getId();
@@ -347,7 +353,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     getProductList(selectedCategoryId, false);
                 }
             });
-            return null;
+            return convertView;
         }
     }
 }

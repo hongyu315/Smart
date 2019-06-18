@@ -25,23 +25,26 @@ public class ProductAdapter extends BaseAdapter {
 
     Context mContext;
     LayoutInflater mLayoutInflater;
-    List<Product> products;
+    List<Product> mProducts;
     Product product;
 
-    public ProductAdapter(Context context, List<Product> list) {
+    public ProductAdapter(Context context) {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
-        products = list;
+    }
+
+    public void setData(List<Product> products) {
+        mProducts = products;
     }
 
     @Override
     public int getCount() {
-        return products != null ? products.size() : 0;
+        return mProducts != null ? mProducts.size() : 0;
     }
 
     @Override
     public Object getItem(int position) {
-        return products.get(position);
+        return mProducts.get(position);
     }
 
     @Override
@@ -68,7 +71,7 @@ public class ProductAdapter extends BaseAdapter {
         }
 
         try{
-            product = products.get(position);
+            product = mProducts.get(position);
 
             if (product.getIs_on_sale() == 1){
                 Glide.with(mContext).load(product.getThumb_url()).into(viewHolder.productIcon);

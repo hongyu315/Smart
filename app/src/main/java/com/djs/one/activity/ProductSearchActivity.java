@@ -115,7 +115,8 @@ public class ProductSearchActivity extends BaseActivity implements View.OnClickL
             }
         });
 
-        adapter = new ProductAdapter(ProductSearchActivity.this,productList);
+        adapter = new ProductAdapter(ProductSearchActivity.this);
+        adapter.setData(productList);
         gridView.setAdapter(adapter);
     }
 
