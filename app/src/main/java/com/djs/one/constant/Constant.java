@@ -50,4 +50,7 @@ public class Constant {
     public static String DeviceToken = "";
 
     public static final String LoginToken = "LoginToken";
+
+    public static int size;
+    public static int price;
 }

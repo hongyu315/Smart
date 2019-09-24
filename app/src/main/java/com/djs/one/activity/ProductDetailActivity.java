@@ -1,7 +1,10 @@
 package com.djs.one.activity;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -27,11 +30,14 @@ import com.danikula.videocache.HttpProxyCacheServer;
 import com.djs.one.ForOneApplication;
 import com.djs.one.R;
 import com.djs.one.adapter.DialogSizeItemAdapter;
+import com.djs.one.adapter.HorizontalListViewAdapter;
+import com.djs.one.adapter.ProductDetailDialogAdapter;
 import com.djs.one.api.API;
 import com.djs.one.api.URL;
 import com.djs.one.bean.AddToShoppingCarBean;
 import com.djs.one.bean.ProductDetailBannerBean;
 import com.djs.one.bean.ProductDetailBean;
+import com.djs.one.bean.SuccessfulMode;
 import com.djs.one.bean.SuccessfulModeBean;
 import com.djs.one.constant.Constant;
 import com.djs.one.manager.TokenManager;
@@ -42,6 +48,7 @@ import com.djs.one.util.SysUtils;
 import com.djs.one.util.ToastUtils;
 import com.djs.one.view.AmountView;
 import com.djs.one.view.Banner;
+import com.djs.one.view.HorizontalListView;
 import com.jaeger.library.StatusBarUtil;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXImageObject;
@@ -50,6 +57,8 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -75,7 +84,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     //商品id
     private String itemId;
 
-    private ProductDetailBean.ProductDetail mProductDetail;
+    public static ProductDetailBean.DataBean mProductDetail;
 
     /**
      * 详情页子view
@@ -85,6 +94,15 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
     private IWXAPI api;
     private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
+
+    String[] titles;
+    private HorizontalListView hListView;
+    private HorizontalListViewAdapter hListViewAdapter ;
+
+    //弹框内容listview
+    private ListView mDialogListView;
+    private ProductDetailDialogAdapter mDialogAdapter;
+    TextView mSize,mPrice;
 
 
     /**
@@ -100,6 +118,33 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
 
         findViews();
         initData();
+
+        mReceiver receiver = new mReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.dsj.one.product_dialog");
+        registerReceiver(receiver,intentFilter);
+
+    }
+
+    public class mReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updatePrice();
+        }
+    }
+
+    public void updatePrice(){
+        int size = 0;
+        int price = 0;
+        for (int i = 0; i < mProductDetail.getSku().size();i++){
+            for (int j = 0; j < mProductDetail.getSku().get(i).getSku().size() ; j ++){
+                size = size + mProductDetail.getSku().get(i).getSku().get(j).getAmount();
+                price = price + mProductDetail.getSku().get(i).getSku().get(j).getAmount() * mProductDetail.getSku().get(i).getSku().get(j).getMarket_price();
+            }
+        }
+        mSize.setText(size + "");
+        mPrice.setText("￥" + price);
     }
 
     @Override
@@ -199,6 +244,10 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
                     if (Constant.SUCCESSFUL == productBean.getCode()) {
                         mProductDetail = productBean.getData();
                         setData();
+                        titles = new String[mProductDetail.getSku().size()];
+                        for (int i = 0; i < titles.length; i++){
+                            titles[i] = mProductDetail.getSku().get(i).getValue();
+                        }
                     } else {
                         ToastUtils.showToast(ProductDetailActivity.this, response.body().getMessage());
                     }
@@ -316,8 +365,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     int sizeListSelectedPosition = 0;
     int colorListSelectedPosition = 0;
     int amountInDialog = 1;
-    List<ProductDetailBean.ProductDetail.AttributesBean.ValuesBean> colorValues = new ArrayList<>();
-    List<ProductDetailBean.ProductDetail.AttributesBean.ValuesBean> sizeValues = new ArrayList<>();
+    List<ProductDetailBean.DataBean.AttributesBean.ValuesBean> colorValues = new ArrayList<>();
+    List<ProductDetailBean.DataBean.AttributesBean.ValuesBean> sizeValues = new ArrayList<>();
 
     public void onAddToShoppingCarBtnClick(View v) {
         if (UserManager.getInstance().isLogin()) {
@@ -351,109 +400,38 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         View view = View.inflate(ProductDetailActivity.this, R.layout.dialog_bottom_layout, null);
         TextView titleTV = view.findViewById(R.id.product_prompt_dialog_title);
         TextView priceTV = view.findViewById(R.id.product_prompt_dialog_price);
+
+        mSize = view.findViewById(R.id.bottom_size);
+        mPrice = view.findViewById(R.id.bottom_price);
+
         ImageView thumbnail = view.findViewById(R.id.product_prompt_dialog_thumbnail);
 
+        hListView = view.findViewById(R.id.horizon_listview);
+        mDialogListView = view.findViewById(R.id.lv_base_call_activity);
+        mDialogAdapter = new ProductDetailDialogAdapter(ProductDetailActivity.this);
+        mDialogListView.setAdapter(mDialogAdapter);
+        mDialogAdapter.setData(mProductDetail.getSku().get(0).getSku());
+
+        hListViewAdapter = new HorizontalListViewAdapter(getApplicationContext(),titles);
+        hListView.setAdapter(hListViewAdapter);
+        hListViewAdapter.setSelectIndex(0);
+        hListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                hListViewAdapter.setSelectIndex(i);
+                hListViewAdapter.notifyDataSetChanged();
+
+                mDialogAdapter.setData(mProductDetail.getSku().get(i).getSku());
+            }
+        });
+
         titleTV.setText(mProductDetail.getTitle() + "");
-        priceTV.setText(mProductDetail.getMarket_price() + "");
+        priceTV.setText("￥" + mProductDetail.getMarket_price() + "");
+
+        mSize.setText("" + Constant.size);
+        mPrice.setText("￥" + Constant.price);
         Glide.with(ProductDetailActivity.this).load(mProductDetail.getThumb_url()).into(thumbnail);
-        ListView sizeListView = view.findViewById(R.id.dialog_size_list);
-        List<ProductDetailBean.ProductDetail.AttributesBean> attributesBeanList = mProductDetail.getAttributes();
 
-        for (ProductDetailBean.ProductDetail.AttributesBean attributesBean : attributesBeanList) {
-            if (attributesBean.getAttr_name().equalsIgnoreCase("颜色")) {
-                colorValues = attributesBean.getValues();
-            } else if (attributesBean.getAttr_name().equalsIgnoreCase("尺寸")) {
-                sizeValues = attributesBean.getValues();
-            }
-        }
-
-        List<String> items = new ArrayList<>();
-        for (ProductDetailBean.ProductDetail.AttributesBean.ValuesBean valuesBean : sizeValues) {
-            items.add(valuesBean.getValue());
-        }
-        final DialogSizeItemAdapter adapter = new DialogSizeItemAdapter(ProductDetailActivity.this, items);
-        sizeListView.setAdapter(adapter);
-
-        sizeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                adapter.changeSelected(position);
-                sizeListSelectedPosition = position;
-            }
-        });
-        sizeListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                adapter.changeSelected(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        LinearLayout colorGridLayout = view.findViewById(R.id.dialog_color_list);
-        List<String> colors = new ArrayList<>();
-        for (ProductDetailBean.ProductDetail.AttributesBean.ValuesBean valuesBean : colorValues) {
-            colors.add(valuesBean.getValue());
-        }
-
-        final List<TextView> colorTextViews = new ArrayList<>(colors.size());
-
-        for (int i = 0; i < colors.size(); i++) {
-            final TextView colorView = new TextView(ProductDetailActivity.this);
-            colorView.setTextSize(12);
-            colorView.setTextColor(getResources().getColor(R.color.home_glod_text_unselect));
-            colorView.setBackground(getResources().getDrawable(R.drawable.bg_amount_layout));
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(0, 0, DensityUtil.dp2px(ProductDetailActivity.this, 10), 0);
-            colorView.setPadding(DensityUtil.dp2px(ProductDetailActivity.this, 9),
-                    DensityUtil.dp2px(ProductDetailActivity.this, 6),
-                    DensityUtil.dp2px(ProductDetailActivity.this, 9),
-                    DensityUtil.dp2px(ProductDetailActivity.this, 6));
-            colorView.setLayoutParams(lp);
-            colorView.setText(colors.get(i));
-            colorView.setTag(i);
-            colorView.setTextIsSelectable(true);
-            colorView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //change other text status
-                    for (TextView textView : colorTextViews) {
-//                        textView.setBackgroundColor(ProductDetailActivity.this.getResources().getColor(R.color.white));
-                        textView.setTextColor(ProductDetailActivity.this.getResources().getColor(R.color.home_glod_text_unselect));
-                        textView.setBackground(getResources().getDrawable(R.drawable.bg_amount_layout));
-                        textView.setPadding(DensityUtil.dp2px(ProductDetailActivity.this, 9),
-                                DensityUtil.dp2px(ProductDetailActivity.this, 6),
-                                DensityUtil.dp2px(ProductDetailActivity.this, 9),
-                                DensityUtil.dp2px(ProductDetailActivity.this, 6));
-                    }
-                    colorListSelectedPosition = (int) v.getTag();
-                    colorView.setBackgroundColor(ProductDetailActivity.this.getResources().getColor(R.color.home_glod_text_unselect));
-                    colorView.setTextColor(ProductDetailActivity.this.getResources().getColor(R.color.white));
-
-                }
-            });
-
-            if (i == 0) {//默认第一个选中
-                colorView.performClick();
-            }
-            colorTextViews.add(colorView);
-            colorGridLayout.addView(colorView);
-        }
-
-
-        AmountView amountView = view.findViewById(R.id.dialog_color_item_amount);
-        amountView.setGoods_storage(Integer.MAX_VALUE);
-        amountView.etAmount.setText("1");
-        amountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
-            @Override
-            public void onAmountChange(View view, int amount) {
-                Log.e("Smart", "onAmountChange: mount = " + amount);
-                amountInDialog = amount;
-            }
-        });
 
         Button confirmBtn = view.findViewById(R.id.shopping_dialog_comfirm_btn);
         confirmBtn.setOnClickListener(new View.OnClickListener() {
@@ -478,7 +456,7 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
         //设置对话框大小
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
                 DensityUtil.dp2px(ProductDetailActivity.this,
-                        (float) (SysUtils.getScreenHeight(ProductDetailActivity.this) * 0.22)));
+                        (float) (SysUtils.getScreenHeight(ProductDetailActivity.this) * 0.25)));
         dialog.show();
     }
 
@@ -486,26 +464,19 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
      * 加入购物车按钮点击
      */
     public void onAddToShoppingCarBtnPressed() {
-        String colorId = colorValues.get(colorListSelectedPosition).getId() + "";
-        String sizeId = sizeValues.get(sizeListSelectedPosition).getId() + "";
-
-        Map<String, ProductDetailBean.ProductDetail.SkusBean> skuList = mProductDetail.getSku();
-
-        String skuId = skuList.get(sizeId + "-" + colorId).getId() + "";
-        String quantity = amountInDialog + "";
 
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(URL.BASE_URL)
                 .build();
         API api = retrofit.create(API.class);
-        Call<AddToShoppingCarBean> products = api.addItem(TokenManager.getInstance().getLoginToken().getData().getToken(), itemId, skuId, quantity);
-        products.enqueue(new Callback<AddToShoppingCarBean>() {
+        Call<SuccessfulMode> products = api.addItems(TokenManager.getInstance().getLoginToken().getData().getToken(), getSkus());
+        products.enqueue(new Callback<SuccessfulMode>() {
             @Override
-            public void onResponse(Call<AddToShoppingCarBean> call, Response<AddToShoppingCarBean> response) {
+            public void onResponse(Call<SuccessfulMode> call, Response<SuccessfulMode> response) {
 
                 try {
-                    AddToShoppingCarBean productBean = response.body();
+                    SuccessfulMode productBean = response.body();
                     if (Constant.SUCCESSFUL == productBean.getCode()) {
                         ToastUtils.showToast(ProductDetailActivity.this, "加入购物车成功");
                     } else {
@@ -516,8 +487,8 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
             }
 
             @Override
-            public void onFailure(Call<AddToShoppingCarBean> call, Throwable t) {
-//                ToastUtils.showToast(ProductDetailActivity.this, "加入购物车失败");
+            public void onFailure(Call<SuccessfulMode> call, Throwable t) {
+                ToastUtils.showToast(ProductDetailActivity.this, "加入购物车失败");
             }
         });
     }
@@ -679,11 +650,22 @@ public class ProductDetailActivity extends BaseActivity implements View.OnClickL
     }
 
     private String getSkus() {
-        String colorId = colorValues.get(colorListSelectedPosition).getId() + "";
-        String sizeId = sizeValues.get(sizeListSelectedPosition).getId() + "";
-        Map<String, ProductDetailBean.ProductDetail.SkusBean> skuList = mProductDetail.getSku();
-        String skuId = skuList.get(sizeId + "-" + colorId).getId() + "";
-        String quantity = amountInDialog + "";
-        return ShoppingUtils.getSkus(itemId, skuId, quantity);
+//        String colorId = colorValues.get(colorListSelectedPosition).getId() + "";
+//        String sizeId = sizeValues.get(sizeListSelectedPosition).getId() + "";
+//        List skuList = mProductDetail.getSku();
+//        String skuId = "";//skuList.get(sizeId + "-" + colorId).getId() + "";
+//        String quantity = amountInDialog + "";
+
+        String skus = "";//	商品SKU,格式：itemId:skuId:quantity[;itemId:skuId:quantity]
+
+        for (int i = 0; i < mProductDetail.getSku().size();i++){
+            for (int j = 0; j < mProductDetail.getSku().get(i).getSku().size() ; j ++){
+                if (mProductDetail.getSku().get(i).getSku().get(j).getAmount() >= 1){
+                    skus = skus + itemId + ":" + mProductDetail.getSku().get(i).getSku().get(j).getId() +":" + mProductDetail.getSku().get(i).getSku().get(j).getAmount() +";";
+                }
+            }
+        }
+
+        return skus;//ShoppingUtils.getSkus(itemId, skuId, quantity);
     }
 }

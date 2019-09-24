@@ -153,6 +153,11 @@ public interface API {
                                        @Query("skuId") String skuId,
                                        @Query("quantity") String quantity);
 
+    //将商品添加到购物车
+    @POST("api/cart/addItems?")
+    Call<SuccessfulMode> addItems(@Header("Authorization") String authorization,
+                                       @Query("skus") String skus);//	商品SKU,格式：itemId:skuId:quantity[;itemId:skuId:quantity]
+
     //购物车商品列表
     @GET("api/cart/items?")
     Call<ShoppingCarItems> shoppingCarItems(@Header("Authorization") String authorization,

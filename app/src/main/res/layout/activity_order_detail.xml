@@ -284,7 +284,8 @@
                                     android:id="@+id/product_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:singleLine="true"
+                                    android:layout_marginRight="@dimen/dp_80"
+                                    android:maxLines="2"
                                     android:text="订单已签收"
                                     android:textColor="@color/home_glod_text_unselect"
                                     android:textSize="14sp"/>
@@ -306,6 +307,15 @@
                                     android:layout_marginTop="@dimen/dimen_3_dp"
                                     android:singleLine="true"
                                     android:text="订单已签收"
+                                    android:textColor="@color/edit_text_hint_color"
+                                    android:textSize="12sp"/>
+                                <TextView
+                                    android:id="@+id/order_time_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/dimen_3_dp"
+                                    android:singleLine="true"
+                                    android:text="发货周期：2天"
                                     android:textColor="@color/edit_text_hint_color"
                                     android:textSize="12sp"/>
                             </LinearLayout>

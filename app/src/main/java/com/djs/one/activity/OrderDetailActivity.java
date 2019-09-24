@@ -101,6 +101,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
     TextView productSize;
     TextView productPrice;
     ImageView productIcon;
+    TextView deliverTime;
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
@@ -167,6 +168,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         productSize = findViewById(R.id.order_num_text);
         productIcon = findViewById(R.id.message_item_icon);
         productPrice = findViewById(R.id.product_price);
+        deliverTime = findViewById(R.id.order_time_text);
 
         payMethodText = (TextView) findViewById(R.id.order_detail_pay_method_txt);
         findViewById(R.id.order_detail_pay_method).setOnClickListener(this);
@@ -339,34 +341,47 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setDetailData() {
-        OrderDetailBean.DataBean data = productBean.getData();
-        //订单状态（-1 无效  0 待确认, 1已确认/待支付, 2已支付/待发货, 3已发货/待收货, 4已完成, 5已取消, 6已关闭）
-        switch (data.getStatus()) {
-            case -1:
-                break;
-            case 0:
-            case 1:
-                money.setText("需付款:" + data.getPay_amount());
-                startCountDownTime(data.getExpire_time());
-                break;
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-                wait4PayLayout.setVisibility(View.GONE);
-                payCancelPayLayout.setVisibility(View.GONE);
-                break;
-            default:
-                break;
+        try{
+            OrderDetailBean.DataBean data = productBean.getData();
+            //订单状态（-1 无效  0 待确认, 1已确认/待支付, 2已支付/待发货, 3已发货/待收货, 4已完成, 5已取消, 6已关闭）
+            switch (data.getStatus()) {
+                case -1:
+                    break;
+                case 0:
+                case 1:
+                    money.setText("需付款:" + data.getPay_amount());
+                    startCountDownTime(data.getExpire_time());
+                    break;
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                    wait4PayLayout.setVisibility(View.GONE);
+                    payCancelPayLayout.setVisibility(View.GONE);
+                    break;
+                default:
+                    break;
+            }
+
+            orderNum.setText("订单编号:" + data.getTrade_no());
+            if (data.getItems().size() > 0){
+                OrderDetailBean.DataBean.ItemsBean itemsBean = data.getItems().get(0);
+
+                productName.setText(itemsBean.getItem_title() + "");
+                productContent.setText("" +itemsBean.getSku_title());
+                if (itemsBean.getSpecs().size() > 0){
+                    productSize.setText("尺寸:" + itemsBean.getSpecs().get(0).getValue());
+                }
+                productPrice.setText(itemsBean.getPrice() + "");
+                deliverTime.setText("发货周期:" + itemsBean.getDelivery_cycle());
+                Glide.with(OrderDetailActivity.this).load(itemsBean.getThumb_url()).into(productIcon);
+            }
+
+        }catch (Exception e){
+
         }
 
-        orderNum.setText("订单编号:" + data.getTrade_no());
-        productName.setText(data.getItems().get(0).getItem_title() + "");
-        productContent.setText("");
-        productSize.setText(data.getItems().get(0).getSku_title());
-        productPrice.setText(data.getItems().get(0).getPrice() + "");
-        Glide.with(OrderDetailActivity.this).load(data.getItems().get(0).getThumb_url()).into(productIcon);
     }
 
     private void onPayMethodClick() {

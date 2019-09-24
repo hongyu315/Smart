@@ -20,8 +20,57 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/bottom_price_layout"
             android:layout_above="@+id/shopping_dialog_comfirm_btn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50">
+
+            <include layout="@layout/gray_line_view"/>
+
+            <TextView
+                android:id="@+id/bottom_price"
+                android:layout_centerVertical="true"
+                android:text="$ 0.00"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/home_glod_text_select"
+                android:layout_marginRight="@dimen/dp_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:id="@+id/bottom_size_txt"
+                android:layout_toLeftOf="@+id/bottom_price"
+                android:layout_marginRight="@dimen/dp_20"
+                android:layout_centerVertical="true"
+                android:text="件"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/bottom_size"
+                android:layout_toLeftOf="@+id/bottom_size_txt"
+                android:layout_marginRight="@dimen/dp_5"
+                android:textColor="@color/home_glod_text_select"
+                android:layout_centerVertical="true"
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_toLeftOf="@+id/bottom_size"
+                android:layout_marginRight="@dimen/dp_5"
+                android:layout_centerVertical="true"
+                android:text="共"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_above="@+id/bottom_price_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -66,9 +115,30 @@
 
             </LinearLayout>
 
+
+            <!-- 横向颜色 开始 -->
+
+            <com.djs.one.view.HorizontalListView
+                android:id="@+id/horizon_listview"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"/>
+
+            <include layout="@layout/gray_line_view"/>
+
+            <!-- 横向颜色 结束 -->
+
+            <ListView
+                android:id="@+id/lv_base_call_activity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/rl_title_log_activity">
+
+            </ListView>
+
             <include layout="@layout/gray_line_view"/>
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_margin="@dimen/dimen_10_dp"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
